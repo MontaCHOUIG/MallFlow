@@ -22,6 +22,7 @@ QT += sql
 SOURCES += \
     connection.cpp \
     dialog.cpp \
+    employe.cpp \
     form.cpp \
     main.cpp \
     mainwindow.cpp
@@ -29,6 +30,7 @@ SOURCES += \
 HEADERS += \
     connection.h \
     dialog.h \
+    employe.h \
     form.h \
     mainwindow.h
 
