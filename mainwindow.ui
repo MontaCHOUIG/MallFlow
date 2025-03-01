@@ -86,22 +86,22 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab1">
      <property name="styleSheet">
       <string notr="true"/>
      </property>
      <attribute name="title">
-      <string>Gestion des services</string>
+      <string>Gestion des sponsors</string>
      </attribute>
      <widget class="QGroupBox" name="Sp_GroupBox_2">
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>60</y>
+        <y>50</y>
         <width>391</width>
-        <height>381</height>
+        <height>431</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -127,13 +127,13 @@ QGroupBox::title {
 </string>
       </property>
       <property name="title">
-       <string>Ajouter un fournisseur</string>
+       <string>Ajouter un Sponsor</string>
       </property>
-      <widget class="QLabel" name="Sp_Label_Nom_2">
+      <widget class="QLabel" name="Sp_Label_Nom">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>100</y>
+         <y>93</y>
          <width>99</width>
          <height>31</height>
         </rect>
@@ -141,18 +141,19 @@ QGroupBox::title {
        <property name="font">
         <font>
          <pointsize>9</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>id</string>
+        <string>Nom</string>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_DA_2">
+      <widget class="QLabel" name="Sp_Label_Email">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>250</y>
+         <y>232</y>
          <width>101</width>
          <height>31</height>
         </rect>
@@ -160,18 +161,19 @@ QGroupBox::title {
        <property name="font">
         <font>
          <pointsize>9</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>etat</string>
+        <string>Email</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_Nom_2">
+      <widget class="QLineEdit" name="Sp_Line_Nom">
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>100</y>
+         <y>93</y>
          <width>209</width>
          <height>31</height>
         </rect>
@@ -186,11 +188,11 @@ QLineEdit:hover {
 }</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_ID_2">
+      <widget class="QLineEdit" name="Sp_Line_ID">
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>50</y>
+         <y>47</y>
          <width>209</width>
          <height>31</height>
         </rect>
@@ -205,14 +207,14 @@ QLineEdit:hover {
 }</string>
        </property>
        <property name="echoMode">
-        <enum>QLineEdit::EchoMode::Normal</enum>
+        <enum>QLineEdit::Normal</enum>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_ID_2">
+      <widget class="QLabel" name="Sp_Label_ID">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>50</y>
+         <y>47</y>
          <width>99</width>
          <height>31</height>
         </rect>
@@ -220,18 +222,19 @@ QLineEdit:hover {
        <property name="font">
         <font>
          <pointsize>9</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>nom service</string>
+        <string>ID</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_CIN_2">
+      <widget class="QLineEdit" name="Sp_Line_Prenom">
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>150</y>
+         <y>139</y>
          <width>209</width>
          <height>31</height>
         </rect>
@@ -246,11 +249,11 @@ QLineEdit:hover {
 }</string>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_CIN_2">
+      <widget class="QLabel" name="Sp_Label_Prenom">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>150</y>
+         <y>139</y>
          <width>99</width>
          <height>31</height>
         </rect>
@@ -258,37 +261,39 @@ QLineEdit:hover {
        <property name="font">
         <font>
          <pointsize>9</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>type</string>
+        <string>Prenom</string>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_Email_2">
+      <widget class="QLabel" name="Sp_Label_Numtel">
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>200</y>
-         <width>121</width>
+         <y>185</y>
+         <width>71</width>
          <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
          <pointsize>9</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>date</string>
+        <string>Numéro</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_Email_2">
+      <widget class="QLineEdit" name="Sp_Line_Email">
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>260</y>
+         <y>230</y>
          <width>209</width>
          <height>31</height>
         </rect>
@@ -306,14 +311,15 @@ QLineEdit:hover {
       <widget class="QPushButton" name="Sp_Button_Ajouter">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>320</y>
+         <x>120</x>
+         <y>380</y>
          <width>151</width>
          <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -331,12 +337,81 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
         <string>Ajouter</string>
        </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit">
+      <widget class="QLineEdit" name="Sp_Line_Numtel">
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>210</y>
-         <width>110</width>
+         <y>184</y>
+         <width>209</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit {
+		border: 1px solid #230a98;
+		border-radius: 5px;
+}
+QLineEdit:hover {
+		border: 1px solid #7359f0;
+}</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Sp_Label_Datedeb">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>279</y>
+         <width>121</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Date de Début</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Sp_Label_Datefin">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>325</y>
+         <width>101</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Date de Fin</string>
+       </property>
+      </widget>
+      <widget class="QDateEdit" name="dateEdit_Debut">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>285</y>
+         <width>151</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QDateEdit" name="dateEdit_Fin">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>330</y>
+         <width>151</width>
          <height>22</height>
         </rect>
        </property>
@@ -353,6 +428,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -381,6 +457,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -433,6 +510,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -475,7 +553,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Liste des services</string>
+      <string>Liste des sponsors</string>
      </attribute>
      <widget class="QPushButton" name="Sp_Button_Tri_Nom">
       <property name="geometry">
@@ -500,7 +578,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <string>Nom</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="Sp_Button_Tri_Type">
+     <widget class="QPushButton" name="Sp_Button_Tri_Email">
       <property name="geometry">
        <rect>
         <x>180</x>
@@ -520,7 +598,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 }</string>
       </property>
       <property name="text">
-       <string>salaire</string>
+       <string>Email</string>
       </property>
      </widget>
      <widget class="QLabel" name="Sp_Label_Recherche">
@@ -534,6 +612,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -590,6 +669,7 @@ QLineEdit:hover {
       </property>
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -597,7 +677,7 @@ QLineEdit:hover {
        <string>Tri par :</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="Sp_Button_Tri_ID">
+     <widget class="QPushButton" name="Sp_Button_Tri_Numtel">
       <property name="geometry">
        <rect>
         <x>270</x>
@@ -617,7 +697,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 }</string>
       </property>
       <property name="text">
-       <string>Role</string>
+       <string>Numtel</string>
       </property>
      </widget>
      <widget class="QPushButton" name="Sp_Button_Fermer">
@@ -631,6 +711,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -665,9 +746,6 @@ border-radius: 10px;
       </property>
       <property name="text">
        <string/>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
       </property>
      </widget>
      <widget class="QPushButton" name="Sp_Button_ExportPDF">
@@ -711,12 +789,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      </widget>
      <zorder>label_2</zorder>
      <zorder>Sp_Button_Tri_Nom</zorder>
-     <zorder>Sp_Button_Tri_Type</zorder>
+     <zorder>Sp_Button_Tri_Email</zorder>
      <zorder>Sp_Label_Recherche</zorder>
      <zorder>Sp_TableView_Res</zorder>
      <zorder>Sp_Line_Recherche</zorder>
      <zorder>Sp_Label_TriPar</zorder>
-     <zorder>Sp_Button_Tri_ID</zorder>
+     <zorder>Sp_Button_Tri_Numtel</zorder>
      <zorder>Sp_Button_Fermer</zorder>
      <zorder>Sp_Label_InfoAffichage</zorder>
      <zorder>Sp_Button_ExportPDF</zorder>
@@ -772,6 +850,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
       <property name="font">
        <font>
+        <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
@@ -854,10 +933,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 border-radius : 20px</string>
     </property>
     <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
@@ -1105,10 +1181,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 border-radius: 20px;</string>
     </property>
     <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
     <widget class="QLabel" name="label_6">
      <property name="geometry">
@@ -1138,9 +1211,9 @@ border-radius: 20px;</string>
     <widget class="QLabel" name="Sp_Label_Titre">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>60</y>
-       <width>391</width>
+       <x>40</x>
+       <y>40</y>
+       <width>401</width>
        <height>51</height>
       </rect>
      </property>
@@ -1156,10 +1229,7 @@ border-bottom-left-radius: 10px;
 border-bottom-right-radius: 10px;</string>
      </property>
      <property name="text">
-      <string>GESTION DES UTILISATEURS</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;   GESTION DES SPONSORS&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
@@ -1223,7 +1293,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1390</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
