@@ -2,6 +2,8 @@
 #define EMPLOYE_H
 
 #include <QString>
+#include <QSqlQuery>
+#include <QSqlQueryModel>
 
 class Employe {
 private:
@@ -19,23 +21,27 @@ public:
     Employe(int id, const QString& nom, const QString& poste, const QString& email,
             const QString& role, double salaire, const QString& mdp);
 
-    // Getters
+    // Getters & Setters
     int getIdEmploye() const;
-    QString getNom() const;
-    QString getPoste() const;
-    QString getEmail() const;
-    QString getRole() const;
-    double getSalaire() const;
-    QString getMdp() const;
-
-    // Setters
     void setIdEmploye(int id);
+    QString getNom() const;
     void setNom(const QString& nom);
+    QString getPoste() const;
     void setPoste(const QString& poste);
+    QString getEmail() const;
     void setEmail(const QString& email);
+    QString getRole() const;
     void setRole(const QString& role);
+    double getSalaire() const;
     void setSalaire(double salaire);
+    QString getMdp() const;
     void setMdp(const QString& mdp);
+
+    // CRUD Operations
+    bool ajouter();
+    QSqlQueryModel* afficher();
+    bool supprimer(int id);
+    bool modifier();
 };
 
 #endif // EMPLOYE_H

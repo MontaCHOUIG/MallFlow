@@ -21,22 +21,16 @@ QT += sql
 
 SOURCES += \
     connection.cpp \
-    dialog.cpp \
     employe.cpp \
-    form.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     connection.h \
-    dialog.h \
     employe.h \
-    form.h \
     mainwindow.h
 
 FORMS += \
-    dialog.ui \
-    form.ui \
     mainwindow.ui
 
 # Default rules for deployment.
