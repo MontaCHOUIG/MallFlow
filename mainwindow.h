@@ -2,7 +2,21 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include "sponsor.h" // Changed from "client.h" to "sponsor.h"
+#include <QList>
+#include <QString>
+#include <QSqlQuery>
+#include <QtCharts/QChartView>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QLegend>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QHorizontalStackedBarSeries>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QCategoryAxis>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+QT_CHARTS_USE_NAMESPACE
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -15,7 +29,19 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+
+    void on_Sp_Button_Ajouter_clicked();
+
+    void on_Sp_Button_Modifier_clicked();
+
+    void on_Sp_Button_Supprimer_clicked();
+
+    void on_Sp_Combo_IDs_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
+    Sponsor S; // Changed from Client C to Sponsor S
+    void clearFields();
 };
 #endif // MAINWINDOW_H

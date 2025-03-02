@@ -24,13 +24,15 @@ SOURCES += \
     dialog.cpp \
     form.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    sponsor.cpp
 
 HEADERS += \
     connection.h \
     dialog.h \
     form.h \
-    mainwindow.h
+    mainwindow.h \
+    sponsor.h
 
 FORMS += \
     dialog.ui \
