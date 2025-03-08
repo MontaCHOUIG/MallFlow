@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("MallFlow");
     ui->Sp_TableView_Res->setModel(S.afficher());
     ui->Sp_TableView_Res->setColumnWidth(3, 250);
+    ui->Sp_TableView_Res->setColumnWidth(2, 250);
     ui->Sp_Combo_IDs->setModel(S.afficher_id());
 }
 
@@ -26,7 +27,6 @@ void MainWindow::on_Sp_Button_Ajouter_clicked()
 {
     int idSponsor = ui->Sp_Line_ID->text().toInt(); // Changed from line_ID to Sp_Line_ID
     QString nomSponsor = ui->Sp_Line_Nom->text(); // Changed from line_nom to Sp_Line_Nom
-    QString prenomSponsor = ui->Sp_Line_Prenom->text(); // Changed from line_prenom to Sp_Line_Prenom
     QString emailSponsor = ui->Sp_Line_Email->text(); // Changed from line_email to Sp_Line_Email
     int numtelSponsor = ui->Sp_Line_Numtel->text().toInt(); // Changed from line_numtel to Sp_Line_Numtel
     QString idSponsorString = ui->Sp_Line_ID->text(); // Changed from line_ID to Sp_Line_ID
@@ -35,12 +35,12 @@ void MainWindow::on_Sp_Button_Ajouter_clicked()
     QDate dateFinSponsor = ui->dateEdit_Fin->date(); // Added date from UI
 
     if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
-        nomSponsor.isEmpty() || prenomSponsor.isEmpty()) {
+        nomSponsor.isEmpty()) {
         ui->Sp_Label_InfoAffichage->setText("Erreur de controle de saisire"); // Changed from label_info_gestion to Sp_Label_InfoAffichage
         return;
     }
 
-    Sponsor S(idSponsor, nomSponsor, prenomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
+    Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
     ui->Sp_Label_InfoAffichage->setText("Ajout Effectué ID: " + QString::number(idSponsor)); // Changed CIN to idSponsor
     bool test = S.ajouter();
     if (test) {
@@ -56,7 +56,6 @@ void MainWindow::on_Sp_Button_Modifier_clicked()
 {
     int idSponsor = ui->Sp_Line_ID->text().toInt(); // Changed from line_ID to Sp_Line_ID
     QString nomSponsor = ui->Sp_Line_Nom->text(); // Changed from line_nom to Sp_Line_Nom
-    QString prenomSponsor = ui->Sp_Line_Prenom->text(); // Changed from line_prenom to Sp_Line_Prenom
     QString emailSponsor = ui->Sp_Line_Email->text(); // Changed from line_email to Sp_Line_Email
     int numtelSponsor = ui->Sp_Line_Numtel->text().toInt(); // Changed from line_numtel to Sp_Line_Numtel
     QString idSponsorString = ui->Sp_Line_ID->text(); // Changed from line_ID to Sp_Line_ID
@@ -65,12 +64,12 @@ void MainWindow::on_Sp_Button_Modifier_clicked()
     QDate dateFinSponsor = ui->dateEdit_Fin->date(); // Added date from UI
 
     if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
-        nomSponsor.isEmpty() || prenomSponsor.isEmpty()) {
+        nomSponsor.isEmpty()) {
         ui->Sp_Label_InfoAffichage->setText("Erreur de controle de saisire"); // Changed from label_info_gestion to Sp_Label_InfoAffichage
         return;
     }
 
-    Sponsor S(idSponsor, nomSponsor, prenomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
+    Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
     bool test = S.modifier();
     if (test) {
         ui->Sp_Label_InfoAffichage->setText("Modification Effectué ID: " + QString::number(idSponsor)); // Changed CIN to idSponsor
@@ -107,12 +106,12 @@ void MainWindow::on_Sp_Combo_IDs_currentIndexChanged(int index)
     if (query.exec()) {
         while (query.next()) {
             ui->Sp_Line_ID->setText(query.value(0).toString()); // Changed line_ID to Sp_Line_ID
-            ui->Sp_Line_Nom->setText(query.value(1).toString()); // Changed line_nom to Sp_Line_Nom
-            ui->Sp_Line_Prenom->setText(query.value(2).toString()); // Changed line_prenom to Sp_Line_Prenom
+            ui->Sp_Line_Nom->setText(query.value(1).toString());
+            ui->Sp_Line_Numtel->setText(query.value(2).toString());// Changed line_nom to Sp_Line_Nom
             ui->Sp_Line_Email->setText(query.value(3).toString()); // Changed line_email to Sp_Line_Email
-            ui->Sp_Line_Numtel->setText(query.value(4).toString()); // Changed line_numtel to Sp_Line_Numtel
-            ui->dateEdit_Debut->setDate(query.value(5).toDate()); // Added date handling
-            ui->dateEdit_Fin->setDate(query.value(6).toDate()); // Added date handling
+         // Changed line_numtel to Sp_Line_Numtel
+            ui->dateEdit_Debut->setDate(query.value(4).toDate()); // Added date handling
+            ui->dateEdit_Fin->setDate(query.value(5).toDate()); // Added date handling
         }
     } else {
         ui->Sp_Label_InfoAffichage->setText("Echec de chargement"); // Changed label_info_gestion to Sp_Label_InfoAffichage
@@ -123,7 +122,6 @@ void MainWindow::clearFields()
     // Clear all QLineEdit fields
     ui->Sp_Line_ID->clear();
     ui->Sp_Line_Nom->clear();
-    ui->Sp_Line_Prenom->clear();
     ui->Sp_Line_Email->clear();
     ui->Sp_Line_Numtel->clear();
 
