@@ -23,6 +23,10 @@ private slots:
     void on_Em_Button_Modifier_clicked(); // Modify employee
     void on_Em_Button_Supprimer_clicked(); // Delete employee
 
+
+public slots:
+    void exportToPDF();
+
 private:
     Ui::MainWindow *ui;
     Employe emp;

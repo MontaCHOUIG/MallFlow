@@ -2,10 +2,9 @@
 #include <QDebug>
 #include <QSqlError>
 
-// Default Constructor
+
 Employe::Employe() {}
 
-// Parameterized Constructor
 Employe::Employe(int id, const QString& nom, const QString& poste, const QString& email,
                  const QString& role, double salaire, const QString& mdp)
     : id_employe(id), nom(nom), poste(poste), email(email), role(role), salaire(salaire), mdp(mdp) {}
@@ -28,7 +27,7 @@ void Employe::setRole(const QString& role) { this->role = role; }
 void Employe::setSalaire(double salaire) { this->salaire = salaire; }
 void Employe::setMdp(const QString& mdp) { this->mdp = mdp; }
 
-// ADD Employee
+// ADD Employe
 bool Employe::ajouter() {
     QSqlQuery query;
     query.prepare("INSERT INTO EMPLOYES (ID_EMPLOYE, NOM, POSTE, EMAIL, ROLE, SALAIRE, MOT_DE_PASSE) "

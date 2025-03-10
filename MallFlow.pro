@@ -23,12 +23,14 @@ SOURCES += \
     connection.cpp \
     employe.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    modifieremploye.cpp
 
 HEADERS += \
     connection.h \
     employe.h \
-    mainwindow.h
+    mainwindow.h \
+    modifieremploye.h
 
 FORMS += \
     mainwindow.ui
