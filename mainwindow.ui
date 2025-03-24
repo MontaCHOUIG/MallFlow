@@ -451,10 +451,10 @@ QLineEdit:hover {
      <attribute name="title">
       <string>Liste des employés</string>
      </attribute>
-     <widget class="QPushButton" name="Em_Button_Tri_Nom">
+     <widget class="QPushButton" name="Em_Button_DESC">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>130</x>
         <y>440</y>
         <width>81</width>
         <height>31</height>
@@ -471,30 +471,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 }</string>
       </property>
       <property name="text">
-       <string>Nom</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="Em_Button_Tri_Type">
-      <property name="geometry">
-       <rect>
-        <x>180</x>
-        <y>440</y>
-        <width>81</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-background-color: rgba(35,10,152, 200);
-border-radius: 8px;
-color: white;
-}
-QPushButton:hover {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
-}</string>
-      </property>
-      <property name="text">
-       <string>salaire</string>
+       <string>DESC</string>
       </property>
      </widget>
      <widget class="QLabel" name="Em_Label_Recherche">
@@ -559,7 +536,7 @@ QTableView::horizontalHeader::section:active, QTableView::verticalHeader::sectio
 </string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="Sp_Line_Recherche">
+     <widget class="QLineEdit" name="Em_Line_Recherche">
       <property name="geometry">
        <rect>
         <x>930</x>
@@ -584,12 +561,12 @@ QLineEdit:hover {
        <string>Par nom</string>
       </property>
      </widget>
-     <widget class="QLabel" name="Sp_Label_TriPar">
+     <widget class="QLabel" name="Em_Label_TriPar">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>440</y>
-        <width>71</width>
+        <width>111</width>
         <height>31</height>
        </rect>
       </property>
@@ -599,13 +576,13 @@ QLineEdit:hover {
        </font>
       </property>
       <property name="text">
-       <string>Tri par :</string>
+       <string>Tri par SALAIRE :</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="Em_Button_Tri_ID">
+     <widget class="QPushButton" name="Em_Button_ASCE">
       <property name="geometry">
        <rect>
-        <x>270</x>
+        <x>240</x>
         <y>440</y>
         <width>81</width>
         <height>31</height>
@@ -622,7 +599,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 }</string>
       </property>
       <property name="text">
-       <string>Role</string>
+       <string>ASCE</string>
       </property>
      </widget>
      <widget class="QPushButton" name="Em_Button_Fermer">
@@ -772,13 +749,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
      </widget>
      <zorder>label_2</zorder>
-     <zorder>Em_Button_Tri_Nom</zorder>
-     <zorder>Em_Button_Tri_Type</zorder>
+     <zorder>Em_Button_DESC</zorder>
      <zorder>Em_Label_Recherche</zorder>
      <zorder>Em_TableView</zorder>
-     <zorder>Sp_Line_Recherche</zorder>
-     <zorder>Sp_Label_TriPar</zorder>
-     <zorder>Em_Button_Tri_ID</zorder>
+     <zorder>Em_Line_Recherche</zorder>
+     <zorder>Em_Label_TriPar</zorder>
+     <zorder>Em_Button_ASCE</zorder>
      <zorder>Em_Button_Fermer</zorder>
      <zorder>Em_Label_InfoAffichage</zorder>
      <zorder>Em_Button_ExportPDF</zorder>

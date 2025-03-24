@@ -15,52 +15,120 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Display employees in QTableView
-    ui->Em_TableView->setModel(emp.afficher());
+    // Initialize proxy model for filtering and sorting
+    proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setSourceModel(emp.afficher());  // Use the existing model
+    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel->setDynamicSortFilter(true);
 
+    // Set filtered model to TableView
+    ui->Em_TableView->setModel(proxyModel);
+
+    // Connect buttons
     connect(ui->Em_Button_ExportPDF, &QPushButton::clicked, this, &MainWindow::exportToPDF);
 
+
+    connect(ui->Em_Button_ASCE, &QPushButton::clicked, this, &MainWindow::sortBySalaryAscending);
+    connect(ui->Em_Button_DESC, &QPushButton::clicked, this, &MainWindow::sortBySalaryDescending);
+
+    // Connect search bar
+    connect(ui->Em_Line_Recherche, &QLineEdit::textChanged, this, &MainWindow::on_Em_Line_Search_textChanged);
 }
+
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-//  Load selected employee details into QLineEdits
-void MainWindow::on_Em_TableView_clicked(const QModelIndex &index)
-{
-    if (index.isValid()) {
-        int row = index.row();
-        ui->Em_Line_ID->setText(ui->Em_TableView->model()->index(row, 0).data().toString());
-        ui->Em_Line_Nom->setText(ui->Em_TableView->model()->index(row, 1).data().toString());
-        ui->Em_Line_role->setText(ui->Em_TableView->model()->index(row, 2).data().toString());
-        ui->Em_Line_email->setText(ui->Em_TableView->model()->index(row, 3).data().toString());
-        ui->Em_Line_salaire->setText(ui->Em_TableView->model()->index(row, 4).data().toString());
-        ui->Em_Line_poste->setText(ui->Em_TableView->model()->index(row, 5).data().toString());
-        ui->Em_Line_mdp->setText(ui->Em_TableView->model()->index(row, 6).data().toString());
-    }
-}
+
+
+
 
 //  Add Employee
 void MainWindow::on_Em_Button_Ajouter_clicked()
 {
-    int id = ui->Em_Line_ID->text().toInt();
-    QString nom = ui->Em_Line_Nom->text();
-    QString role = ui->Em_Line_role->text();
-    QString email = ui->Em_Line_email->text();
-    double salaire = ui->Em_Line_salaire->text().toDouble();
-    QString poste = ui->Em_Line_poste->text();
-    QString mdp = ui->Em_Line_mdp->text();
+    bool ok;
 
+    // Validation de l'ID
+    int id = ui->Em_Line_ID->text().toInt(&ok);
+    if (!ok) {
+        QMessageBox::warning(this, "Erreur", "ID invalide !");
+        return;
+    }
+
+    // Vérification que le nom n'est pas vide
+    QString nom = ui->Em_Line_Nom->text();
+    if (nom.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Le nom ne peut pas être vide !");
+        return;
+    }
+
+    // Vérification que le rôle n'est pas vide
+    QString role = ui->Em_Line_role->text();
+    if (role.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Le rôle ne peut pas être vide !");
+        return;
+    }
+
+
+    QString email = ui->Em_Line_email->text().trimmed();
+
+    // Une regex pour l'email
+    QRegularExpression emailRegex("^[\\w\\.\\-]+@[\\w\\-]+(\\.[\\w\\-]{2,})+$");
+    QRegularExpressionMatch match = emailRegex.match(email);
+
+    if (!match.hasMatch()) {
+        QMessageBox::warning(this, "Erreur", "Format de l'email invalide !");
+        return;
+    }
+
+
+    // Validation du salaire
+    double salaire = ui->Em_Line_salaire->text().toDouble(&ok);
+    if (!ok || salaire < 0) {
+        QMessageBox::warning(this, "Erreur", "Salaire invalide !");
+        return;
+    }
+
+    // Vérification que le poste n'est pas vide
+    QString poste = ui->Em_Line_poste->text();
+    if (poste.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Le poste ne peut pas être vide !");
+        return;
+    }
+
+    // Vérification que le mot de passe n'est pas vide
+    QString mdp = ui->Em_Line_mdp->text();
+    if (mdp.trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Le mot de passe ne peut pas être vide !");
+        return;
+    }
+
+    // Création de l'objet Employe
     Employe e(id, nom, role, email, poste, salaire, mdp);
 
+    // Tentative d'ajout de l'employé et affichage du résultat
     if (e.ajouter()) {
-        qDebug() << "Employee added successfully!";
-        ui->Em_TableView->setModel(emp.afficher()); // Refresh table
+        QMessageBox::information(this, "Succès", "Employé ajouté avec succès !");
+         proxyModel->setSourceModel(emp.afficher()); // Rafraîchissement du tableau
+        clearEmployeeForm();
     } else {
-        // qDebug() << "Failed to add employee.";
+        QMessageBox::warning(this, "Erreur", "L'ajout de l'employé a échoué !");
     }
+}
+
+void MainWindow::clearEmployeeForm()
+{
+    ui->Em_Line_ID->clear();
+    ui->Em_Line_Nom->clear();
+    ui->Em_Line_role->clear();
+    ui->Em_Line_email->clear();
+    ui->Em_Line_salaire->clear();
+    ui->Em_Line_poste->clear();
+    ui->Em_Line_mdp->clear();
 }
 
 
@@ -78,8 +146,8 @@ void MainWindow::on_Em_Button_Modifier_clicked()
     QString nom = ui->Em_TableView->model()->index(row, 1).data().toString();
     QString role = ui->Em_TableView->model()->index(row, 2).data().toString();
     QString email = ui->Em_TableView->model()->index(row, 3).data().toString();
-    double salaire = ui->Em_TableView->model()->index(row, 4).data().toDouble();
-    QString poste = ui->Em_TableView->model()->index(row, 5).data().toString();
+     QString poste = ui->Em_TableView->model()->index(row, 4).data().toString();
+    double salaire = ui->Em_TableView->model()->index(row, 5).data().toDouble();
     QString mdp = ui->Em_TableView->model()->index(row, 6).data().toString();
 
     // Open modification form
@@ -88,7 +156,7 @@ void MainWindow::on_Em_Button_Modifier_clicked()
 
     // Refresh table if modification is successful
     if (modifyDialog.exec() == QDialog::Accepted) {
-        ui->Em_TableView->setModel(emp.afficher());
+         proxyModel->setSourceModel(emp.afficher());
     }
 }
 
@@ -96,20 +164,33 @@ void MainWindow::on_Em_Button_Modifier_clicked()
 // Delete Employee
 void MainWindow::on_Em_Button_Supprimer_clicked()
 {
-    int id = ui->Em_Line_ID->text().toInt();
+    QModelIndex index = ui->Em_TableView->currentIndex();
 
-    if (id == 0) {
-        QMessageBox::warning(this, "Delete Error", "Please select an employee first!");
+    // Check if a valid row is selected
+    if (!index.isValid()) {
+        QMessageBox::warning(this, "Erreur de suppression", "Veuillez sélectionner un employé dans le tableau !");
         return;
     }
 
-    if (emp.supprimer(id)) {
-        qDebug() << "Employee deleted successfully!";
-        ui->Em_TableView->setModel(emp.afficher()); // Refresh table
-    } else {
-        qDebug() << "Failed to delete employee.";
+    int row = index.row();
+    int id = ui->Em_TableView->model()->index(row, 0).data().toInt(); // Get ID from the selected row
+
+    // Confirmation dialog
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Confirmation",
+                                  "Voulez-vous vraiment supprimer cet employé ?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        if (emp.supprimer(id)) {
+            QMessageBox::information(this, "Succès", "Employé supprimé avec succès !");
+             proxyModel->setSourceModel(emp.afficher()); // Refresh table
+        } else {
+            QMessageBox::warning(this, "Erreur", "Échec de la suppression de l'employé.");
+        }
     }
 }
+
 
 
 void MainWindow::exportToPDF() {
@@ -173,3 +254,20 @@ void MainWindow::exportToPDF() {
     painter.end();
     QMessageBox::information(this, "Succès", "PDF généré avec succès !");
 }
+
+void MainWindow::sortBySalaryAscending()
+{
+    proxyModel->sort(5, Qt::AscendingOrder); // Column index 4 is for salary
+}
+
+void MainWindow::sortBySalaryDescending()
+{
+    proxyModel->sort(5, Qt::DescendingOrder); // Column index 4 is for salary
+}
+
+void MainWindow::on_Em_Line_Search_textChanged(const QString &text)
+{
+    proxyModel->setFilterKeyColumn(2);
+    proxyModel->setFilterFixedString(text);
+}
+
