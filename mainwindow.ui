@@ -86,7 +86,7 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab1">
      <property name="styleSheet">
@@ -768,8 +768,8 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <widget class="QPushButton" name="pushButton_7">
       <property name="geometry">
        <rect>
-        <x>920</x>
-        <y>450</y>
+        <x>910</x>
+        <y>470</y>
         <width>171</width>
         <height>41</height>
        </rect>
@@ -846,10 +846,21 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <string/>
       </property>
      </widget>
+     <widget class="QWidget" name="chartWidget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1091</width>
+        <height>461</height>
+       </rect>
+      </property>
+     </widget>
      <zorder>label_4</zorder>
      <zorder>pushButton_7</zorder>
      <zorder>Sp_Label_Stats</zorder>
      <zorder>Sp_Button_Fermer_4</zorder>
+     <zorder>chartWidget</zorder>
     </widget>
    </widget>
    <widget class="QLabel" name="Bg_imzge">

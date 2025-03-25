@@ -5,6 +5,10 @@
 #include <QModelIndex>
 #include "employe.h"
 #include <QSortFilterProxyModel>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,8 +31,11 @@ private slots:
     void on_Em_Line_Search_textChanged(const QString &text);
     void clearEmployeeForm();
 
+
+
 public slots:
     void exportToPDF();
+    void showSalaryPieChart();
 
 private:
     Ui::MainWindow *ui;

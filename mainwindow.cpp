@@ -9,6 +9,14 @@
 #include <QPainter>
 #include <QFileDialog>
 
+
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+#include <QtCharts/QChart>
+
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -34,6 +42,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connect search bar
     connect(ui->Em_Line_Recherche, &QLineEdit::textChanged, this, &MainWindow::on_Em_Line_Search_textChanged);
+
+    showSalaryPieChart();
+
 }
 
 
@@ -114,6 +125,7 @@ void MainWindow::on_Em_Button_Ajouter_clicked()
     if (e.ajouter()) {
         QMessageBox::information(this, "Succès", "Employé ajouté avec succès !");
          proxyModel->setSourceModel(emp.afficher()); // Rafraîchissement du tableau
+        showSalaryPieChart();  // Update pie chart
         clearEmployeeForm();
     } else {
         QMessageBox::warning(this, "Erreur", "L'ajout de l'employé a échoué !");
@@ -157,6 +169,8 @@ void MainWindow::on_Em_Button_Modifier_clicked()
     // Refresh table if modification is successful
     if (modifyDialog.exec() == QDialog::Accepted) {
          proxyModel->setSourceModel(emp.afficher());
+        showSalaryPieChart();  // Update pie chart
+
     }
 }
 
@@ -185,6 +199,8 @@ void MainWindow::on_Em_Button_Supprimer_clicked()
         if (emp.supprimer(id)) {
             QMessageBox::information(this, "Succès", "Employé supprimé avec succès !");
              proxyModel->setSourceModel(emp.afficher()); // Refresh table
+            showSalaryPieChart();  // Update pie chart
+
         } else {
             QMessageBox::warning(this, "Erreur", "Échec de la suppression de l'employé.");
         }
@@ -270,4 +286,63 @@ void MainWindow::on_Em_Line_Search_textChanged(const QString &text)
     proxyModel->setFilterKeyColumn(2);
     proxyModel->setFilterFixedString(text);
 }
+
+
+void MainWindow::showSalaryPieChart()
+{
+    // Count employees based on salary ranges
+    int low = 0, medium = 0, high = 0;
+    QAbstractItemModel *model = ui->Em_TableView->model();
+    if (!model) return;
+
+    for (int row = 0; row < model->rowCount(); ++row) {
+        double salary = model->index(row, 5).data().toDouble(); // Assuming column 5 is salary
+        if (salary < 2000)
+            low++;
+        else if (salary <= 5000)
+            medium++;
+        else
+            high++;
+    }
+
+    // Create a pie chart series
+    QPieSeries *series = new QPieSeries();
+    series->append(QString("Low (-2000)"), low);
+    series->append(QString("Medium (2000-5000)"), medium);
+    series->append(QString("High (>5000)"), high);
+
+
+    // Customize slices
+    for (QPieSlice *slice : series->slices()) {
+        QString formattedLabel = QString("%1: %2 employees")
+        .arg(slice->label())
+            .arg(QString::number(slice->value()));
+        slice->setLabel(formattedLabel);
+        slice->setLabelVisible(true);
+    }
+
+    // Create the chart
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Salary Distribution");
+    chart->legend()->setAlignment(Qt::AlignBottom);
+
+    // Create the chart view
+    QChartView *chartView = new QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    // Remove previous layout if any and set a new one
+    QLayout *oldLayout = ui->chartWidget->layout();
+    if (oldLayout) {
+        delete oldLayout;
+    }
+
+    QVBoxLayout *layout = new QVBoxLayout(ui->chartWidget);
+    layout->addWidget(chartView);
+    ui->chartWidget->setLayout(layout);
+}
+
+
+
+
 
