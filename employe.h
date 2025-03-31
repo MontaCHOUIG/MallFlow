@@ -4,6 +4,8 @@
 #include <QString>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QCryptographicHash>
+#include <QSettings>
 
 class Employe {
 private:
@@ -42,6 +44,14 @@ public:
     QSqlQueryModel* afficher();
     bool supprimer(int id);
     bool modifier();
+
+    QString hashPassword(const QString &password);
+    bool authenticateUser(const QString &email, const QString &password);
+    void saveAuthenticatedUser(const QString &email);
+    QString getAuthenticatedUser();
+    void logoutUser();
+
+
 };
 
 #endif // EMPLOYE_H

@@ -3,6 +3,7 @@
 #include <QSqlError>
 
 
+
 Employe::Employe() {}
 
 Employe::Employe(int id, const QString& nom, const QString& poste, const QString& email,
@@ -27,6 +28,27 @@ void Employe::setRole(const QString& role) { this->role = role; }
 void Employe::setSalaire(double salaire) { this->salaire = salaire; }
 void Employe::setMdp(const QString& mdp) { this->mdp = mdp; }
 
+QString Employe::hashPassword(const QString &password) {
+    QByteArray hash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256);
+    return hash.toHex();
+}
+
+
+bool Employe::authenticateUser(const QString &email, const QString &password) {
+    QSqlQuery query;
+    query.prepare("SELECT mdp FROM Employe WHERE email = :email");
+    query.bindValue(":email", email);
+
+    if (query.exec() && query.next()) {
+        QString storedHash = query.value(0).toString();
+        QString enteredHash = hashPassword(password);
+        return storedHash == enteredHash;
+    }
+    return false;
+}
+
+
+
 // ADD Employe
 bool Employe::ajouter() {
     QSqlQuery query;
@@ -38,7 +60,7 @@ bool Employe::ajouter() {
     query.bindValue(":email", email);
     query.bindValue(":role", role);
     query.bindValue(":salaire", salaire);
-    query.bindValue(":mdp", mdp);  // Changed "mdp" to match the correct column "MOT_DE_PASSE"
+    query.bindValue(":mdp", hashPassword(mdp));  // Changed "mdp" to match the correct column "MOT_DE_PASSE"
 
     if (!query.exec()) {
         //qDebug() << "Failed to add employee:" << query.lastError().text();
@@ -93,4 +115,21 @@ bool Employe::modifier() {
         return false;
     }
     return true;
+}
+
+
+void Employe::saveAuthenticatedUser(const QString &email) {
+    QSettings settings("MallFlow", "Auth");
+    settings.setValue("authenticatedUser", email);
+}
+
+QString Employe::getAuthenticatedUser() {
+    QSettings settings("MallFlow", "Auth");
+    return settings.value("authenticatedUser", "").toString();
+}
+
+
+void Employe::logoutUser() {
+    QSettings settings("MallFlow", "Auth");
+    settings.remove("authenticatedUser");
 }

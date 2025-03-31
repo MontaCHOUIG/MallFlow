@@ -283,7 +283,7 @@ void MainWindow::sortBySalaryDescending()
 
 void MainWindow::on_Em_Line_Search_textChanged(const QString &text)
 {
-    proxyModel->setFilterKeyColumn(2);
+    proxyModel->setFilterKeyColumn(1);
     proxyModel->setFilterFixedString(text);
 }
 

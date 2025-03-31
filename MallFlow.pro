@@ -1,5 +1,5 @@
 QT       += core gui
-TARGET = MallFlow 
+TARGET = MallFlow
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -24,6 +24,7 @@ QT += charts
 SOURCES += \
     connection.cpp \
     employe.cpp \
+    login.cpp \
     main.cpp \
     mainwindow.cpp \
     modifieremploye.cpp
@@ -31,6 +32,7 @@ SOURCES += \
 HEADERS += \
     connection.h \
     employe.h \
+    login.h \
     mainwindow.h \
     modifieremploye.h
 
