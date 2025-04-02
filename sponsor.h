@@ -32,6 +32,11 @@ public:
     void setEmailSponsor(QString emailSponsor) { this->emailSponsor = emailSponsor; }
     void setDateDebutSponsor(QDate dateDebutSponsor) { this->dateDebutSponsor = dateDebutSponsor; }
     void setDateFinSponsor(QDate dateFinSponsor) { this->dateFinSponsor = dateFinSponsor; }
+    QSqlQueryModel* Afficher_Tri_NOM();
+    QSqlQueryModel* Afficher_Tri_EMAIL();
+    QSqlQueryModel* Afficher_Tri_TEL();
+    void Recherche(QTableView *table, QString x);
+    void clearTable(QTableView *table);
 
     bool ajouter();
     bool supprimer(int idSponsor);

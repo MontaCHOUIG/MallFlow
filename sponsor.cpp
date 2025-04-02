@@ -84,3 +84,83 @@ QSqlQueryModel* Sponsor::afficher_id()
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID Sponsor"));
     return model;
 }
+QSqlQueryModel* Sponsor::Afficher_Tri_NOM() {
+    QSqlQueryModel* model = new QSqlQueryModel();
+    model->setQuery("SELECT TO_CHAR(ID_SPONSOR) AS ID_SPONSOR, NOM_SPONSOR, TO_CHAR(TEL_SPONSOR) AS TEL_SPONSOR, EMAIL_SPONSOR, TO_CHAR(DATE_DEBUT, 'YYYY-MM-DD') AS DATE_DEBUT, TO_CHAR(DATE_FIN, 'YYYY-MM-DD') AS DATE_FIN FROM SPONSORS ORDER BY NOM_SPONSOR");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID Sponsor"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Téléphone"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Email"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Date Début"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Date Fin"));
+
+    return model;
+}
+
+QSqlQueryModel* Sponsor::Afficher_Tri_EMAIL() {
+    QSqlQueryModel* model = new QSqlQueryModel();
+    model->setQuery("SELECT TO_CHAR(ID_SPONSOR) AS ID_SPONSOR, NOM_SPONSOR, TO_CHAR(TEL_SPONSOR) AS TEL_SPONSOR, EMAIL_SPONSOR, TO_CHAR(DATE_DEBUT, 'YYYY-MM-DD') AS DATE_DEBUT, TO_CHAR(DATE_FIN, 'YYYY-MM-DD') AS DATE_FIN FROM SPONSORS ORDER BY EMAIL_SPONSOR");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID Sponsor"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Téléphone"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Email"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Date Début"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Date Fin"));
+
+    return model;
+}
+
+QSqlQueryModel* Sponsor::Afficher_Tri_TEL() {
+    QSqlQueryModel* model = new QSqlQueryModel();
+    model->setQuery("SELECT TO_CHAR(ID_SPONSOR) AS ID_SPONSOR, NOM_SPONSOR, TO_CHAR(TEL_SPONSOR) AS TEL_SPONSOR, EMAIL_SPONSOR, TO_CHAR(DATE_DEBUT, 'YYYY-MM-DD') AS DATE_DEBUT, TO_CHAR(DATE_FIN, 'YYYY-MM-DD') AS DATE_FIN FROM SPONSORS ORDER BY TEL_SPONSOR");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID Sponsor"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Téléphone"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Email"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Date Début"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Date Fin"));
+
+    return model;
+}
+
+void Sponsor::Recherche(QTableView *table, QString x) {
+    QSqlQueryModel *model = new QSqlQueryModel();
+    QSqlQuery *query = new QSqlQuery;
+
+    if (!x.isEmpty()) {
+        query->prepare("SELECT TO_CHAR(ID_SPONSOR) AS ID_SPONSOR, NOM_SPONSOR, TO_CHAR(TEL_SPONSOR) AS TEL_SPONSOR, "
+                       "EMAIL_SPONSOR, TO_CHAR(DATE_DEBUT, 'YYYY-MM-DD') AS DATE_DEBUT, "
+                       "TO_CHAR(DATE_FIN, 'YYYY-MM-DD') AS DATE_FIN "
+                       "FROM SPONSORS WHERE regexp_like(NOM_SPONSOR, :X, 'i')");
+        query->bindValue(":X", x);
+    } else {
+        query->prepare("SELECT TO_CHAR(ID_SPONSOR) AS ID_SPONSOR, NOM_SPONSOR, TO_CHAR(TEL_SPONSOR) AS TEL_SPONSOR, "
+                       "EMAIL_SPONSOR, TO_CHAR(DATE_DEBUT, 'YYYY-MM-DD') AS DATE_DEBUT, "
+                       "TO_CHAR(DATE_FIN, 'YYYY-MM-DD') AS DATE_FIN FROM SPONSORS");
+    }
+
+    query->exec();
+    model->setQuery(*query);
+
+    // 🟢 Set headers just like afficher()
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID Sponsor"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Numéro de Téléphone"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Email"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Date Début"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Date Fin"));
+
+    table->setModel(model);
+    table->show();
+}
+
+void Sponsor::clearTable(QTableView *table) {
+    QSqlQueryModel* modelFeragh = new QSqlQueryModel();
+    modelFeragh->clear();
+    table->setModel(modelFeragh);
+}
+
+

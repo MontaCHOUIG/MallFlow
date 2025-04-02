@@ -5,6 +5,9 @@
 #include <QJsonDocument>
 #include <QDebug>
 #include <QUrlQuery>
+#include <QPrinter>
+#include <QTextDocument>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -133,3 +136,93 @@ void MainWindow::clearFields()
 
 
 
+
+
+
+void MainWindow::on_Sp_Button_ExportPDF_clicked()
+{
+    QString strStream;
+    QTextStream out(&strStream);
+
+    const int rowCount = ui->Sp_TableView_Res->model()->rowCount();
+    const int columnCount = ui->Sp_TableView_Res->model()->columnCount();
+
+    out << "<html>\n"
+           "<head>\n"
+           "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+        << QString("<title>%1</title>\n").arg("Export PDF")
+        << "</head>\n"
+           "<body bgcolor=#ffffff link=#5000A0>\n"
+           "<center><H1>Liste des Sponsors</H1><br><br>\n"
+           "<table border=1 cellspacing=0 cellpadding=2>\n";
+
+    // Table headers
+    out << "<thead><tr bgcolor=#f0f0f0><th>Numero</th>";
+    for (int column = 0; column < columnCount; column++) {
+        if (!ui->Sp_TableView_Res->isColumnHidden(column)) {
+            out << QString("<th>%1</th>").arg(ui->Sp_TableView_Res->model()->headerData(column, Qt::Horizontal).toString());
+        }
+    }
+    out << "</tr></thead>\n";
+
+    // Table data
+    for (int row = 0; row < rowCount; row++) {
+        out << "<tr><td>" << row + 1 << "</td>";
+        for (int column = 0; column < columnCount; column++) {
+            if (!ui->Sp_TableView_Res->isColumnHidden(column)) {
+                QString data = ui->Sp_TableView_Res->model()->data(ui->Sp_TableView_Res->model()->index(row, column)).toString().simplified();
+                out << QString("<td>%1</td>").arg(data.isEmpty() ? "&nbsp;" : data);
+            }
+        }
+        out << "</tr>\n";
+    }
+
+    out << "</table></center>\n</body>\n</html>\n";
+
+    QString fileName = QFileDialog::getSaveFileName(this, "Sauvegarder en PDF", QString(), "*.pdf");
+    if (QFileInfo(fileName).suffix().isEmpty())
+        fileName.append(".pdf");
+
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setPaperSize(QPrinter::A4);
+    printer.setOutputFileName(fileName);
+
+    QTextDocument doc;
+    doc.setHtml(strStream);
+    doc.setPageSize(printer.pageRect().size());
+    doc.print(&printer);
+}
+
+
+
+void MainWindow::on_Sp_Button_Tri_Numtel_clicked()
+{
+    ui->Sp_Label_InfoAffichage->setText("Tri par NUMÉRO DE TÉLÉPHONE effectué");
+    ui->Sp_TableView_Res->setModel(S.Afficher_Tri_TEL());
+}
+
+void MainWindow::on_Sp_Button_Tri_Nom_clicked()
+{
+    ui->Sp_Label_InfoAffichage->setText("Tri par NOM effectué");
+    ui->Sp_TableView_Res->setModel(S.Afficher_Tri_NOM());
+}
+
+void MainWindow::on_Sp_Button_Tri_Email_clicked()
+{
+    ui->Sp_Label_InfoAffichage->setText("Tri par EMAIL effectué");
+    ui->Sp_TableView_Res->setModel(S.Afficher_Tri_EMAIL());
+}
+
+
+
+void MainWindow::on_Sp_Line_Recherche_textChanged(const QString &arg1)
+{
+
+        S.clearTable(ui->Sp_TableView_Res);
+        S.Recherche(ui->Sp_TableView_Res, arg1);
+        ui->Sp_TableView_Res->setColumnWidth(3, 250);
+        ui->Sp_TableView_Res->setColumnWidth(2, 250);
+
+
+}
