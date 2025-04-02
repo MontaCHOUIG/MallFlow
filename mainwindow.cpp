@@ -16,6 +16,8 @@
 #include <QtCharts/QChart>
 
 
+#include "login.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,13 +25,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+
     // Initialize proxy model for filtering and sorting
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(emp.afficher());  // Use the existing model
     proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setDynamicSortFilter(true);
-
+    updateAuthUserLabel();
     // Set filtered model to TableView
     ui->Em_TableView->setModel(proxyModel);
 
@@ -344,5 +347,23 @@ void MainWindow::showSalaryPieChart()
 
 
 
+void MainWindow::updateAuthUserLabel() {
+    Employe e;
+    authUserEmail = e.getAuthenticatedUser();
+    ui->label_authUser->setText("Logged in as: " + authUserEmail);
+}
 
 
+
+void MainWindow::on_button_logout_clicked() {
+    Employe e ;
+    e.logoutUser();  // Clear stored session
+    close();  // Close main window
+
+    // Show login screen again
+    Login login;
+    if (login.exec() == QDialog::Accepted) {
+        updateAuthUserLabel();  // Update label with new user
+        show();  // Reopen main window
+    }
+}

@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void updateAuthUserLabel();
 
 private slots:
     void on_Em_Button_Ajouter_clicked();  // Add employee
@@ -30,7 +31,7 @@ private slots:
     void sortBySalaryDescending();
     void on_Em_Line_Search_textChanged(const QString &text);
     void clearEmployeeForm();
-
+    void on_button_logout_clicked();
 
 
 public slots:
@@ -41,6 +42,8 @@ private:
     Ui::MainWindow *ui;
     Employe emp;
     QSortFilterProxyModel *proxyModel;
+    QString authUserEmail;
+
 };
 
 #endif // MAINWINDOW_H

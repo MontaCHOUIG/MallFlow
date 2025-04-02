@@ -1162,12 +1162,12 @@ border-radius: 20px;</string>
     <property name="frameShadow">
      <enum>QFrame::Shadow::Raised</enum>
     </property>
-    <widget class="QLabel" name="label_6">
+    <widget class="QLabel" name="label_authUser">
      <property name="geometry">
       <rect>
-       <x>710</x>
+       <x>610</x>
        <y>50</y>
-       <width>231</width>
+       <width>331</width>
        <height>41</height>
       </rect>
      </property>
@@ -1184,7 +1184,7 @@ border-radius: 20px;</string>
 </string>
      </property>
      <property name="text">
-      <string>User@shopDevs.com</string>
+      <string/>
      </property>
     </widget>
     <widget class="QLabel" name="Sp_Label_Titre">
@@ -1230,7 +1230,7 @@ border-bottom-right-radius: 10px;</string>
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="button_logout">
      <property name="geometry">
       <rect>
        <x>1020</x>

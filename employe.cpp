@@ -3,7 +3,6 @@
 #include <QSqlError>
 
 
-
 Employe::Employe() {}
 
 Employe::Employe(int id, const QString& nom, const QString& poste, const QString& email,
@@ -36,17 +35,26 @@ QString Employe::hashPassword(const QString &password) {
 
 bool Employe::authenticateUser(const QString &email, const QString &password) {
     QSqlQuery query;
-    query.prepare("SELECT mdp FROM Employe WHERE email = :email");
+    query.prepare("SELECT MOT_DE_PASSE FROM Employes WHERE email = :email");
     query.bindValue(":email", email);
 
-    if (query.exec() && query.next()) {
-        QString storedHash = query.value(0).toString();
-        QString enteredHash = hashPassword(password);
-        return storedHash == enteredHash;
+    if (!query.exec()) {
+        qDebug() << "Database query failed:" << query.lastError().text();
+        return false;
     }
+
+    if (query.next()) {
+        QString storedHash = query.value(0).toString();
+        QString enteredHash = hashPassword(password);  // Hash input password
+        qDebug() << "Stored Hash:" << storedHash;  // Debugging
+        qDebug() << "Entered Hash:" << enteredHash;
+
+        return storedHash == enteredHash;  // Compare hashes
+    }
+
+    qDebug() << "User not found or no password stored.";
     return false;
 }
-
 
 
 // ADD Employe
