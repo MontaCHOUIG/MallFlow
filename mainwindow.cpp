@@ -41,7 +41,6 @@ MainWindow::~MainWindow()
 // Bouton "Ajouter" cliqué
 void MainWindow::on_Sp_Button_Ajouter_clicked()
 {
-<<<<<<< Updated upstream
     QString idSponsorString = ui->Sp_Line_ID->text().trimmed();
     QString nomSponsor = ui->Sp_Line_Nom->text().trimmed();
     QString emailSponsor = ui->Sp_Line_Email->text().trimmed();
@@ -101,46 +100,12 @@ void MainWindow::on_Sp_Button_Ajouter_clicked()
         clearFields();
     } else {
         ui->Sp_Label_InfoAffichage_2->setText("❌ Échec de l'ajout.");
-=======
-    // Récupération des données du formulaire
-    int idSponsor = ui->Sp_Line_ID->text().toInt();
-    QString nomSponsor = ui->Sp_Line_Nom->text();
-    QString emailSponsor = ui->Sp_Line_Email->text();
-    int numtelSponsor = ui->Sp_Line_Numtel->text().toInt();
-    QString idSponsorString = ui->Sp_Line_ID->text();
-    QString numtelSponsorString = ui->Sp_Line_Numtel->text();
-    QDate dateDebutSponsor = ui->dateEdit_Debut->date();
-    QDate dateFinSponsor = ui->dateEdit_Fin->date();
-
-    // Vérification des champs obligatoires
-    if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
-        nomSponsor.isEmpty()) {
-        ui->Sp_Label_InfoAffichage->setText("Erreur de contrôle de saisie");
-        return;
-    }
-
-    // Création d'un objet Sponsor avec les données
-    Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
-
-    // Tentative d'ajout du sponsor dans la base de données
-    ui->Sp_Label_InfoAffichage->setText("Ajout effectué ID: " + QString::number(idSponsor));
-    bool test = S.ajouter(); // Appel de la méthode ajouter
-
-    if (test) {
-        // Si l'ajout est réussi, mettre à jour la table et la combobox
-        ui->Sp_TableView_Res->setModel(S.afficher());
-        ui->Sp_Combo_IDs->setModel(S.afficher_id());
-        clearFields(); // Nettoyer les champs du formulaire
-    } else {
-        ui->Sp_Label_InfoAffichage->setText("Ajout non effectué");
->>>>>>> Stashed changes
     }
 }
 
 // Bouton "Modifier" cliqué
 void MainWindow::on_Sp_Button_Modifier_clicked()
 {
-<<<<<<< Updated upstream
     QString idSponsorString = ui->Sp_Line_ID->text().trimmed();
     QString nomSponsor = ui->Sp_Line_Nom->text().trimmed();
     QString emailSponsor = ui->Sp_Line_Email->text().trimmed();
@@ -196,41 +161,7 @@ void MainWindow::on_Sp_Button_Modifier_clicked()
 
 
 
-=======
-    // Récupération des données modifiées du formulaire
-    int idSponsor = ui->Sp_Line_ID->text().toInt();
-    QString nomSponsor = ui->Sp_Line_Nom->text();
-    QString emailSponsor = ui->Sp_Line_Email->text();
-    int numtelSponsor = ui->Sp_Line_Numtel->text().toInt();
-    QString idSponsorString = ui->Sp_Line_ID->text();
-    QString numtelSponsorString = ui->Sp_Line_Numtel->text();
-    QDate dateDebutSponsor = ui->dateEdit_Debut->date();
-    QDate dateFinSponsor = ui->dateEdit_Fin->date();
 
-    // Vérification des champs obligatoires
-    if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
-        nomSponsor.isEmpty()) {
-        ui->Sp_Label_InfoAffichage->setText("Erreur de contrôle de saisie");
-        return;
-    }
-
-    // Création d'un objet Sponsor modifié avec les nouvelles données
-    Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
-
-    // Tentative de modification du sponsor dans la base de données
-    bool test = S.modifier();
-    if (test) {
-        ui->Sp_Label_InfoAffichage->setText("Modification effectuée ID: " + QString::number(idSponsor));
-        ui->Sp_TableView_Res->setModel(S.afficher()); // Mise à jour de la table
-        ui->Sp_Combo_IDs->setModel(S.afficher_id()); // Mise à jour de la combobox
-        clearFields(); // Nettoyage des champs
-    } else {
-        ui->Sp_Label_InfoAffichage->setText("Modification non effectuée");
-    }
-}
-
-// Bouton "Supprimer" cliqué
->>>>>>> Stashed changes
 void MainWindow::on_Sp_Button_Supprimer_clicked()
 {
     // Récupération de l'ID sélectionné dans la combobox
@@ -240,21 +171,12 @@ void MainWindow::on_Sp_Button_Supprimer_clicked()
     // Tentative de suppression du sponsor
     bool test = S.supprimer(S.getIdSponsor());
     if (test) {
-<<<<<<< Updated upstream
         ui->Sp_Label_InfoAffichage_2->setText("Suppression Effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
         ui->Sp_TableView_Res->setModel(S.afficher()); // Changed table_Clients to Sp_TableView_Res
         ui->Sp_Combo_IDs->setModel(S.afficher_id());
         clearFields();// Changed comboBox_IDs to Sp_Combo_IDs
     } else {
         ui->Sp_Label_InfoAffichage_2->setText("Suppression non effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
-=======
-        ui->Sp_Label_InfoAffichage->setText("Suppression effectuée");
-        ui->Sp_TableView_Res->setModel(S.afficher()); // Mise à jour de la table
-        ui->Sp_Combo_IDs->setModel(S.afficher_id()); // Mise à jour de la combobox
-        clearFields(); // Nettoyage des champs
-    } else {
-        ui->Sp_Label_InfoAffichage->setText("Suppression non effectuée");
->>>>>>> Stashed changes
     }
 }
 
@@ -295,7 +217,7 @@ void MainWindow::clearFields()
     ui->dateEdit_Debut->setDate(QDate::currentDate());
     ui->dateEdit_Fin->setDate(QDate::currentDate());
 }
-<<<<<<< Updated upstream
+
 
 
 
@@ -308,8 +230,8 @@ void MainWindow::on_Sp_Button_ExportPDF_clicked()
     QString strStream;
         QTextStream out(&strStream);
 
-        const int rowCount = ui->Rc_TableView_Res->model()->rowCount();
-        const int columnCount = ui->Rc_TableView_Res->model()->columnCount();
+        const int rowCount = ui->Sp_TableView_Res->model()->rowCount();
+        const int columnCount = ui->Sp_TableView_Res->model()->columnCount();
 
         out << "<html>\n"
                "<head>\n"
@@ -323,9 +245,9 @@ void MainWindow::on_Sp_Button_ExportPDF_clicked()
         // Table headers
         out << "<thead><tr bgcolor=#f0f0f0><th>Numéro</th>";
         for (int column = 0; column < columnCount; ++column) {
-            if (!ui->Rc_TableView_Res->isColumnHidden(column)) {
+            if (!ui->Sp_TableView_Res->isColumnHidden(column)) {
                 out << QString("<th>%1</th>").arg(
-                    ui->Rc_TableView_Res->model()->headerData(column, Qt::Horizontal).toString());
+                    ui->Sp_TableView_Res->model()->headerData(column, Qt::Horizontal).toString());
             }
         }
         out << "</tr></thead>\n";
@@ -334,9 +256,9 @@ void MainWindow::on_Sp_Button_ExportPDF_clicked()
         for (int row = 0; row < rowCount; ++row) {
             out << "<tr><td>" << row + 1 << "</td>";
             for (int column = 0; column < columnCount; ++column) {
-                if (!ui->Rc_TableView_Res->isColumnHidden(column)) {
-                    QString data = ui->Rc_TableView_Res->model()
-                                       ->data(ui->Rc_TableView_Res->model()->index(row, column))
+                if (!ui->Sp_TableView_Res->isColumnHidden(column)) {
+                    QString data = ui->Sp_TableView_Res->model()
+                                       ->data(ui->Sp_TableView_Res->model()->index(row, column))
                                        .toString()
                                        .simplified();
                     out << QString("<td>%1</td>").arg(data.isEmpty() ? "&nbsp;" : data);
@@ -393,5 +315,4 @@ void MainWindow::on_Sp_Line_Recherche_textChanged(const QString &arg1)
 
 
 }
-=======
->>>>>>> Stashed changes
+
