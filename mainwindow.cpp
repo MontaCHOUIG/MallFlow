@@ -28,61 +28,124 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_Sp_Button_Ajouter_clicked()
 {
-    int idSponsor = ui->Sp_Line_ID->text().toInt(); // Changed from line_ID to Sp_Line_ID
-    QString nomSponsor = ui->Sp_Line_Nom->text(); // Changed from line_nom to Sp_Line_Nom
-    QString emailSponsor = ui->Sp_Line_Email->text(); // Changed from line_email to Sp_Line_Email
-    int numtelSponsor = ui->Sp_Line_Numtel->text().toInt(); // Changed from line_numtel to Sp_Line_Numtel
-    QString idSponsorString = ui->Sp_Line_ID->text(); // Changed from line_ID to Sp_Line_ID
-    QString numtelSponsorString = ui->Sp_Line_Numtel->text(); // Changed from line_numtel to Sp_Line_Numtel
-    QDate dateDebutSponsor = ui->dateEdit_Debut->date(); // Added date from UI
-    QDate dateFinSponsor = ui->dateEdit_Fin->date(); // Added date from UI
+    QString idSponsorString = ui->Sp_Line_ID->text().trimmed();
+    QString nomSponsor = ui->Sp_Line_Nom->text().trimmed();
+    QString emailSponsor = ui->Sp_Line_Email->text().trimmed();
+    QString numtelSponsorString = ui->Sp_Line_Numtel->text().trimmed();
+    QDate dateDebutSponsor = ui->dateEdit_Debut->date();
+    QDate dateFinSponsor = ui->dateEdit_Fin->date();
 
-    if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
-        nomSponsor.isEmpty()) {
-        ui->Sp_Label_InfoAffichage->setText("Erreur de controle de saisire"); // Changed from label_info_gestion to Sp_Label_InfoAffichage
+    if (idSponsorString.isEmpty() || nomSponsor.isEmpty() || emailSponsor.isEmpty() || numtelSponsorString.isEmpty()) {
+        ui->Sp_Label_InfoAffichage_2->setText("⚠️ Tous les champs doivent être remplis.");
         return;
     }
 
+    bool ok;
+    int idSponsor = idSponsorString.toInt(&ok);
+    if (!ok || idSponsor <= 0) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ L'ID doit être un entier positif.");
+        return;
+    }
+
+    if (numtelSponsorString.length() != 8 || !numtelSponsorString.toLongLong(&ok) || !ok) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ Le numéro doit contenir exactement 8 chiffres.");
+        return;
+    }
+
+    if (dateFinSponsor < dateDebutSponsor) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ La date de fin doit être identique ou postérieure à la date de début.");
+        return;
+    }
+
+    // Vérification ID existant
+    QSqlQuery checkId;
+    checkId.prepare("SELECT COUNT(*) FROM SPONSORS WHERE ID_SPONSOR = :id");
+    checkId.bindValue(":id", idSponsor);
+    checkId.exec();
+    if (checkId.next() && checkId.value(0).toInt() > 0) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ Cet ID existe déjà.");
+        return;
+    }
+
+    // Vérification email existant
+    QSqlQuery checkEmail;
+    checkEmail.prepare("SELECT COUNT(*) FROM SPONSORS WHERE EMAIL_SPONSOR = :email");
+    checkEmail.bindValue(":email", emailSponsor);
+    checkEmail.exec();
+    if (checkEmail.next() && checkEmail.value(0).toInt() > 0) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ Cet email est déjà utilisé.");
+        return;
+    }
+
+    int numtelSponsor = numtelSponsorString.toInt();
+
     Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
-    ui->Sp_Label_InfoAffichage->setText("Ajout Effectué ID: " + QString::number(idSponsor)); // Changed CIN to idSponsor
-    bool test = S.ajouter();
-    if (test) {
-        ui->Sp_TableView_Res->setModel(S.afficher()); // Changed table_Clients to Sp_TableView_Res
+    if (S.ajouter()) {
+        ui->Sp_Label_InfoAffichage_2->setText("✅ Ajout réussi (ID: " + QString::number(idSponsor) + ")");
+        ui->Sp_TableView_Res->setModel(S.afficher());
         ui->Sp_Combo_IDs->setModel(S.afficher_id());
-        clearFields();// Changed comboBox_IDs to Sp_Combo_IDs
+        clearFields();
     } else {
-        ui->Sp_Label_InfoAffichage->setText("non effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
+        ui->Sp_Label_InfoAffichage_2->setText("❌ Échec de l'ajout.");
     }
 }
 
 void MainWindow::on_Sp_Button_Modifier_clicked()
 {
-    int idSponsor = ui->Sp_Line_ID->text().toInt(); // Changed from line_ID to Sp_Line_ID
-    QString nomSponsor = ui->Sp_Line_Nom->text(); // Changed from line_nom to Sp_Line_Nom
-    QString emailSponsor = ui->Sp_Line_Email->text(); // Changed from line_email to Sp_Line_Email
-    int numtelSponsor = ui->Sp_Line_Numtel->text().toInt(); // Changed from line_numtel to Sp_Line_Numtel
-    QString idSponsorString = ui->Sp_Line_ID->text(); // Changed from line_ID to Sp_Line_ID
-    QString numtelSponsorString = ui->Sp_Line_Numtel->text(); // Changed from line_numtel to Sp_Line_Numtel
-    QDate dateDebutSponsor = ui->dateEdit_Debut->date(); // Added date from UI
-    QDate dateFinSponsor = ui->dateEdit_Fin->date(); // Added date from UI
+    QString idSponsorString = ui->Sp_Line_ID->text().trimmed();
+    QString nomSponsor = ui->Sp_Line_Nom->text().trimmed();
+    QString emailSponsor = ui->Sp_Line_Email->text().trimmed();
+    QString numtelSponsorString = ui->Sp_Line_Numtel->text().trimmed();
+    QDate dateDebutSponsor = ui->dateEdit_Debut->date();
+    QDate dateFinSponsor = ui->dateEdit_Fin->date();
 
-    if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
-        nomSponsor.isEmpty()) {
-        ui->Sp_Label_InfoAffichage->setText("Erreur de controle de saisire"); // Changed from label_info_gestion to Sp_Label_InfoAffichage
+    if (idSponsorString.isEmpty() || nomSponsor.isEmpty() || emailSponsor.isEmpty() || numtelSponsorString.isEmpty()) {
+        ui->Sp_Label_InfoAffichage_2->setText("⚠️ Tous les champs doivent être remplis.");
         return;
     }
 
+    bool ok;
+    int idSponsor = idSponsorString.toInt(&ok);
+    if (!ok || idSponsor <= 0) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ ID invalide.");
+        return;
+    }
+
+    if (numtelSponsorString.length() != 8 || !numtelSponsorString.toLongLong(&ok) || !ok) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ Le numéro doit contenir exactement 8 chiffres.");
+        return;
+    }
+
+    if (dateFinSponsor < dateDebutSponsor) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ La date de fin doit être identique ou postérieure à la date de début.");
+        return;
+    }
+
+    // Vérifier que l'email n'appartient pas à un autre sponsor
+    QSqlQuery checkEmail;
+    checkEmail.prepare("SELECT ID_SPONSOR FROM SPONSORS WHERE EMAIL_SPONSOR = :email AND ID_SPONSOR != :id");
+    checkEmail.bindValue(":email", emailSponsor);
+    checkEmail.bindValue(":id", idSponsor);
+    checkEmail.exec();
+    if (checkEmail.next()) {
+        ui->Sp_Label_InfoAffichage_2->setText("❌ Cet email est déjà utilisé par un autre sponsor.");
+        return;
+    }
+
+    int numtelSponsor = numtelSponsorString.toInt();
+
     Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
-    bool test = S.modifier();
-    if (test) {
-        ui->Sp_Label_InfoAffichage->setText("Modification Effectué ID: " + QString::number(idSponsor)); // Changed CIN to idSponsor
-        ui->Sp_TableView_Res->setModel(S.afficher()); // Changed table_Clients to Sp_TableView_Res
+    if (S.modifier()) {
+        ui->Sp_Label_InfoAffichage_2->setText("✅ Modification réussie (ID: " + QString::number(idSponsor) + ")");
+        ui->Sp_TableView_Res->setModel(S.afficher());
         ui->Sp_Combo_IDs->setModel(S.afficher_id());
-        clearFields();// Changed comboBox_IDs to Sp_Combo_IDs
+        clearFields();
     } else {
-        ui->Sp_Label_InfoAffichage->setText("Modification non effectué"); // Fixed typo and changed label
+        ui->Sp_Label_InfoAffichage_2->setText("❌ Échec de la modification.");
     }
 }
+
+
 
 void MainWindow::on_Sp_Button_Supprimer_clicked()
 {
@@ -90,12 +153,12 @@ void MainWindow::on_Sp_Button_Supprimer_clicked()
     S.setIdSponsor(ui->Sp_Combo_IDs->currentText().toInt()); // Changed comboBox_IDs to Sp_Combo_IDs
     bool test = S.supprimer(S.getIdSponsor());
     if (test) {
-        ui->Sp_Label_InfoAffichage->setText("Suppression Effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
+        ui->Sp_Label_InfoAffichage_2->setText("Suppression Effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
         ui->Sp_TableView_Res->setModel(S.afficher()); // Changed table_Clients to Sp_TableView_Res
         ui->Sp_Combo_IDs->setModel(S.afficher_id());
         clearFields();// Changed comboBox_IDs to Sp_Combo_IDs
     } else {
-        ui->Sp_Label_InfoAffichage->setText("Suppression non effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
+        ui->Sp_Label_InfoAffichage_2->setText("Suppression non effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
     }
 }
 
