@@ -14,25 +14,34 @@
 #include <QTextDocument>
 #include <QFileDialog>
 
+// Constructeur de la classe MainWindow
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow) // Initialisation de l'interface utilisateur
 {
-    ui->setupUi(this);
-    setWindowTitle("MallFlow");
-    ui->Sp_TableView_Res->setModel(S.afficher());
-    ui->Sp_TableView_Res->setColumnWidth(3, 250);
-    ui->Sp_TableView_Res->setColumnWidth(2, 250);
-    ui->Sp_Combo_IDs->setModel(S.afficher_id());
+    ui->setupUi(this); // Configuration de l'interface utilisateur
+    setWindowTitle("MallFlow"); // Définition du titre de la fenêtre
+
+
+    ui->Sp_Line_ID->setValidator(new QIntValidator(0, 999999, this));
+    ui->Sp_Line_Numtel->setValidator(new QIntValidator(0, 999999999, this));
+
+    ui->Sp_TableView_Res->setModel(S.afficher()); // Affiche les sponsors dans la table
+    ui->Sp_TableView_Res->setColumnWidth(3, 250); // Ajuste la largeur de la colonne Email
+    ui->Sp_TableView_Res->setColumnWidth(2, 250); // Ajuste la largeur de la colonne Numéro de téléphone
+    ui->Sp_Combo_IDs->setModel(S.afficher_id()); // Remplit la combobox avec les ID des sponsors
 }
 
+// Destructeur de la classe MainWindow
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete ui; // Libération de la mémoire de l'interface utilisateur
 }
 
+// Bouton "Ajouter" cliqué
 void MainWindow::on_Sp_Button_Ajouter_clicked()
 {
+<<<<<<< Updated upstream
     QString idSponsorString = ui->Sp_Line_ID->text().trimmed();
     QString nomSponsor = ui->Sp_Line_Nom->text().trimmed();
     QString emailSponsor = ui->Sp_Line_Email->text().trimmed();
@@ -92,11 +101,46 @@ void MainWindow::on_Sp_Button_Ajouter_clicked()
         clearFields();
     } else {
         ui->Sp_Label_InfoAffichage_2->setText("❌ Échec de l'ajout.");
+=======
+    // Récupération des données du formulaire
+    int idSponsor = ui->Sp_Line_ID->text().toInt();
+    QString nomSponsor = ui->Sp_Line_Nom->text();
+    QString emailSponsor = ui->Sp_Line_Email->text();
+    int numtelSponsor = ui->Sp_Line_Numtel->text().toInt();
+    QString idSponsorString = ui->Sp_Line_ID->text();
+    QString numtelSponsorString = ui->Sp_Line_Numtel->text();
+    QDate dateDebutSponsor = ui->dateEdit_Debut->date();
+    QDate dateFinSponsor = ui->dateEdit_Fin->date();
+
+    // Vérification des champs obligatoires
+    if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
+        nomSponsor.isEmpty()) {
+        ui->Sp_Label_InfoAffichage->setText("Erreur de contrôle de saisie");
+        return;
+    }
+
+    // Création d'un objet Sponsor avec les données
+    Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
+
+    // Tentative d'ajout du sponsor dans la base de données
+    ui->Sp_Label_InfoAffichage->setText("Ajout effectué ID: " + QString::number(idSponsor));
+    bool test = S.ajouter(); // Appel de la méthode ajouter
+
+    if (test) {
+        // Si l'ajout est réussi, mettre à jour la table et la combobox
+        ui->Sp_TableView_Res->setModel(S.afficher());
+        ui->Sp_Combo_IDs->setModel(S.afficher_id());
+        clearFields(); // Nettoyer les champs du formulaire
+    } else {
+        ui->Sp_Label_InfoAffichage->setText("Ajout non effectué");
+>>>>>>> Stashed changes
     }
 }
 
+// Bouton "Modifier" cliqué
 void MainWindow::on_Sp_Button_Modifier_clicked()
 {
+<<<<<<< Updated upstream
     QString idSponsorString = ui->Sp_Line_ID->text().trimmed();
     QString nomSponsor = ui->Sp_Line_Nom->text().trimmed();
     QString emailSponsor = ui->Sp_Line_Email->text().trimmed();
@@ -152,54 +196,106 @@ void MainWindow::on_Sp_Button_Modifier_clicked()
 
 
 
+=======
+    // Récupération des données modifiées du formulaire
+    int idSponsor = ui->Sp_Line_ID->text().toInt();
+    QString nomSponsor = ui->Sp_Line_Nom->text();
+    QString emailSponsor = ui->Sp_Line_Email->text();
+    int numtelSponsor = ui->Sp_Line_Numtel->text().toInt();
+    QString idSponsorString = ui->Sp_Line_ID->text();
+    QString numtelSponsorString = ui->Sp_Line_Numtel->text();
+    QDate dateDebutSponsor = ui->dateEdit_Debut->date();
+    QDate dateFinSponsor = ui->dateEdit_Fin->date();
+
+    // Vérification des champs obligatoires
+    if (numtelSponsorString.isEmpty() || emailSponsor.isEmpty() || idSponsorString.isEmpty() || idSponsor == 0 ||
+        nomSponsor.isEmpty()) {
+        ui->Sp_Label_InfoAffichage->setText("Erreur de contrôle de saisie");
+        return;
+    }
+
+    // Création d'un objet Sponsor modifié avec les nouvelles données
+    Sponsor S(idSponsor, nomSponsor, emailSponsor, numtelSponsor, dateDebutSponsor, dateFinSponsor);
+
+    // Tentative de modification du sponsor dans la base de données
+    bool test = S.modifier();
+    if (test) {
+        ui->Sp_Label_InfoAffichage->setText("Modification effectuée ID: " + QString::number(idSponsor));
+        ui->Sp_TableView_Res->setModel(S.afficher()); // Mise à jour de la table
+        ui->Sp_Combo_IDs->setModel(S.afficher_id()); // Mise à jour de la combobox
+        clearFields(); // Nettoyage des champs
+    } else {
+        ui->Sp_Label_InfoAffichage->setText("Modification non effectuée");
+    }
+}
+
+// Bouton "Supprimer" cliqué
+>>>>>>> Stashed changes
 void MainWindow::on_Sp_Button_Supprimer_clicked()
 {
+    // Récupération de l'ID sélectionné dans la combobox
     Sponsor S;
-    S.setIdSponsor(ui->Sp_Combo_IDs->currentText().toInt()); // Changed comboBox_IDs to Sp_Combo_IDs
+    S.setIdSponsor(ui->Sp_Combo_IDs->currentText().toInt());
+
+    // Tentative de suppression du sponsor
     bool test = S.supprimer(S.getIdSponsor());
     if (test) {
+<<<<<<< Updated upstream
         ui->Sp_Label_InfoAffichage_2->setText("Suppression Effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
         ui->Sp_TableView_Res->setModel(S.afficher()); // Changed table_Clients to Sp_TableView_Res
         ui->Sp_Combo_IDs->setModel(S.afficher_id());
         clearFields();// Changed comboBox_IDs to Sp_Combo_IDs
     } else {
         ui->Sp_Label_InfoAffichage_2->setText("Suppression non effectué"); // Changed label_info_gestion to Sp_Label_InfoAffichage
+=======
+        ui->Sp_Label_InfoAffichage->setText("Suppression effectuée");
+        ui->Sp_TableView_Res->setModel(S.afficher()); // Mise à jour de la table
+        ui->Sp_Combo_IDs->setModel(S.afficher_id()); // Mise à jour de la combobox
+        clearFields(); // Nettoyage des champs
+    } else {
+        ui->Sp_Label_InfoAffichage->setText("Suppression non effectuée");
+>>>>>>> Stashed changes
     }
 }
 
+// Lorsque l'index de la combobox change
 void MainWindow::on_Sp_Combo_IDs_currentIndexChanged(int index)
 {
-    int idSponsor = ui->Sp_Combo_IDs->currentText().toInt(); // Changed comboBox_IDs to Sp_Combo_IDs
-    QString idSponsorString = QString::number(idSponsor);
+    // Récupération de l'ID sélectionné
+    int idSponsor = ui->Sp_Combo_IDs->currentText().toInt();
     QSqlQuery query;
-    query.prepare("SELECT * FROM SPONSORS WHERE ID_SPONSOR = :ID_SPONSOR"); // Changed CLIENT to SPONSORS and used parameter binding
+    query.prepare("SELECT * FROM SPONSORS WHERE ID_SPONSOR = :ID_SPONSOR");
     query.bindValue(":ID_SPONSOR", idSponsor);
+
+    // Remplissage des champs du formulaire avec les données du sponsor sélectionné
     if (query.exec()) {
         while (query.next()) {
-            ui->Sp_Line_ID->setText(query.value(0).toString()); // Changed line_ID to Sp_Line_ID
+            ui->Sp_Line_ID->setText(query.value(0).toString());
             ui->Sp_Line_Nom->setText(query.value(1).toString());
-            ui->Sp_Line_Numtel->setText(query.value(2).toString());// Changed line_nom to Sp_Line_Nom
-            ui->Sp_Line_Email->setText(query.value(3).toString()); // Changed line_email to Sp_Line_Email
-         // Changed line_numtel to Sp_Line_Numtel
-            ui->dateEdit_Debut->setDate(query.value(4).toDate()); // Added date handling
-            ui->dateEdit_Fin->setDate(query.value(5).toDate()); // Added date handling
+            ui->Sp_Line_Numtel->setText(query.value(2).toString());
+            ui->Sp_Line_Email->setText(query.value(3).toString());
+            ui->dateEdit_Debut->setDate(query.value(4).toDate());
+            ui->dateEdit_Fin->setDate(query.value(5).toDate());
         }
     } else {
-        ui->Sp_Label_InfoAffichage->setText("Echec de chargement"); // Changed label_info_gestion to Sp_Label_InfoAffichage
+        ui->Sp_Label_InfoAffichage->setText("Échec de chargement");
     }
 }
+
+// Méthode pour effacer tous les champs du formulaire
 void MainWindow::clearFields()
 {
-    // Clear all QLineEdit fields
+    // Nettoyage des champs QLineEdit
     ui->Sp_Line_ID->clear();
     ui->Sp_Line_Nom->clear();
     ui->Sp_Line_Email->clear();
     ui->Sp_Line_Numtel->clear();
 
-    // Reset QDateEdit fields to a default date (e.g., current date or a specific date)
-    ui->dateEdit_Debut->setDate(QDate::currentDate()); // Or set to a specific default, e.g., QDate(2000, 1, 1)
-    ui->dateEdit_Fin->setDate(QDate::currentDate());   // Or set to a specific default
+    // Réinitialisation des champs QDateEdit à la date actuelle
+    ui->dateEdit_Debut->setDate(QDate::currentDate());
+    ui->dateEdit_Fin->setDate(QDate::currentDate());
 }
+<<<<<<< Updated upstream
 
 
 
@@ -297,3 +393,5 @@ void MainWindow::on_Sp_Line_Recherche_textChanged(const QString &arg1)
 
 
 }
+=======
+>>>>>>> Stashed changes
