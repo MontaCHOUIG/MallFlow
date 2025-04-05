@@ -218,7 +218,7 @@ void MainWindow::exportToPDF() {
 
     QPdfWriter writer(filePath);
     writer.setPageSize(QPageSize(QPageSize::A4));
-    writer.setResolution(300); // High resolution
+    writer.setResolution(300);
     QPainter painter(&writer);
 
     if (!painter.isActive()) {
@@ -226,53 +226,53 @@ void MainWindow::exportToPDF() {
         return;
     }
 
-    int marginLeft = 100; // Left margin
-    int startY = 200;     // Start position (higher for better spacing)
-    int rowHeight = 200;   // More height for rows
-    int columnSpacing = 350; // More space between columns
+    int marginLeft = 100;
+    int startY = 200;
+    int rowHeight = 200;
+    int columnSpacing = 350;
 
     // Set Title
     QFont titleFont("Arial", 12, QFont::Bold);
     painter.setFont(titleFont);
     painter.drawText(marginLeft, startY, "Liste des Employés");
 
-    startY += 80; // More space after title
+    startY += 80;
 
-    // Column headers
+    // Column headers (no MDP column)
     QFont headerFont("Arial", 12, QFont::Bold);
     painter.setFont(headerFont);
     painter.drawText(marginLeft, startY, "ID");
     painter.drawText(marginLeft + 0.5 * columnSpacing, startY, "NOM");
     painter.drawText(marginLeft + 1.5 * columnSpacing, startY, "POSTE");
-    painter.drawText(marginLeft + 2.2 * columnSpacing, startY, "EMAIL");
-    painter.drawText(marginLeft + 4 * columnSpacing, startY, "RÔLE");
-    painter.drawText(marginLeft + 5 * columnSpacing, startY, "SALAIRE");
-    painter.drawText(marginLeft + 6 * columnSpacing, startY, "MDP");
+    painter.drawText(marginLeft + 3 * columnSpacing, startY, "EMAIL");
+    painter.drawText(marginLeft + 5 * columnSpacing, startY, "RÔLE");
+    painter.drawText(marginLeft + 6 * columnSpacing, startY, "SALAIRE");
 
-    startY += 30; // More space before table data
 
-    // Set font for data
+    startY += 30;
+
+    // Data font
     QFont dataFont("Courier New", 11);
     painter.setFont(dataFont);
 
     // Get data from QTableView
     QAbstractItemModel *model = ui->Em_TableView->model();
     for (int row = 0; row < model->rowCount(); row++) {
-        // Draw employee data with more spacing
         painter.drawText(marginLeft, startY, model->index(row, 0).data().toString());
         painter.drawText(marginLeft + 0.5 * columnSpacing, startY, model->index(row, 1).data().toString());
         painter.drawText(marginLeft + 1.5 * columnSpacing, startY, model->index(row, 2).data().toString());
-        painter.drawText(marginLeft + 2.2 * columnSpacing, startY, model->index(row, 3).data().toString());
-        painter.drawText(marginLeft + 4 * columnSpacing, startY, model->index(row, 4).data().toString());
-        painter.drawText(marginLeft + 5 * columnSpacing, startY, model->index(row, 5).data().toString());
-        painter.drawText(marginLeft + 6 * columnSpacing, startY, model->index(row, 6).data().toString());
+        painter.drawText(marginLeft + 3 * columnSpacing, startY, model->index(row, 3).data().toString());
+        painter.drawText(marginLeft + 5 * columnSpacing, startY, model->index(row, 4).data().toString());
+        painter.drawText(marginLeft + 6 * columnSpacing, startY, model->index(row, 5).data().toString());
 
-        startY += rowHeight; // Move to next row with more space
+
+        startY += rowHeight;
     }
 
     painter.end();
     QMessageBox::information(this, "Succès", "PDF généré avec succès !");
 }
+
 
 void MainWindow::sortBySalaryAscending()
 {

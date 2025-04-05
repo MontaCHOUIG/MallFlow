@@ -45,11 +45,11 @@ bool Employe::authenticateUser(const QString &email, const QString &password) {
 
     if (query.next()) {
         QString storedHash = query.value(0).toString();
-        QString enteredHash = hashPassword(password);  // Hash input password
-        qDebug() << "Stored Hash:" << storedHash;  // Debugging
+        QString enteredHash = hashPassword(password);
+        qDebug() << "Stored Hash:" << storedHash;
         qDebug() << "Entered Hash:" << enteredHash;
 
-        return storedHash == enteredHash;  // Compare hashes
+        return storedHash == enteredHash;
     }
 
     qDebug() << "User not found or no password stored.";
