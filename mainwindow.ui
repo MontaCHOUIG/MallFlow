@@ -86,22 +86,22 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
-    <widget class="QWidget" name="tab1">
+    <widget class="QWidget" name="tab_1">
      <property name="styleSheet">
       <string notr="true"/>
      </property>
      <attribute name="title">
-      <string>Gestion des services</string>
+      <string>Gestion des évènements</string>
      </attribute>
      <widget class="QGroupBox" name="Sp_GroupBox_2">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>60</y>
-        <width>391</width>
-        <height>381</height>
+        <x>50</x>
+        <y>50</y>
+        <width>401</width>
+        <height>411</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -127,9 +127,9 @@ QGroupBox::title {
 </string>
       </property>
       <property name="title">
-       <string>Ajouter un fournisseur</string>
+       <string>Ajouter un évènement</string>
       </property>
-      <widget class="QLabel" name="Sp_Label_Nom_2">
+      <widget class="QLabel" name="Sp_Label_Titre_2">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -145,10 +145,10 @@ QGroupBox::title {
         </font>
        </property>
        <property name="text">
-        <string>id</string>
+        <string>Titre</string>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_DA_2">
+      <widget class="QLabel" name="Sp_Label_Date_2">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -164,10 +164,10 @@ QGroupBox::title {
         </font>
        </property>
        <property name="text">
-        <string>etat</string>
+        <string>Date_Fin</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_Nom_2">
+      <widget class="QLineEdit" name="Sp_Line_Titre">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -186,7 +186,7 @@ QLineEdit:hover {
 }</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_ID_2">
+      <widget class="QLineEdit" name="Sp_Line_ID">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -208,7 +208,7 @@ QLineEdit:hover {
         <enum>QLineEdit::EchoMode::Normal</enum>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_ID_2">
+      <widget class="QLabel" name="Sp_Label_ID">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -224,10 +224,10 @@ QLineEdit:hover {
         </font>
        </property>
        <property name="text">
-        <string>nom service</string>
+        <string>ID_Evènement</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_CIN_2">
+      <widget class="QLineEdit" name="Sp_Line_Lieu">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -246,7 +246,7 @@ QLineEdit:hover {
 }</string>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_CIN_2">
+      <widget class="QLabel" name="Sp_Label_Lieu">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -262,10 +262,10 @@ QLineEdit:hover {
         </font>
        </property>
        <property name="text">
-        <string>type</string>
+        <string>Lieu</string>
        </property>
       </widget>
-      <widget class="QLabel" name="Sp_Label_Email_2">
+      <widget class="QLabel" name="Sp_Label_Date">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -281,14 +281,14 @@ QLineEdit:hover {
         </font>
        </property>
        <property name="text">
-        <string>date</string>
+        <string>Date_Début</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_Email_2">
+      <widget class="QLineEdit" name="Sp_Line_Type">
        <property name="geometry">
         <rect>
          <x>140</x>
-         <y>260</y>
+         <y>310</y>
          <width>209</width>
          <height>31</height>
         </rect>
@@ -307,7 +307,7 @@ QLineEdit:hover {
        <property name="geometry">
         <rect>
          <x>110</x>
-         <y>320</y>
+         <y>360</y>
          <width>151</width>
          <height>31</height>
         </rect>
@@ -339,6 +339,35 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
          <width>110</width>
          <height>22</height>
         </rect>
+       </property>
+      </widget>
+      <widget class="QDateEdit" name="dateEdit_2">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>260</y>
+         <width>110</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="Sp_Label_Type">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>300</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Type de &lt;br/&gt;participants&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
@@ -398,7 +427,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <string>Supprimer</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="Sp_Combo_IDs">
+     <widget class="QComboBox" name="Sp_Combo_ID">
       <property name="geometry">
        <rect>
         <x>690</x>
@@ -470,17 +499,40 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <zorder>Sp_GroupBox_2</zorder>
      <zorder>Sp_Button_Modifier</zorder>
      <zorder>Sp_Button_Supprimer</zorder>
-     <zorder>Sp_Combo_IDs</zorder>
+     <zorder>Sp_Combo_ID</zorder>
      <zorder>Sp_Button_Fermer_2</zorder>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Liste des services</string>
+      <string>Liste des évènements</string>
      </attribute>
-     <widget class="QPushButton" name="Sp_Button_Tri_Nom">
+     <widget class="QPushButton" name="Sp_Button_Tri_ID">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>100</x>
+        <y>440</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color: rgba(35,10,152, 200);
+border-radius: 8px;
+color: white;
+}
+QPushButton:hover {
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
+}</string>
+      </property>
+      <property name="text">
+       <string>ID_Evènement</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="Sp_Button_Tri_Titre">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
         <y>440</y>
         <width>81</width>
         <height>31</height>
@@ -497,48 +549,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 }</string>
       </property>
       <property name="text">
-       <string>Nom</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="Sp_Button_Tri_Type">
-      <property name="geometry">
-       <rect>
-        <x>180</x>
-        <y>440</y>
-        <width>81</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-background-color: rgba(35,10,152, 200);
-border-radius: 8px;
-color: white;
-}
-QPushButton:hover {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
-}</string>
-      </property>
-      <property name="text">
-       <string>salaire</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="Sp_Label_Recherche">
-      <property name="geometry">
-       <rect>
-        <x>840</x>
-        <y>450</y>
-        <width>81</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Recherche :</string>
+       <string>Titre</string>
       </property>
      </widget>
      <widget class="QTableView" name="Sp_TableView_Res">
@@ -576,13 +587,13 @@ QLineEdit:hover {
        <string/>
       </property>
       <property name="placeholderText">
-       <string>Par nom</string>
+       <string>Par Titre</string>
       </property>
      </widget>
      <widget class="QLabel" name="Sp_Label_TriPar">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>30</x>
         <y>440</y>
         <width>71</width>
         <height>31</height>
@@ -597,10 +608,10 @@ QLineEdit:hover {
        <string>Tri par :</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="Sp_Button_Tri_ID">
+     <widget class="QPushButton" name="Sp_Button_Tri_Lieu">
       <property name="geometry">
        <rect>
-        <x>270</x>
+        <x>310</x>
         <y>440</y>
         <width>81</width>
         <height>31</height>
@@ -617,14 +628,14 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 }</string>
       </property>
       <property name="text">
-       <string>Role</string>
+       <string>Lieu</string>
       </property>
      </widget>
      <widget class="QPushButton" name="Sp_Button_Fermer">
       <property name="geometry">
        <rect>
-        <x>510</x>
-        <y>510</y>
+        <x>500</x>
+        <y>500</y>
         <width>81</width>
         <height>23</height>
        </rect>
@@ -651,10 +662,10 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <widget class="QLabel" name="Sp_Label_InfoAffichage">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>240</x>
         <y>20</y>
-        <width>511</width>
-        <height>41</height>
+        <width>571</width>
+        <height>51</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -664,13 +675,13 @@ border-radius: 10px;
 </string>
       </property>
       <property name="text">
-       <string/>
+       <string>Liste des évènements</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="Sp_Button_ExportPDF">
+     <widget class="QPushButton" name="Sp_Button_PDF">
       <property name="geometry">
        <rect>
         <x>1020</x>
@@ -709,27 +720,50 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <string/>
       </property>
      </widget>
+     <widget class="QPushButton" name="Sp_Button_Recherche">
+      <property name="geometry">
+       <rect>
+        <x>830</x>
+        <y>450</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+background-color: rgba(35,10,152, 200);
+border-radius: 8px;
+color: white;
+}
+QPushButton:hover {
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
+}</string>
+      </property>
+      <property name="text">
+       <string>Recherche</string>
+      </property>
+     </widget>
      <zorder>label_2</zorder>
-     <zorder>Sp_Button_Tri_Nom</zorder>
-     <zorder>Sp_Button_Tri_Type</zorder>
-     <zorder>Sp_Label_Recherche</zorder>
+     <zorder>Sp_Button_Tri_ID</zorder>
+     <zorder>Sp_Button_Tri_Titre</zorder>
      <zorder>Sp_TableView_Res</zorder>
      <zorder>Sp_Line_Recherche</zorder>
      <zorder>Sp_Label_TriPar</zorder>
-     <zorder>Sp_Button_Tri_ID</zorder>
+     <zorder>Sp_Button_Tri_Lieu</zorder>
      <zorder>Sp_Button_Fermer</zorder>
      <zorder>Sp_Label_InfoAffichage</zorder>
-     <zorder>Sp_Button_ExportPDF</zorder>
+     <zorder>Sp_Button_PDF</zorder>
+     <zorder>Sp_Button_Recherche</zorder>
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
-      <string>statistiques</string>
+      <string>Statistiques des évènements</string>
      </attribute>
      <widget class="QPushButton" name="pushButton_7">
       <property name="geometry">
        <rect>
-        <x>920</x>
-        <y>450</y>
+        <x>910</x>
+        <y>470</y>
         <width>171</width>
         <height>41</height>
        </rect>
@@ -765,9 +799,9 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       <property name="geometry">
        <rect>
         <x>510</x>
-        <y>510</y>
+        <y>492</y>
         <width>81</width>
-        <height>23</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
@@ -809,6 +843,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <zorder>pushButton_7</zorder>
      <zorder>Sp_Label_Stats</zorder>
      <zorder>Sp_Button_Fermer_4</zorder>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Code QR</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Maps</string>
+     </attribute>
     </widget>
    </widget>
    <widget class="QLabel" name="Bg_imzge">
@@ -862,7 +906,7 @@ border-radius : 20px</string>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>30</y>
        <width>141</width>
        <height>141</height>
@@ -887,7 +931,7 @@ QLabel {
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>40</x>
        <y>200</y>
        <width>111</width>
        <height>41</height>
@@ -1140,7 +1184,7 @@ border-radius: 20px;</string>
       <rect>
        <x>80</x>
        <y>60</y>
-       <width>391</width>
+       <width>451</width>
        <height>51</height>
       </rect>
      </property>
@@ -1156,7 +1200,7 @@ border-bottom-left-radius: 10px;
 border-bottom-right-radius: 10px;</string>
      </property>
      <property name="text">
-      <string>GESTION DES UTILISATEURS</string>
+      <string>GESTION DES EVENEMENTS</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1223,7 +1267,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1390</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

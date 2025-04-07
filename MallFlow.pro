@@ -1,53 +1,52 @@
-QT       += core gui
-TARGET = MallFlow 
+# Définir la version de Qt et les modules requis
+QT += core gui sql widgets printsupport
 
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+# Configuration du projet
+CONFIG += c++17
+CONFIG += release
+CONFIG -= debug_and_release
 
-CONFIG += c++11
-
-# The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
-
-# You can also make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
-QT += sql
-
+# Fichiers sources
 SOURCES += \
-    connection.cpp \
-    dialog.cpp \
-    form.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    evenement.cpp \
+    connection.cpp
 
+# Fichiers d'en-tête
 HEADERS += \
-    connection.h \
-    dialog.h \
-    form.h \
-    mainwindow.h
+    mainwindow.h \
+    evenement.h \
+    connection.h
 
+# Fichiers d'interface utilisateur (UI)
 FORMS += \
-    dialog.ui \
-    form.ui \
     mainwindow.ui
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
-
-DISTFILES += \
-    imgs/output-onlinepngtools (2).png \
-    imgs/output-onlinepngtools.png \
-    resources/background.jpeg \
-    resources/background.png
-
+# Fichiers de ressources
 RESOURCES += \
-    resources.qrc \
     resources.qrc
+
+# Options de compilation
+QMAKE_CXXFLAGS += -Wall -Wextra -O2
+
+# Nom de l'exécutable généré
+TARGET = GestionEvenements
+
+# Configuration spécifique aux plateformes
+win32 {
+    LIBS += -lole32 -loleaut32 -luuid
+}
+
+unix {
+    LIBS += -lpthread
+}
+
+macx {
+    LIBS += -framework CoreFoundation
+}
+
+# Dossiers supplémentaires pour les includes et dépendances
+INCLUDEPATH += include
+DEPENDPATH += include
