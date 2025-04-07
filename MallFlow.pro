@@ -23,6 +23,7 @@ SOURCES += \
     connection.cpp \
     dialog.cpp \
     form.cpp \
+    fournisseur.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -30,6 +31,7 @@ HEADERS += \
     connection.h \
     dialog.h \
     form.h \
+    fournisseur.h \
     mainwindow.h
 
 FORMS += \
