@@ -299,7 +299,7 @@ void MainWindow::showSalaryPieChart()
     if (!model) return;
 
     for (int row = 0; row < model->rowCount(); ++row) {
-        double salary = model->index(row, 5).data().toDouble(); // Assuming column 5 is salary
+        double salary = model->index(row, 5).data().toDouble();
         if (salary < 2000)
             low++;
         else if (salary <= 5000)
