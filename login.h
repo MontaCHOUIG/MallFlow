@@ -5,6 +5,9 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QLabel>
+#include "emailsender.h"
+
 
 class Login : public QDialog {
     Q_OBJECT
@@ -16,12 +19,15 @@ public:
 private slots:
     void onLoginButtonClicked();
     void onCancelButtonClicked();
+    void onForgotPasswordClicked();
+
 
 private:
     QLineEdit *emailLineEdit;
     QLineEdit *passwordLineEdit;
     QPushButton *loginButton;
     QPushButton *cancelButton;
+    QLabel *forgotPasswordLabel;
 };
 
 #endif // LOGIN_H

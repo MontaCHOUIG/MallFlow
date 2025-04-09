@@ -19,10 +19,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 QT += sql
 QT += charts
+QT += network
 
 
 SOURCES += \
     connection.cpp \
+    emailsender.cpp \
     employe.cpp \
     login.cpp \
     main.cpp \
@@ -31,6 +33,7 @@ SOURCES += \
 
 HEADERS += \
     connection.h \
+    emailsender.h \
     employe.h \
     login.h \
     mainwindow.h \
