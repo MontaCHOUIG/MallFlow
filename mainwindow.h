@@ -48,6 +48,10 @@ private slots:
 
     void on_Sp_Line_Recherche_textChanged(const QString &arg1);
 
+    void on_pushButton_Stat_clicked();
+
+    void tech_choix_pie();
+
 private:
     Ui::MainWindow *ui;
     Sponsor S; // Changed from Client C to Sponsor S

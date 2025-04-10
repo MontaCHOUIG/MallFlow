@@ -13,6 +13,16 @@
 #include <QTextStream>
 #include <QTextDocument>
 #include <QFileDialog>
+#include <QtCharts>
+#include <QtCharts/QChartView>
+#include <QtCharts/QChart>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+#include <QtGlobal>
+#include <QPainter>
+#include <QSqlQuery>
+#include <QSqlError>
+
 
 // Constructeur de la classe MainWindow
 MainWindow::MainWindow(QWidget *parent)
@@ -316,3 +326,101 @@ void MainWindow::on_Sp_Line_Recherche_textChanged(const QString &arg1)
 
 }
 
+
+void MainWindow::tech_choix_pie() {
+    QChartView *chartView;
+    QSqlQuery query;
+    qreal tot = 0, lessThan6Months = 0, between6MonthsAnd1Year = 0, moreThan1Year = 0;
+
+    // Step 1: Get the total count of sponsors
+    query.prepare("SELECT COUNT(*) FROM SPONSORS");
+    if (query.exec() && query.next()) {
+        tot = query.value(0).toDouble();
+    } else {
+        qDebug() << "Error getting total count:" << query.lastError().text();
+        ui->Sp_Label_Stats->setText("❌ Erreur lors du calcul du total des sponsors.");
+        return;
+    }
+
+    // Step 2: Calculate durations and classify them using MONTHS_BETWEEN for Oracle
+    query.prepare(
+        "WITH DurationData AS ("
+        "    SELECT "
+        "        CASE "
+        "            WHEN MONTHS_BETWEEN(DATE_FIN, DATE_DEBUT) < 6 THEN 'Less than 6 months' "
+        "            WHEN MONTHS_BETWEEN(DATE_FIN, DATE_DEBUT) BETWEEN 6 AND 12 THEN 'Between 6 months and 1 year' "
+        "            ELSE 'More than 1 year' "
+        "        END AS duration_category "
+        "    FROM SPONSORS "
+        "    WHERE DATE_DEBUT IS NOT NULL AND DATE_FIN IS NOT NULL"
+        ")"
+        "SELECT duration_category, COUNT(*) "
+        "FROM DurationData "
+        "GROUP BY duration_category"
+    );
+
+    if (query.exec()) {
+        while (query.next()) {
+            QString category = query.value(0).toString();
+            int count = query.value(1).toInt();
+            if (category == "Less than 6 months") {
+                lessThan6Months = count;
+            } else if (category == "Between 6 months and 1 year") {
+                between6MonthsAnd1Year = count;
+            } else if (category == "More than 1 year") {
+                moreThan1Year = count;
+            }
+        }
+    } else {
+        qDebug() << "Error calculating durations:" << query.lastError().text();
+        ui->Sp_Label_Stats->setText("❌ Erreur lors du calcul des durées: " + query.lastError().text());
+        return;
+    }
+
+    // Step 3: Calculate percentages
+    qreal c1 = (tot > 0) ? (lessThan6Months / tot) : 0;
+    qreal c2 = (tot > 0) ? (between6MonthsAnd1Year / tot) : 0;
+    qreal c3 = (tot > 0) ? (moreThan1Year / tot) : 0;
+
+    // Step 4: Create the pie series
+    QPieSeries *series = new QPieSeries();
+    series->append("Moins de 6 mois", c1);
+    series->append("Entre 6 mois et 1 an", c2);
+    series->append("Plus d'1 an", c3);
+
+    // Set labels for each slice
+    for (QPieSlice *slice : series->slices()) {
+        slice->setLabelVisible();
+        slice->setLabel(QString("%1: %2%").arg(slice->label()).arg(slice->percentage() * 100, 0, 'f', 1));
+    }
+
+    // Step 5: Create the chart
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("Statistiques des Sponsors par Durée");
+    chart->legend()->show();
+    chart->setAnimationOptions(QChart::AllAnimations);
+    chart->setTheme(QChart::ChartThemeQt);
+
+    // Step 6: Create the chart view
+    chartView = new QChartView(chart, ui->Sp_Label_Stats);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setMinimumSize(570, 570);
+
+    // Add the chart view to the layout
+    QVBoxLayout *layout = new QVBoxLayout(ui->Sp_Label_Stats);
+    layout->addWidget(chartView);
+    ui->Sp_Label_Stats->setLayout(layout);
+
+    chartView->show();
+}
+
+
+
+
+
+void MainWindow::on_pushButton_Stat_clicked()
+{
+    tech_choix_pie();
+    show();
+}

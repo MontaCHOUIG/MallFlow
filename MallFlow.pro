@@ -1,4 +1,4 @@
-QT       += core gui printsupport
+QT       += core gui printsupport charts
 TARGET = MallFlow 
 
 

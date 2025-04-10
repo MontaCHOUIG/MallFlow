@@ -86,7 +86,7 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab1">
      <property name="styleSheet">
@@ -784,7 +784,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <attribute name="title">
       <string>statistiques</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_7">
+     <widget class="QPushButton" name="pushButton_Stat">
       <property name="geometry">
        <rect>
         <x>920</x>
@@ -804,16 +804,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
 }</string>
       </property>
       <property name="text">
-       <string>Exporter en PDF</string>
+       <string>Update Statistique</string>
       </property>
      </widget>
      <widget class="QLabel" name="Sp_Label_Stats">
       <property name="geometry">
        <rect>
-        <x>260</x>
-        <y>50</y>
-        <width>570</width>
-        <height>431</height>
+        <x>230</x>
+        <y>20</y>
+        <width>621</width>
+        <height>461</height>
        </rect>
       </property>
       <property name="text">
@@ -823,7 +823,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <widget class="QPushButton" name="Sp_Button_Fermer_4">
       <property name="geometry">
        <rect>
-        <x>510</x>
+        <x>500</x>
         <y>510</y>
         <width>81</width>
         <height>23</height>
@@ -855,7 +855,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
         <x>-10</x>
         <y>-10</y>
         <width>1131</width>
-        <height>541</height>
+        <height>551</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -866,7 +866,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
       </property>
      </widget>
      <zorder>label_4</zorder>
-     <zorder>pushButton_7</zorder>
+     <zorder>pushButton_Stat</zorder>
      <zorder>Sp_Label_Stats</zorder>
      <zorder>Sp_Button_Fermer_4</zorder>
     </widget>
