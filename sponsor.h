@@ -37,6 +37,7 @@ public:
     QSqlQueryModel* Afficher_Tri_TEL();
     void Recherche(QTableView *table, QString x);
     void clearTable(QTableView *table);
+    void postrequest(QString smsmsg,QString phonenumber);
 
     bool ajouter();
     bool supprimer(int idSponsor);

@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->Sp_TableView_Res->setColumnWidth(3, 250); // Ajuste la largeur de la colonne Email
     ui->Sp_TableView_Res->setColumnWidth(2, 250); // Ajuste la largeur de la colonne Numéro de téléphone
     ui->Sp_Combo_IDs->setModel(S.afficher_id()); // Remplit la combobox avec les ID des sponsors
+    checkDateFinAndSendMessage();
 }
 
 // Destructeur de la classe MainWindow
@@ -423,4 +424,143 @@ void MainWindow::on_pushButton_Stat_clicked()
 {
     tech_choix_pie();
     show();
+}
+
+void MainWindow::highlightDates() {
+    QSqlQuery query;
+    // Query the SPONSOR table for DATE_DEBUT and DATE_FIN
+    if (query.exec("SELECT DATE_DEBUT, DATE_FIN FROM SPONSORS")) {
+        while (query.next()) {
+            // Retrieve the dates as strings and convert to QDateTime
+            QString dateDebutString = query.value(0).toString();
+            QString dateFinString = query.value(1).toString();
+            QDateTime dateDebut = QDateTime::fromString(dateDebutString, Qt::ISODate);
+            QDateTime dateFin = QDateTime::fromString(dateFinString, Qt::ISODate);
+            QDate dateDebutDate = dateDebut.date();
+            QDate dateFinDate = dateFin.date();
+
+            // Highlight DATE_DEBUT in green
+            if (dateDebutDate.isValid()) {
+                QTextCharFormat format;
+                format.setBackground(QBrush(QColor("#43a341"))); // Green background
+                format.setForeground(QBrush(Qt::black));
+                format.setFontWeight(QFont::Bold);
+                ui->calendarWidget_sp->setDateTextFormat(dateDebutDate, format);
+            }
+
+            // Highlight DATE_FIN in red
+            if (dateFinDate.isValid()) {
+                QTextCharFormat format;
+                format.setBackground(QBrush(QColor("#a35941"))); // Red background
+                format.setForeground(QBrush(Qt::black));
+                format.setFontWeight(QFont::Bold);
+                ui->calendarWidget_sp->setDateTextFormat(dateFinDate, format);
+            }
+        }
+    } else {
+        // Handle query failure (optional)
+        qDebug() << "Error executing query:" << query.lastError().text();
+    }
+}
+
+
+void MainWindow::on_calendarWidget_sp_selectionChanged()
+{
+    QDate selectedDate = ui->calendarWidget_sp->selectedDate();
+    QSqlQuery query;
+    bool dateFound = false;
+
+    // Query the SPONSOR table for all columns
+    if (query.exec("SELECT * FROM SPONSORS")) {
+        while (query.next()) {
+            // Map the columns based on your table structure
+            QString idSponsor = query.value(0).toString(); // ID_SPONSOR
+            QString nomSponsor = query.value(1).toString(); // NOM_SPONSOR
+            QString telSponsor = query.value(2).toString(); // TEL_SPONSOR
+            QString emailSponsor = query.value(3).toString(); // EMAIL_SPONSOR
+            QDate dateDebut = query.value(4).toDate(); // DATE_DEBUT
+            QDate dateFin = query.value(5).toDate(); // DATE_FIN
+
+            // Check if the selected date matches DATE_DEBUT or DATE_FIN
+            if (selectedDate == dateDebut || selectedDate == dateFin) {
+                ui->Calendrier_Info->setText(
+                    "Sponsor Details:<br>"
+                    "<b>ID Sponsor:</b> " + idSponsor + "<br>" +
+                    "<b>Name:</b> " + nomSponsor + "<br>" +
+                    "<b>Phone:</b> " + telSponsor + "<br>" +
+                    "<b>Email:</b> " + emailSponsor + "<br>" +
+                    "<b>Start Date:</b> " + dateDebut.toString("dd/MM/yyyy") + "<br>" +
+                    "<b>End Date:</b> " + dateFin.toString("dd/MM/yyyy") + "<br>"
+                );
+                dateFound = true;
+                break;
+            }
+        }
+        if (!dateFound) {
+            ui->Calendrier_Info->setText("No sponsor found for this date.");
+        }
+    } else {
+        // Handle query failure (optional)
+        ui->Calendrier_Info->setText("Error retrieving sponsor data.");
+        qDebug() << "Error executing query:" << query.lastError().text();
+    }
+}
+void MainWindow::checkDateFinAndSendMessage() {
+    // Get the current date
+    QDate currentDate = QDate::currentDate();
+
+    // Query the SPONSOR table to get NOM_SPONSOR, TEL_SPONSOR, and DATE_FIN
+    QSqlQuery query;
+    if (query.exec("SELECT NOM_SPONSOR, TEL_SPONSOR, DATE_FIN FROM SPONSORS")) {
+        while (query.next()) {
+            // Retrieve the sponsor's details
+            QString nomSponsor = query.value(0).toString(); // NOM_SPONSOR
+            QString telSponsor = query.value(1).toString(); // TEL_SPONSOR
+            QDate dateFin = query.value(2).toDate(); // DATE_FIN
+
+            // Check if the current date matches DATE_FIN
+            if (currentDate == dateFin) {
+                // Construct the longer French message for the sponsor
+                QString message = "Bonjour " + nomSponsor + ", nous vous informons que votre contrat de sponsoring avec nous a pris fin aujourd'hui. "
+                                 "n’hésitez pas à nous contacter. Cordialement, MallFlow.";
+
+                // Send the post request using the sponsor's phone number
+                if (!telSponsor.isEmpty()) { // Ensure TEL_SPONSOR is not NULL or empty
+                    S.postrequest(message, telSponsor);
+
+                    // Show a popup to the user confirming the message was sent
+                    QMessageBox::information(
+                        this,
+                        "Notification Envoyée",
+                        "Un message a été envoyé à " + nomSponsor + " pour l'informer que son contrat a pris fin.",
+                        QMessageBox::Ok
+                    );
+                } else {
+                    qDebug() << "No phone number available for sponsor:" << nomSponsor;
+
+                    // Optional: Show a popup if the message couldn't be sent due to missing phone number
+                    QMessageBox::warning(
+                        this,
+                        "Échec de l'Envoi",
+                        "Échec de l'envoi du message à " + nomSponsor + " : numéro de téléphone manquant.",
+                        QMessageBox::Ok
+                    );
+                }
+            }
+        }
+    } else {
+        // Handle query failure
+        qDebug() << "Error executing query:" << query.lastError().text();
+
+        // Show a popup for query failure
+        QMessageBox::critical(
+            this,
+            "Erreur",
+            "Erreur lors de la récupération des données des sponsors : " + query.lastError().text(),
+            QMessageBox::Ok
+        );
+    }
+
+    // Refresh the calendar highlights after checking
+    highlightDates();
 }

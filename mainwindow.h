@@ -52,6 +52,12 @@ private slots:
 
     void tech_choix_pie();
 
+    void on_calendarWidget_sp_selectionChanged();
+
+    void highlightDates();
+
+    void checkDateFinAndSendMessage();
+
 private:
     Ui::MainWindow *ui;
     Sponsor S; // Changed from Client C to Sponsor S

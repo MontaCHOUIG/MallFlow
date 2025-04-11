@@ -1,5 +1,8 @@
 #include "sponsor.h"
 #include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QDebug>
@@ -201,4 +204,39 @@ void Sponsor::clearTable(QTableView *table) {
     table->setModel(modelFeragh);
 }
 
+void Sponsor::postrequest(QString smsmsg, QString phonenumber) {
+    QEventLoop eventLoop;
+    QNetworkAccessManager mgr;
+    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 
+    // Replace with your Twilio credentials and phone number
+    QString accountSid = "AC6e26f6db1c043fe90779d6b644b7cd71";
+    QString authToken = "4ae04e06baed68e4ca48d1339476d6e9";
+    QString fromNumber = "+18053603109"; // Your Twilio phone number
+
+    QUrl url(QString("https://api.twilio.com/2010-04-01/Accounts/%1/Messages.json").arg(accountSid));
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    // Set up Basic Auth header
+    QString auth = "Basic " + QString("%1:%2").arg(accountSid, authToken).toUtf8().toBase64();
+    req.setRawHeader("Authorization", auth.toUtf8());
+
+    // Form the data as application/x-www-form-urlencoded
+    QUrlQuery params;
+    params.addQueryItem("To", "+216" + phonenumber);
+    params.addQueryItem("From", fromNumber);
+    params.addQueryItem("Body", smsmsg);
+
+    QByteArray data = params.query().toUtf8();
+    QNetworkReply *reply = mgr.post(req, data);
+    eventLoop.exec(); // blocks stack until "finished()" has been called
+
+    if (reply->error() == QNetworkReply::NoError) {
+        qDebug() << "Success" << reply->readAll();
+        delete reply;
+    } else {
+        qDebug() << "Failure" << reply->errorString() << reply->error();
+        delete reply;
+    }
+}
