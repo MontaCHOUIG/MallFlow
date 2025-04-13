@@ -6,28 +6,35 @@
 
 class Evenement {
 public:
-    Evenement(int id, const QString& titre, const QString& lieu, const QDate& dateDebut, const QDate& dateFin, const QString& typeParticipants);
+    Evenement(int id, const QString& titre, const QDate& dateDebut, const QDate& dateFin,
+              const QString& lieu, const QString& typeParticipants, int idEmploye, int idSponsor);
 
     int getId() const;
     QString getTitre() const;
-    QString getLieu() const;
     QDate getDateDebut() const;
     QDate getDateFin() const;
+    QString getLieu() const;
     QString getTypeParticipants() const;
+    int getIdEmploye() const;
+    int getIdSponsor() const;
 
     void setTitre(const QString& titre);
-    void setLieu(const QString& lieu);
     void setDateDebut(const QDate& dateDebut);
     void setDateFin(const QDate& dateFin);
+    void setLieu(const QString& lieu);
     void setTypeParticipants(const QString& typeParticipants);
+    void setIdEmploye(int idEmploye);
+    void setIdSponsor(int idSponsor);
 
 private:
-    int id;
+    int id_evenement;
     QString titre;
+    QDate date_debut;
+    QDate date_fin;
     QString lieu;
-    QDate dateDebut;
-    QDate dateFin;
-    QString typeParticipants; // Nouvel attribut
+    QString type_participants;
+    int id_employe;
+    int id_sponsor;
 };
 
 #endif // EVENEMENT_H

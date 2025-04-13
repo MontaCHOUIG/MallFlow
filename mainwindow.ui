@@ -86,7 +86,7 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <property name="styleSheet">
@@ -100,8 +100,8 @@ QTabBar::close-button:hover {
        <rect>
         <x>50</x>
         <y>50</y>
-        <width>401</width>
-        <height>411</height>
+        <width>411</width>
+        <height>471</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -167,7 +167,7 @@ QGroupBox::title {
         <string>Date_Fin</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_Titre">
+      <widget class="QLineEdit" name="TITRE">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -186,7 +186,7 @@ QLineEdit:hover {
 }</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_ID">
+      <widget class="QLineEdit" name="ID_EVENEMENT">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -227,7 +227,7 @@ QLineEdit:hover {
         <string>ID_Evènement</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_Lieu">
+      <widget class="QLineEdit" name="LIEU">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -284,7 +284,7 @@ QLineEdit:hover {
         <string>Date_Début</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="Sp_Line_Type">
+      <widget class="QLineEdit" name="TYPE_DE_PARTICIPANTS">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -306,8 +306,8 @@ QLineEdit:hover {
       <widget class="QPushButton" name="Sp_Button_Ajouter">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>360</y>
+         <x>120</x>
+         <y>420</y>
          <width>151</width>
          <height>31</height>
         </rect>
@@ -331,7 +331,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
         <string>Ajouter</string>
        </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit">
+      <widget class="QDateEdit" name="DATE_DEBUT">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -341,7 +341,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
         </rect>
        </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit_2">
+      <widget class="QDateEdit" name="DATE_FIN">
        <property name="geometry">
         <rect>
          <x>140</x>
@@ -368,6 +368,44 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </property>
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Type de &lt;br/&gt;participants&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ID_SPONSOR">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>390</y>
+         <width>209</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit {
+		border: 1px solid #230a98;
+		border-radius: 5px;
+}
+QLineEdit:hover {
+		border: 1px solid #7359f0;
+}</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="ID_EMPLOYE">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>350</y>
+         <width>209</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit {
+		border: 1px solid #230a98;
+		border-radius: 5px;
+}
+QLineEdit:hover {
+		border: 1px solid #7359f0;
+}</string>
        </property>
       </widget>
      </widget>
@@ -427,7 +465,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <string>Supprimer</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="Sp_Combo_ID">
+     <widget class="QComboBox" name="Sp_combo_ID">
       <property name="geometry">
        <rect>
         <x>690</x>
@@ -499,7 +537,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <zorder>Sp_GroupBox_2</zorder>
      <zorder>Sp_Button_Modifier</zorder>
      <zorder>Sp_Button_Supprimer</zorder>
-     <zorder>Sp_Combo_ID</zorder>
+     <zorder>Sp_combo_ID</zorder>
      <zorder>Sp_Button_Fermer_2</zorder>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -759,70 +797,6 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
      <attribute name="title">
       <string>Statistiques des évènements</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_7">
-      <property name="geometry">
-       <rect>
-        <x>910</x>
-        <y>470</y>
-        <width>171</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-background-color: rgba(35,10,152, 200);
-border-radius: 8px;
-color: white;
-}
-QPushButton:hover {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
-}</string>
-      </property>
-      <property name="text">
-       <string>Exporter en PDF</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="Sp_Label_Stats">
-      <property name="geometry">
-       <rect>
-        <x>260</x>
-        <y>50</y>
-        <width>570</width>
-        <height>431</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="Sp_Button_Fermer_4">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>492</y>
-        <width>81</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-background-color: rgba(35,10,152, 200);
-border-radius: 8px;
-color: white;
-}
-QPushButton:hover {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
-}</string>
-      </property>
-      <property name="text">
-       <string>Fermer</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
@@ -839,20 +813,87 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <string/>
       </property>
      </widget>
-     <zorder>label_4</zorder>
-     <zorder>pushButton_7</zorder>
-     <zorder>Sp_Label_Stats</zorder>
-     <zorder>Sp_Button_Fermer_4</zorder>
+     <widget class="QWidget" name="widget" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1121</width>
+        <height>541</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_stats"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
       <string>Code QR</string>
      </attribute>
+     <widget class="QWidget" name="widget_2" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1121</width>
+        <height>541</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_tab4">
+         <item>
+          <widget class="QComboBox" name="tab4_combo_Event">
+           <property name="styleSheet">
+            <string notr="true">QComboBox
+{
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    selection-background-color: #111;
+    selection-color: yellow;
+    color: black;
+    border-style: solid;
+    border: 1px solid #230a98;
+    border-radius: 5;
+    padding: 1px 0px 1px 20px;
+}</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
       <string>Maps</string>
      </attribute>
+     <widget class="QWidget" name="widget_3" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>-10</y>
+        <width>1121</width>
+        <height>561</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_tab5"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </widget>
    <widget class="QLabel" name="Bg_imzge">

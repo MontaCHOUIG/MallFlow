@@ -1,18 +1,21 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "evenement.h"
-
+#include <QSqlError>
 #include <QMessageBox>
 #include <QStandardItemModel>
 #include <QIntValidator>
-#include <QComboBox>
 #include <QFileDialog>
-#include <QTextStream>
 #include <QPrinter>
 #include <QPainter>
-#include <algorithm>
+#include <QTextDocument>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QImage>
+#include <QSqlQuery>
+#include <QPixmap>
+#include <QLabel>
+#include <QQuickItem>
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -20,203 +23,368 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->Sp_Line_ID->setValidator(new QIntValidator(1, 1000000, this));
+    // Initialisation de la carte
+    mapWidget = new QQuickWidget(ui->tab_5);
+    mapWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    mapWidget->setSource(QUrl("qrc:/map.qml"));
+    ui->verticalLayout_tab5->addWidget(mapWidget);
+    networkManager = new QNetworkAccessManager(this);
 
-    connect(ui->Sp_Combo_ID, &QComboBox::currentTextChanged,
-            this, &MainWindow::on_Sp_Combo_ID_currentIndexChanged);
 
-    connect(ui->Sp_Button_Recherche, &QPushButton::clicked,
-            this, &MainWindow::on_Sp_Button_Recherche_clicked);
-    connect(ui->Sp_Button_Tri_Titre, &QPushButton::clicked,
-            this, &MainWindow::on_Sp_Button_Tri_Titre_clicked);
-    connect(ui->Sp_Button_Tri_Lieu, &QPushButton::clicked,
-            this, &MainWindow::on_Sp_Button_Tri_Lieu_clicked);
-    connect(ui->Sp_Button_Tri_ID, &QPushButton::clicked,
-            this, &MainWindow::on_Sp_Button_Tri_ID_clicked);
+    // Initialisation des graphiques
+    chartViewParticipants = new QChartView(ui->tab_3);
+    chartViewLieux = new QChartView(ui->tab_3);
+
+    // Ajout au layout de tab3 (à adapter selon votre UI)
+    ui->verticalLayout_stats->addWidget(chartViewParticipants);
+    ui->verticalLayout_stats->addWidget(chartViewLieux);
+
+    updateStats(); // Mettre à jour les stats au lancement
+
+    // Configuration des validateurs
+    ui->ID_EVENEMENT->setValidator(new QIntValidator(1, 1000000, this));
+    ui->ID_EMPLOYE->setValidator(new QIntValidator(1, 1000000, this));
+    ui->ID_SPONSOR->setValidator(new QIntValidator(1, 1000000, this));
+
+    afficherEvenements(); // Initialiser tableau et combo box
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_Sp_Button_Ajouter_clicked() {
-    int id = ui->Sp_Line_ID->text().toInt();
-    QString titre = ui->Sp_Line_Titre->text().trimmed();
-    QString lieu = ui->Sp_Line_Lieu->text().trimmed();
-    QDate dateDebut = ui->dateEdit->date();
-    QDate dateFin = ui->dateEdit_2->date();
-    QString typeParticipants = ui->Sp_Line_Type->text().trimmed();
-
-    if (titre.isEmpty() || lieu.isEmpty() || typeParticipants.isEmpty()) {
-        QMessageBox::warning(this, "Champs manquants", "Veuillez remplir tous les champs obligatoires.");
-        return;
-    }
-    if (dateFin < dateDebut) {
-        QMessageBox::warning(this, "Dates invalides", "La date de fin doit être postérieure ou égale à la date de début.");
-        return;
-    }
-    for (const Evenement &e : evenements) {
-        if (e.getId() == id) {
-            QMessageBox::warning(this, "ID existant", "Un événement avec cet ID existe déjà.");
-            return;
-        }
-    }
-
-    evenements.append(Evenement(id, titre, lieu, dateDebut, dateFin, typeParticipants));
-    afficherEvenements();
-
-    ui->Sp_Line_ID->clear();
-    ui->Sp_Line_Titre->clear();
-    ui->Sp_Line_Lieu->clear();
-    ui->Sp_Line_Type->clear();
-    ui->dateEdit->setDate(QDate::currentDate());
-    ui->dateEdit_2->setDate(QDate::currentDate());
-    ui->tabWidget->setCurrentIndex(1);
-    QMessageBox::information(this, "Succès", "Événement ajouté avec succès.");
+bool MainWindow::recordExists(const QString &table, const QString &col, int id) {
+    QSqlQuery q;
+    q.prepare(QString("SELECT 1 FROM %1 WHERE %2 = :id").arg(table, col));
+    q.bindValue(":id", id);
+    if (!q.exec()) return false;
+    return q.next();
 }
 
-void MainWindow::on_Sp_Combo_ID_currentIndexChanged(const QString &idStr) {
-    if (idStr.isEmpty()) return;
-    int id = idStr.toInt();
-    for (const Evenement &e : evenements) {
-        if (e.getId() == id) {
-            ui->Sp_Line_ID->setText(idStr);
-            ui->Sp_Line_Titre->setText(e.getTitre());
-            ui->Sp_Line_Lieu->setText(e.getLieu());
-            ui->dateEdit->setDate(e.getDateDebut());
-            ui->dateEdit_2->setDate(e.getDateFin());
-            ui->Sp_Line_Type->setText(e.getTypeParticipants());
-            break;
-        }
+void MainWindow::on_Sp_Button_Ajouter_clicked() {
+    int id = ui->ID_EVENEMENT->text().toInt();
+    QString titre = ui->TITRE->text().trimmed();
+    QDate dateDebut = ui->DATE_DEBUT->date();
+    QDate dateFin = ui->DATE_FIN->date();
+    QString lieu = ui->LIEU->text().trimmed();
+    QString typeParticipants = ui->TYPE_DE_PARTICIPANTS->text().trimmed();
+    int idEmploye = ui->ID_EMPLOYE->text().toInt();
+    int idSponsor = ui->ID_SPONSOR->text().toInt();
+
+    if (id <= 0 || titre.isEmpty() || !dateDebut.isValid() || !dateFin.isValid() || dateFin < dateDebut) {
+        QMessageBox::warning(this, "Erreur", "Champs invalides.");
+        return;
+    }
+
+    QSqlQuery checkQuery;
+    checkQuery.prepare("SELECT ID_EVENEMENT FROM SHOPDEVS.EVENEMENTS WHERE ID_EVENEMENT = :id");
+    checkQuery.bindValue(":id", id);
+    if (checkQuery.exec() && checkQuery.next()) {
+        QMessageBox::warning(this, "Erreur", "L'ID existe déjà !");
+        return;
+    }
+
+    if (idEmploye > 0 && !recordExists("SHOPDEVS.EMPLOYES", "ID_EMPLOYE", idEmploye)) {
+        QMessageBox::warning(this, "Erreur", "Employé inexistant.");
+        return;
+    }
+    if (idSponsor > 0 && !recordExists("SHOPDEVS.SPONSORS", "ID_SPONSOR", idSponsor)) {
+        QMessageBox::warning(this, "Erreur", "Sponsor inexistant.");
+        return;
+    }
+
+    QSqlQuery insertQuery;
+    insertQuery.prepare(
+        "INSERT INTO SHOPDEVS.EVENEMENTS "
+        "(ID_EVENEMENT, TITRE, DATE_DEBUT, DATE_FIN, LIEU, TYPE_DE_PARTICIPANTS, ID_EMPLOYE, ID_SPONSOR) "
+        "VALUES (:id, :titre, TO_DATE(:debut, 'YYYY-MM-DD'), TO_DATE(:fin, 'YYYY-MM-DD'), :lieu, :type, :emp, :spon)"
+        );
+    insertQuery.bindValue(":id", id);
+    insertQuery.bindValue(":titre", titre);
+    insertQuery.bindValue(":debut", dateDebut.toString("yyyy-MM-dd")); // Format correct
+    insertQuery.bindValue(":fin", dateFin.toString("yyyy-MM-dd"));
+    insertQuery.bindValue(":lieu", lieu);
+    insertQuery.bindValue(":type", typeParticipants);
+    insertQuery.bindValue(":emp", idEmploye);
+    insertQuery.bindValue(":spon", idSponsor);
+    if (insertQuery.exec()) {
+        QMessageBox::information(this, "Succès", "Événement ajouté !");
+        // Nettoyage des champs
+        ui->ID_EVENEMENT->clear(); ui->TITRE->clear(); ui->DATE_DEBUT->setDate(QDate::currentDate());
+        ui->DATE_FIN->setDate(QDate::currentDate()); ui->LIEU->clear(); ui->TYPE_DE_PARTICIPANTS->clear();
+        ui->ID_EMPLOYE->clear(); ui->ID_SPONSOR->clear();
+
+        afficherEvenements();        // Mise à jour dynamique du tableau et combo box
+        updateStats();
+    } else {
+        QMessageBox::critical(this, "Erreur", insertQuery.lastError().text());
     }
 }
 
 void MainWindow::on_Sp_Button_Modifier_clicked() {
-    int id = ui->Sp_Combo_ID->currentText().toInt();
-    QString titre = ui->Sp_Line_Titre->text().trimmed();
-    QString lieu = ui->Sp_Line_Lieu->text().trimmed();
-    QDate dateDebut = ui->dateEdit->date();
-    QDate dateFin = ui->dateEdit_2->date();
-    QString typeParticipants = ui->Sp_Line_Type->text().trimmed();
+    int id = ui->Sp_combo_ID->currentText().toInt();
+    QString titre = ui->TITRE->text();
+    QDate dateDebut = ui->DATE_DEBUT->date();
+    QDate dateFin = ui->DATE_FIN->date();
+    QString lieu = ui->LIEU->text();
+    QString typeParticipants = ui->TYPE_DE_PARTICIPANTS->text();
+    int idEmploye = ui->ID_EMPLOYE->text().toInt();
+    int idSponsor = ui->ID_SPONSOR->text().toInt();
 
-    if (titre.isEmpty() || lieu.isEmpty() || typeParticipants.isEmpty()) {
-        QMessageBox::warning(this, "Champs manquants", "Veuillez remplir tous les champs.");
-        return;
-    }
+    QSqlQuery query;
+    query.prepare("UPDATE SHOPDEVS.EVENEMENTS SET TITRE=:titre, DATE_DEBUT=TO_DATE(:debut, 'YYYY-MM-DD'), DATE_FIN=TO_DATE(:fin, 'YYYY-MM-DD'), LIEU=:lieu, TYPE_DE_PARTICIPANTS=:type, ID_EMPLOYE=:emp, ID_SPONSOR=:spon WHERE ID_EVENEMENT=:id");
+    query.bindValue(":titre", titre);
+    query.bindValue(":debut", dateDebut.toString("yyyy-MM-dd"));
+    query.bindValue(":fin", dateFin.toString("yyyy-MM-dd"));
+    query.bindValue(":lieu", lieu);
+    query.bindValue(":type", typeParticipants);
+    query.bindValue(":emp", idEmploye);
+    query.bindValue(":spon", idSponsor);
+    query.bindValue(":id", id);
 
-    for (Evenement &e : evenements) {
-        if (e.getId() == id) {
-            e.setTitre(titre);
-            e.setLieu(lieu);
-            e.setDateDebut(dateDebut);
-            e.setDateFin(dateFin);
-            e.setTypeParticipants(typeParticipants);
-            afficherEvenements();
-            QMessageBox::information(this, "Succès", "Événement modifié avec succès.");
-            return;
-        }
+    if (query.exec()) {
+        afficherEvenements();
+        updateStats();
+        QMessageBox::information(this, "Succès", "Modification réussie.");
+    } else {
+        QMessageBox::critical(this, "Erreur", query.lastError().text());
     }
-    QMessageBox::warning(this, "Erreur", "Aucun événement trouvé.");
 }
 
 void MainWindow::on_Sp_Button_Supprimer_clicked() {
-    int id = ui->Sp_Combo_ID->currentText().toInt();
-    for (int i = 0; i < evenements.size(); ++i) {
-        if (evenements[i].getId() == id) {
-            evenements.removeAt(i);
-            afficherEvenements();
-            QMessageBox::information(this, "Succès", "Événement supprimé avec succès.");
-            return;
-        }
+    int id = ui->Sp_combo_ID->currentText().toInt();
+    QSqlQuery query;
+    query.prepare("DELETE FROM SHOPDEVS.EVENEMENTS WHERE ID_EVENEMENT = :id");
+    query.bindValue(":id", id);
+    if (query.exec()) {
+        afficherEvenements();
+        updateStats();
+        QMessageBox::information(this, "Succès", "Suppression réussie.");
+    } else {
+        QMessageBox::critical(this, "Erreur", query.lastError().text());
     }
-    QMessageBox::warning(this, "Erreur", "Événement non trouvé.");
 }
 
-void MainWindow::afficherEvenements(const QList<Evenement> &liste) {
-    QList<Evenement> aAfficher = liste.isEmpty() ? evenements : liste;
-    auto *model = new QStandardItemModel(this);
-    model->setHorizontalHeaderLabels({"ID", "Titre", "Lieu", "Date Début", "Date Fin", "Participants"});
+void MainWindow::on_Sp_combo_ID_currentIndexChanged(int index)
+{
+    QString idStr = ui->Sp_combo_ID->itemText(index);
+    if (idStr.isEmpty()) return;
 
-    for (const Evenement &e : aAfficher) {
+    QSqlQuery query;
+    query.prepare("SELECT * FROM SHOPDEVS.EVENEMENTS WHERE ID_EVENEMENT = :id");
+    query.bindValue(":id", idStr.toInt());
+    if (query.exec() && query.next()) {
+        ui->ID_EVENEMENT->setText(query.value("ID_EVENEMENT").toString());
+        ui->TITRE->setText(query.value("TITRE").toString());
+        ui->DATE_DEBUT->setDate(query.value("DATE_DEBUT").toDate());
+        ui->DATE_FIN->setDate(query.value("DATE_FIN").toDate());
+        ui->LIEU->setText(query.value("LIEU").toString());
+        ui->TYPE_DE_PARTICIPANTS->setText(query.value("TYPE_DE_PARTICIPANTS").toString());
+        ui->ID_EMPLOYE->setText(query.value("ID_EMPLOYE").toString());
+        ui->ID_SPONSOR->setText(query.value("ID_SPONSOR").toString());
+    }
+    {
+        // Code existant pour remplir les champs...
+        QString lieu = query.value("LIEU").toString();
+
+        // Nouveau : Géocodage de l'adresse
+        if(!lieu.isEmpty()) {
+            geocodeAddress(lieu);
+        }
+    }
+}
+
+
+
+
+
+void MainWindow::afficherEvenements(const QString &orderBy) {
+    QString queryStr = "SELECT * FROM SHOPDEVS.EVENEMENTS"; // au lieu de "EVENEMENT"
+    if (!orderBy.isEmpty()) queryStr += " ORDER BY " + orderBy;
+
+    QStandardItemModel *model = new QStandardItemModel();
+    model->setHorizontalHeaderLabels({"ID", "Titre", "Date Début", "Date Fin", "Lieu", "Participants", "ID Employé", "ID Sponsor"});
+
+    QSqlQuery query(queryStr);
+    while (query.next()) {
         QList<QStandardItem*> row;
-        row << new QStandardItem(QString::number(e.getId()))
-            << new QStandardItem(e.getTitre())
-            << new QStandardItem(e.getLieu())
-            << new QStandardItem(e.getDateDebut().toString("yyyy-MM-dd"))
-            << new QStandardItem(e.getDateFin().toString("yyyy-MM-dd"))
-            << new QStandardItem(e.getTypeParticipants());
+        for (int i = 0; i < 8; ++i) {
+            row << new QStandardItem(query.value(i).toString());
+        }
         model->appendRow(row);
     }
-    ui->Sp_TableView_Res->setModel(model);
 
-    ui->Sp_Combo_ID->clear();
-    for (const Evenement &e : evenements)
-        ui->Sp_Combo_ID->addItem(QString::number(e.getId()));
+    ui->Sp_TableView_Res->setModel(model);
+    ui->Sp_combo_ID->clear();
+    QSqlQuery idQuery("SELECT ID_EVENEMENT FROM SHOPDEVS.EVENEMENTS");
+    while (idQuery.next()) ui->Sp_combo_ID->addItem(idQuery.value(0).toString());
 }
 
 void MainWindow::on_Sp_Button_Recherche_clicked() {
-    QString titreRecherche = ui->Sp_Line_Recherche->text().trimmed();
-    QList<Evenement> resultats;
-    for (const Evenement &e : evenements) {
-        if (e.getTitre().contains(titreRecherche, Qt::CaseInsensitive))
-            resultats.append(e);
+    QString searchText = ui->Sp_Line_Recherche->text().trimmed();
+    QSqlQuery query;
+    query.prepare("SELECT * FROM SHOPDEVS.EVENEMENTS WHERE TITRE LIKE :search OR LIEU LIKE :search");
+    query.bindValue(":search", "%" + searchText + "%");
+    query.exec();
+
+    QStandardItemModel *model = new QStandardItemModel();
+    model->setHorizontalHeaderLabels({"ID", "Titre", "Date Début", "Date Fin", "Lieu", "Participants", "ID Employé", "ID Sponsor"});
+
+    while (query.next()) {
+        QList<QStandardItem*> row;
+        for (int i = 0; i < 8; ++i) row << new QStandardItem(query.value(i).toString());
+        model->appendRow(row);
     }
-    afficherEvenements(resultats);
-}
 
-void MainWindow::on_Sp_Button_Tri_Titre_clicked() {
-    std::sort(evenements.begin(), evenements.end(), [](const Evenement &a, const Evenement &b) {
-        return a.getTitre().toLower() < b.getTitre().toLower();
-    });
-    afficherEvenements();
-}
-
-void MainWindow::on_Sp_Button_Tri_Lieu_clicked() {
-    std::sort(evenements.begin(), evenements.end(), [](const Evenement &a, const Evenement &b) {
-        return a.getLieu().toLower() < b.getLieu().toLower();
-    });
-    afficherEvenements();
+    ui->Sp_TableView_Res->setModel(model);
 }
 
 void MainWindow::on_Sp_Button_Tri_ID_clicked() {
-    std::sort(evenements.begin(), evenements.end(), [](const Evenement &a, const Evenement &b) {
-        return a.getId() < b.getId();
-    });
-    afficherEvenements();
+    afficherEvenements("ID_EVENEMENT ASC");
 }
 
-void MainWindow::on_Sp_Button_PDF_clicked()
-{
-    QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer le PDF", "", "Fichiers PDF (*.pdf)");
-    if (fileName.isEmpty())
-        return;
+void MainWindow::on_Sp_Button_Tri_Titre_clicked() {
+    afficherEvenements("TITRE ASC");
+}
 
-    if (!fileName.endsWith(".pdf", Qt::CaseInsensitive)) {
-        fileName += ".pdf";
-    }
+void MainWindow::on_Sp_Button_Tri_Lieu_clicked() {
+    afficherEvenements("LIEU ASC");
+}
 
+void MainWindow::on_Sp_Button_PDF_clicked() {
+    QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer PDF", "", "Fichiers PDF (*.pdf)");
+    if (fileName.isEmpty()) return;
+    genererPDF(fileName);
+}
+
+
+void MainWindow::genererPDF(const QString &fileName) {
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(fileName);
+    printer.setPageOrientation(QPageLayout::Landscape);
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setPageMargins(QMarginsF(15, 20, 15, 15));
 
-    QTextDocument doc;
-    QString html = "<h2>Liste des événements</h2><table border='1' cellspacing='0' cellpadding='2'>"
-                   "<tr><th>ID</th><th>Titre</th><th>Lieu</th><th>Date Début</th><th>Date Fin</th><th>Type</th></tr>";
+    // Entête avec logo à gauche + titre/date centrés
+    QString html = "<div style='display: flex; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #2E86C1;'>"
+                   "<img src=':/imgs/logo.png' width='120' style='margin-right: 30px;'/>" // Logo fixé à gauche
+                   "<div style='flex-grow: 1; text-align: center;'>" // Conteneur centré
+                   "<h1 style='color: #2E86C1; margin: 0; font-family: Arial;'>Événements MallFlow</h1>"
+                   "<p style='color: #6C757D; font-size: 12px; margin-top: 3px;'>"
+                   "Généré le " + QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm") + "</p>"
+                                                                                 "</div></div>";
 
-    for (const Evenement &e : evenements) {
-        html += "<tr><td>" + QString::number(e.getId()) + "</td>"
-                + "<td>" + e.getTitre() + "</td>"
-                + "<td>" + e.getLieu() + "</td>"
-                + "<td>" + e.getDateDebut().toString("yyyy-MM-dd") + "</td>"
-                + "<td>" + e.getDateFin().toString("yyyy-MM-dd") + "</td>"
-                + "<td>" + e.getTypeParticipants() + "</td></tr>";
+    // Style pour centrer le tableau dans la page
+    html += "<style>"
+            "table { margin: 0 auto; width: 98%; border: 1px solid #ddd; }" // Centrage + légère marge
+            "th, td { padding: 8px; text-align: center; }"
+            "td:nth-child(2) { text-align: left; }" // Titre aligné à gauche
+            "th { background: #f8f9fa; color: #2E86C1; }"
+            "</style>";
+
+    // Structure du tableau inchangée
+    html += "<table>"
+            "<tr>"
+            "<th>ID</th><th>Titre</th><th>Date Début</th><th>Date Fin</th>"
+            "<th>Lieu</th><th>Participants</th><th>Employé</th><th>Sponsor</th>"
+            "</tr>";
+
+    QSqlQuery query("SELECT * FROM SHOPDEVS.EVENEMENTS");
+    while (query.next()) {
+        html += QString("<tr>"
+                        "<td>%1</td><td>%2</td><td>%3</td><td>%4</td>"
+                        "<td>%5</td><td>%6</td><td>%7</td><td>%8</td></tr>")
+                    .arg(query.value(0).toString(),
+                         query.value(1).toString(),
+                         query.value(2).toDate().toString("dd/MM/yyyy"),
+                         query.value(3).toDate().toString("dd/MM/yyyy"),
+                         query.value(4).toString(),
+                         query.value(5).toString(),
+                         query.value(6).toString(),
+                         query.value(7).toString());
     }
+
     html += "</table>";
 
+    QTextDocument doc;
     doc.setHtml(html);
+    doc.setPageSize(printer.pageRect(QPrinter::Point).size());
     doc.print(&printer);
 
-    QMessageBox::information(this, "Succès", "PDF généré avec succès !");
-    // Optionnel : ouvrir automatiquement le fichier
     QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
 }
+void MainWindow::updateStats() {
+    // Statistique des types de participants
+    QSqlQuery queryParticipants("SELECT TYPE_DE_PARTICIPANTS, COUNT(*) FROM SHOPDEVS.EVENEMENTS GROUP BY TYPE_DE_PARTICIPANTS");
+    QPieSeries *seriesParticipants = new QPieSeries();
+
+    while (queryParticipants.next()) {
+        seriesParticipants->append(
+            queryParticipants.value(0).toString(),
+            queryParticipants.value(1).toInt()
+            );
+    }
+
+    QChart *chartParticipants = new QChart();
+    chartParticipants->addSeries(seriesParticipants);
+    chartParticipants->setTitle("Répartition par type de participants");
+    chartViewParticipants->setChart(chartParticipants);
+
+    // Statistique des lieux
+    QSqlQuery queryLieux("SELECT LIEU, COUNT(*) FROM SHOPDEVS.EVENEMENTS GROUP BY LIEU");
+    QBarSeries *seriesLieux = new QBarSeries();
+
+    while (queryLieux.next()) {
+        QBarSet *set = new QBarSet(queryLieux.value(0).toString());
+        *set << queryLieux.value(1).toInt();
+        seriesLieux->append(set);
+    }
+
+    QChart *chartLieux = new QChart();
+    chartLieux->addSeries(seriesLieux);
+    chartLieux->setTitle("Nombre d'événements par lieu");
+
+    QValueAxis *axisY = new QValueAxis();
+    axisY->setLabelFormat("%d");
+    chartLieux->addAxis(axisY, Qt::AlignLeft);
+    seriesLieux->attachAxis(axisY);
+
+    chartViewLieux->setChart(chartLieux);
+}
+void MainWindow::geocodeAddress(const QString &address) {
+    QString url = QString("https://nominatim.openstreetmap.org/search?format=json&q=%1").arg(address);
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::UserAgentHeader, "MallFlow/1.0");
+
+    QNetworkReply *reply = networkManager->get(request);
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+            QJsonArray array = doc.array();
+
+            // 🔧 Correction ici : utiliser QQuickItem* avec cast explicite plus bas
+            QQuickItem *item = mapWidget->rootObject();
+
+            if (!array.isEmpty() && item) {
+                QJsonObject obj = array.first().toObject();
+                double lat = obj["lat"].toString().toDouble();
+                double lon = obj["lon"].toString().toDouble();
+
+                QObject *root = static_cast<QObject*>(item);
+
+                QMetaObject::invokeMethod(root, "clearMarkers");
+
+                QMetaObject::invokeMethod(root, "addMarker",
+                                          Q_ARG(qreal, lat),
+                                          Q_ARG(qreal, lon));
+
+                QMetaObject::invokeMethod(root, "centerOn",
+                                          Q_ARG(qreal, lat),
+                                          Q_ARG(qreal, lon));
+            }
+        }
+        reply->deleteLater();
+    });
+}
+

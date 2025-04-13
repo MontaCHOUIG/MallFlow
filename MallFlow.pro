@@ -1,52 +1,41 @@
-# Définir la version de Qt et les modules requis
-QT += core gui sql widgets printsupport
+QT += core gui sql widgets printsupport charts quick quickwidgets location positioning network
 
-
-# Configuration du projet
 CONFIG += c++17
 CONFIG += release
 CONFIG -= debug_and_release
 
-# Fichiers sources
+TARGET = GestionEvenements
+
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
     evenement.cpp \
     connection.cpp
 
-# Fichiers d'en-tête
 HEADERS += \
     mainwindow.h \
     evenement.h \
     connection.h
 
-# Fichiers d'interface utilisateur (UI)
 FORMS += \
     mainwindow.ui
 
-# Fichiers de ressources
 RESOURCES += \
     resources.qrc
 
-# Options de compilation
-QMAKE_CXXFLAGS += -Wall -Wextra -O2
+# Ajouter les fichiers QML et images aux ressources
+DISTFILES +=
 
-# Nom de l'exécutable généré
-TARGET = GestionEvenements
-
-# Configuration spécifique aux plateformes
 win32 {
     LIBS += -lole32 -loleaut32 -luuid
 }
-
 unix {
     LIBS += -lpthread
 }
-
 macx {
     LIBS += -framework CoreFoundation
 }
 
-# Dossiers supplémentaires pour les includes et dépendances
-INCLUDEPATH += include
-DEPENDPATH += include
+# Configuration spécifique pour QML
+QML_IMPORT_PATH = qml
+QML_DESIGNER_IMPORT_PATH = qml

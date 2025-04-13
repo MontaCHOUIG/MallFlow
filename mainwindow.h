@@ -2,10 +2,20 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QList>
-#include "evenement.h"
+#include <QSqlQuery>
+#include <QtCharts>
+#include <QChartView>
+#include <QPieSeries>
+#include <QBarSeries>
+#include <QBarSet>
+#include <QValueAxis>
+#include <QQuickWidget>
+#include <QGeoCoordinate>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
-QT_BEGIN_NAMESPACE
+
+
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
@@ -17,24 +27,36 @@ public:
     ~MainWindow();
 
 private slots:
+    // Boutons
     void on_Sp_Button_Ajouter_clicked();
     void on_Sp_Button_Modifier_clicked();
     void on_Sp_Button_Supprimer_clicked();
-    void on_Sp_Combo_ID_currentIndexChanged(const QString &idStr);
-
-    // Slots ajoutés
     void on_Sp_Button_Recherche_clicked();
+    void on_Sp_Button_Tri_ID_clicked();
     void on_Sp_Button_Tri_Titre_clicked();
     void on_Sp_Button_Tri_Lieu_clicked();
-    void on_Sp_Button_Tri_ID_clicked();
     void on_Sp_Button_PDF_clicked();
+
+
+    // Combo box
+    void on_Sp_combo_ID_currentIndexChanged(int index);
+
 
 private:
     Ui::MainWindow *ui;
-    QList<Evenement> evenements;
 
-    void afficherEvenements(const QList<Evenement> &liste = QList<Evenement>());
-    void genererPDF(const Evenement &e);
+    // Fonctions utilitaires
+    bool recordExists(const QString &table, const QString &col, int id);
+    void afficherEvenements(const QString &orderBy = "");
+    void genererPDF(const QString &fileName);
+    void clearEventFields();
+    void updateStats();
+    QChartView *chartViewParticipants;
+    QChartView *chartViewLieux;
+    QQuickWidget *mapWidget;
+    QNetworkAccessManager *networkManager;
+    void geocodeAddress(const QString &address);
+
 };
 
 #endif // MAINWINDOW_H
