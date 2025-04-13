@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>imgs/background.png</file>
+        <file>imgs/output-onlinepngtools (2).png</file>
+        <file>imgs/output-onlinepngtools.png</file>
+        <file>imgs/output-onlinepngtools (3).png</file>
+        <file>imgs/logo.png</file>
+        <file>imgs/userr.jpg</file>
+        <file>imgs/backgroundservice.png</file>
+        <file>imgs/alarm.wav</file>
+    </qresource>
+</RCC>
