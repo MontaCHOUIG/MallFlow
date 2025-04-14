@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
     mapWidget->setSource(QUrl("qrc:/map.qml"));
     ui->verticalLayout_tab5->addWidget(mapWidget);
     networkManager = new QNetworkAccessManager(this);
+    connect(networkManager, &QNetworkAccessManager::finished, this, &MainWindow::onNetworkReplyFinished);
+
     // Initialisation des graphiques
     chartViewParticipants = new QChartView(ui->tab_3);
     chartViewLieux = new QChartView(ui->tab_3);
@@ -48,9 +50,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->ID_SPONSOR->setValidator(new QIntValidator(1, 1000000, this));
 
     afficherEvenements(); // Initialiser tableau et combo box
-    updateQRCodeComboBox();
-    connect(networkManager, &QNetworkAccessManager::finished,
-            this, &MainWindow::onQRCodeDownloaded);
+
+
+
+    updateQRCodeComboBox(); // Appelé à la fin
+
 
 }
 
@@ -360,49 +364,59 @@ void MainWindow::updateStats() {
 
     chartViewLieux->setChart(chartLieux);
 }
-void MainWindow::geocodeAddress(const QString &address) {
-    QString url = QString("https://nominatim.openstreetmap.org/search?format=json&q=%1").arg(address);
+void MainWindow::geocodeAddress(const QString &address)
+{
+    QUrl url(QString("https://nominatim.openstreetmap.org/search?format=json&q=%1").arg(QUrl::toPercentEncoding(address)));
+    currentGeocodeUrl = url;
+
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::UserAgentHeader, "MallFlow/1.0");
 
-    QNetworkReply *reply = networkManager->get(request);
-    connect(reply, &QNetworkReply::finished, [this, reply]() {
-        if (reply->error() == QNetworkReply::NoError) {
-            QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-            QJsonArray array = doc.array();
-
-            // 🔧 Correction ici : utiliser QQuickItem* avec cast explicite plus bas
-            QQuickItem *item = mapWidget->rootObject();
-
-            if (!array.isEmpty() && item) {
-                QJsonObject obj = array.first().toObject();
-                double lat = obj["lat"].toString().toDouble();
-                double lon = obj["lon"].toString().toDouble();
-
-                QObject *root = static_cast<QObject*>(item);
-
-                QMetaObject::invokeMethod(root, "clearMarkers");
-
-                QMetaObject::invokeMethod(root, "addMarker",
-                                          Q_ARG(qreal, lat),
-                                          Q_ARG(qreal, lon));
-
-                QMetaObject::invokeMethod(root, "centerOn",
-                                          Q_ARG(qreal, lat),
-                                          Q_ARG(qreal, lon));
-            }
-        }
-        reply->deleteLater();
-    });
+    networkManager->get(request);
 }
+
 
 void MainWindow::generateQRCodeViaAPI(const QString &data)
 {
     QString encodedData = QUrl::toPercentEncoding(data);
+    QUrl url("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodedData);
+    currentQRCodeUrl = url;
 
-    QUrl fullUrl("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodedData);
-    QNetworkRequest request(fullUrl); // ✅ ici tu crées bien un objet
-    networkManager->get(request);     // ✅ ici ça va compiler
+    QNetworkRequest request(url);
+    networkManager->get(request);
+}
+
+void MainWindow::onNetworkReplyFinished(QNetworkReply *reply)
+{
+    QUrl requestedUrl = reply->request().url();
+
+    if (requestedUrl == currentQRCodeUrl) {
+        QByteArray imageData = reply->readAll();
+        QPixmap pixmap;
+        pixmap.loadFromData(imageData);
+        ui->label_3->setPixmap(pixmap);
+    }
+    else if (requestedUrl == currentGeocodeUrl) {
+        QByteArray response = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(response);
+        QJsonArray array = doc.array();
+
+        QQuickItem *item = mapWidget->rootObject();
+
+        if (!array.isEmpty() && item) {
+            QJsonObject obj = array.first().toObject();
+            double lat = obj["lat"].toString().toDouble();
+            double lon = obj["lon"].toString().toDouble();
+
+            QObject *root = static_cast<QObject*>(item);
+
+            QMetaObject::invokeMethod(root, "clearMarkers");
+            QMetaObject::invokeMethod(root, "addMarker", Q_ARG(qreal, lat), Q_ARG(qreal, lon));
+            QMetaObject::invokeMethod(root, "centerOn", Q_ARG(qreal, lat), Q_ARG(qreal, lon));
+        }
+    }
+
+    reply->deleteLater();
 }
 
 void MainWindow::on_tab4_combo_Event_currentIndexChanged(int index)
@@ -440,16 +454,4 @@ void MainWindow::updateQRCodeComboBox()
     while (query.next()) {
         ui->tab4_combo_Event->addItem(query.value(0).toString());
     }
-}
-void MainWindow::onQRCodeDownloaded(QNetworkReply* reply)
-{
-    if (reply->error() == QNetworkReply::NoError) {
-        QByteArray data = reply->readAll();
-        QPixmap pixmap;
-        pixmap.loadFromData(data);
-        ui->label_3->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio));
-    } else {
-        qDebug() << "Erreur téléchargement QR:" << reply->errorString();
-    }
-    reply->deleteLater();
 }

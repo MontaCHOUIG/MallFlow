@@ -37,7 +37,7 @@ private slots:
     void on_Sp_Button_Tri_Titre_clicked();
     void on_Sp_Button_Tri_Lieu_clicked();
     void on_Sp_Button_PDF_clicked();
-    void onQRCodeDownloaded(QNetworkReply* reply);
+    void onNetworkReplyFinished(QNetworkReply *reply);
 
 
     // Combo box
@@ -58,10 +58,13 @@ private:
     QChartView *chartViewParticipants;
     QChartView *chartViewLieux;
     QQuickWidget *mapWidget;
-    QNetworkAccessManager *networkManager;
     void geocodeAddress(const QString &address);
     void generateQRCodeViaAPI(const QString &data);
     void updateQRCodeComboBox();
+    QNetworkAccessManager *networkManager;
+    QUrl currentQRCodeUrl;
+    QUrl currentGeocodeUrl;
+
 
 
 };
