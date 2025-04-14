@@ -12,10 +12,13 @@
 #include <QUrl>
 #include <QImage>
 #include <QSqlQuery>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QBuffer>
 #include <QPixmap>
 #include <QLabel>
 #include <QQuickItem>
-
+#include <QRegularExpression>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -29,8 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     mapWidget->setSource(QUrl("qrc:/map.qml"));
     ui->verticalLayout_tab5->addWidget(mapWidget);
     networkManager = new QNetworkAccessManager(this);
-
-
     // Initialisation des graphiques
     chartViewParticipants = new QChartView(ui->tab_3);
     chartViewLieux = new QChartView(ui->tab_3);
@@ -47,6 +48,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->ID_SPONSOR->setValidator(new QIntValidator(1, 1000000, this));
 
     afficherEvenements(); // Initialiser tableau et combo box
+    updateQRCodeComboBox();
+    connect(networkManager, &QNetworkAccessManager::finished,
+            this, &MainWindow::onQRCodeDownloaded);
+
 }
 
 MainWindow::~MainWindow() {
@@ -116,6 +121,7 @@ void MainWindow::on_Sp_Button_Ajouter_clicked() {
 
         afficherEvenements();        // Mise à jour dynamique du tableau et combo box
         updateStats();
+        updateQRCodeComboBox();
     } else {
         QMessageBox::critical(this, "Erreur", insertQuery.lastError().text());
     }
@@ -145,6 +151,7 @@ void MainWindow::on_Sp_Button_Modifier_clicked() {
     if (query.exec()) {
         afficherEvenements();
         updateStats();
+        updateQRCodeComboBox();
         QMessageBox::information(this, "Succès", "Modification réussie.");
     } else {
         QMessageBox::critical(this, "Erreur", query.lastError().text());
@@ -159,6 +166,7 @@ void MainWindow::on_Sp_Button_Supprimer_clicked() {
     if (query.exec()) {
         afficherEvenements();
         updateStats();
+        updateQRCodeComboBox();
         QMessageBox::information(this, "Succès", "Suppression réussie.");
     } else {
         QMessageBox::critical(this, "Erreur", query.lastError().text());
@@ -388,3 +396,60 @@ void MainWindow::geocodeAddress(const QString &address) {
     });
 }
 
+void MainWindow::generateQRCodeViaAPI(const QString &data)
+{
+    QString encodedData = QUrl::toPercentEncoding(data);
+
+    QUrl fullUrl("https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodedData);
+    QNetworkRequest request(fullUrl); // ✅ ici tu crées bien un objet
+    networkManager->get(request);     // ✅ ici ça va compiler
+}
+
+void MainWindow::on_tab4_combo_Event_currentIndexChanged(int index)
+{
+    QString idStr = ui->tab4_combo_Event->itemText(index);
+    if (idStr.isEmpty()) return;
+
+    QSqlQuery query;
+    query.prepare("SELECT * FROM SHOPDEVS.EVENEMENTS WHERE ID_EVENEMENT = :id");
+    query.bindValue(":id", idStr.toInt());
+
+    if (query.exec() && query.next()) {
+        QString info;
+        info += "ID: " + query.value("ID_EVENEMENT").toString() + "\n";
+        info += "Titre: " + query.value("TITRE").toString() + "\n";
+        info += "Date début: " + query.value("DATE_DEBUT").toDate().toString("dd/MM/yyyy") + "\n";
+        info += "Date fin: " + query.value("DATE_FIN").toDate().toString("dd/MM/yyyy") + "\n";
+        info += "Lieu: " + query.value("LIEU").toString() + "\n";
+        info += "Participants: " + query.value("TYPE_DE_PARTICIPANTS").toString() + "\n";
+        info += "Employé: " + query.value("ID_EMPLOYE").toString() + "\n";
+        info += "Sponsor: " + query.value("ID_SPONSOR").toString();
+
+        info = info.normalized(QString::NormalizationForm_D).remove(QRegularExpression("[^a-zA-Z0-9\\s:/.-]"));
+
+        generateQRCodeViaAPI(info);
+    } else {
+        ui->label_3->clear();
+        qDebug() << "Échec récupération données événement.";
+    }
+}
+void MainWindow::updateQRCodeComboBox()
+{
+    ui->tab4_combo_Event->clear();
+    QSqlQuery query("SELECT ID_EVENEMENT FROM SHOPDEVS.EVENEMENTS");
+    while (query.next()) {
+        ui->tab4_combo_Event->addItem(query.value(0).toString());
+    }
+}
+void MainWindow::onQRCodeDownloaded(QNetworkReply* reply)
+{
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QPixmap pixmap;
+        pixmap.loadFromData(data);
+        ui->label_3->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio));
+    } else {
+        qDebug() << "Erreur téléchargement QR:" << reply->errorString();
+    }
+    reply->deleteLater();
+}

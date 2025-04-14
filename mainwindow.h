@@ -13,6 +13,7 @@
 #include <QGeoCoordinate>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QNetworkRequest>
 
 
 
@@ -36,10 +37,13 @@ private slots:
     void on_Sp_Button_Tri_Titre_clicked();
     void on_Sp_Button_Tri_Lieu_clicked();
     void on_Sp_Button_PDF_clicked();
+    void onQRCodeDownloaded(QNetworkReply* reply);
 
 
     // Combo box
     void on_Sp_combo_ID_currentIndexChanged(int index);
+    void on_tab4_combo_Event_currentIndexChanged(int index);
+
 
 
 private:
@@ -56,6 +60,9 @@ private:
     QQuickWidget *mapWidget;
     QNetworkAccessManager *networkManager;
     void geocodeAddress(const QString &address);
+    void generateQRCodeViaAPI(const QString &data);
+    void updateQRCodeComboBox();
+
 
 };
 
