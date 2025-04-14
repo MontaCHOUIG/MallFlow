@@ -86,7 +86,7 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <property name="styleSheet">
@@ -880,13 +880,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
         <height>541</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_tab4">
-         <item>
-          <widget class="QComboBox" name="tab4_combo_Event">
-           <property name="styleSheet">
-            <string notr="true">QComboBox
+      <widget class="QComboBox" name="tab4_combo_Event">
+       <property name="geometry">
+        <rect>
+         <x>360</x>
+         <y>10</y>
+         <width>361</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox
 {
     subcontrol-origin: padding;
     subcontrol-position: top right;
@@ -898,19 +902,30 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
     border-radius: 5;
     padding: 1px 0px 1px 20px;
 }</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>430</x>
+         <y>60</y>
+         <width>361</width>
+         <height>301</height>
+        </rect>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>1677</width>
+         <height>1677</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_5">

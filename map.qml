@@ -31,7 +31,7 @@ Map {
         delegate: MapQuickItem {
             coordinate: QtPositioning.coordinate(lat, lon)
             sourceItem: Image {
-                source: "qrc:/images/pin.png"
+                source: "qrc:/imgs/pin.png"
                 width: 32
                 height: 32
             }
