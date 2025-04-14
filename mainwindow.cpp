@@ -9,12 +9,13 @@
 #include <QPainter>
 #include <QFileDialog>
 
+#include <QPrinter>
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
 #include <QtCharts/QChart>
-
+#include <QDesktopServices>
 
 #include "login.h"
 
@@ -28,7 +29,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Initialize proxy model for filtering and sorting
     proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setSourceModel(emp.afficher());  // Use the existing model
+    QSqlQueryModel *model = emp.afficher();
+    model->setHeaderData(0, Qt::Horizontal, "ID");
+    model->setHeaderData(1, Qt::Horizontal, "Nom");
+    model->setHeaderData(2, Qt::Horizontal, "Poste");
+    model->setHeaderData(3, Qt::Horizontal, "Email");
+    model->setHeaderData(4, Qt::Horizontal, "Rôle");
+    model->setHeaderData(5, Qt::Horizontal, "Salaire");
+    model->setHeaderData(6, Qt::Horizontal, "Mot de passe ");
+
+
+    proxyModel->setSourceModel(model);
+
     proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setDynamicSortFilter(true);
@@ -37,7 +49,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->Em_TableView->setModel(proxyModel);
 
     // Connect buttons
-    connect(ui->Em_Button_ExportPDF, &QPushButton::clicked, this, &MainWindow::exportToPDF);
+    connect(ui->Em_Button_ExportPDF, &QPushButton::clicked, this, [=]() {
+        QString fileName = QFileDialog::getSaveFileName(this, "Enregistrer en PDF", "", "Fichiers PDF (*.pdf)");
+        if (!fileName.isEmpty()) {
+            exportToPDF(fileName);
+        }
+    });
 
 
     connect(ui->Em_Button_ASCE, &QPushButton::clicked, this, &MainWindow::sortBySalaryAscending);
@@ -212,66 +229,61 @@ void MainWindow::on_Em_Button_Supprimer_clicked()
 
 
 
-void MainWindow::exportToPDF() {
-    QString filePath = QFileDialog::getSaveFileName(this, "Save PDF", "", "PDF Files (*.pdf)");
-    if (filePath.isEmpty()) return;
+void MainWindow::exportToPDF(const QString &fileName) {
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(fileName);
+    printer.setPageOrientation(QPageLayout::Landscape);
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setPageMargins(QMarginsF(15, 20, 15, 15));
 
-    QPdfWriter writer(filePath);
-    writer.setPageSize(QPageSize(QPageSize::A4));
-    writer.setResolution(300);
-    QPainter painter(&writer);
+    // Entête avec logo à gauche + titre/date centrés
+    QString html = "<div style='display: flex; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #2E86C1;'>"
+                   "<img src=':/imgs/logo.png' width='120' style='margin-right: 30px;'/>"
+                   "<div style='flex-grow: 1; text-align: center;'>"
+                   "<h1 style='color: #2E86C1; margin: 0; font-family: Arial;'>Liste des Employés</h1>"
+                   "<p style='color: #6C757D; font-size: 12px; margin-top: 3px;'>"
+                   "Généré le " + QDateTime::currentDateTime().toString("dd/MM/yyyy HH:mm") + "</p>"
+                                                                                 "</div></div>";
 
-    if (!painter.isActive()) {
-        QMessageBox::warning(this, "Error", "Could not open PDF for writing.");
-        return;
-    }
+    // Style du tableau
+    html += "<style>"
+            "table { margin: 0 auto; width: 98%; border-collapse: collapse; border: 1px solid #ddd; }"
+            "th, td { padding: 10px; border: 1px solid #ccc; text-align: center; font-family: Arial; font-size: 11pt; }"
+            "td:nth-child(2) { text-align: left; }"
+            "th { background-color: #f8f9fa; color: #2E86C1; font-size: 12pt; }"
+            "</style>";
 
-    int marginLeft = 100;
-    int startY = 200;
-    int rowHeight = 200;
-    int columnSpacing = 350;
+    // Entête du tableau
+    html += "<table>"
+            "<tr>"
+            "<th>ID</th><th>Nom</th><th>Poste</th><th>Email</th>"
+            "<th>Rôle</th><th>Salaire</th>"
+            "</tr>";
 
-    // Set Title
-    QFont titleFont("Arial", 12, QFont::Bold);
-    painter.setFont(titleFont);
-    painter.drawText(marginLeft, startY, "Liste des Employés");
-
-    startY += 80;
-
-    // Column headers (no MDP column)
-    QFont headerFont("Arial", 12, QFont::Bold);
-    painter.setFont(headerFont);
-    painter.drawText(marginLeft, startY, "ID");
-    painter.drawText(marginLeft + 0.5 * columnSpacing, startY, "NOM");
-    painter.drawText(marginLeft + 1.5 * columnSpacing, startY, "POSTE");
-    painter.drawText(marginLeft + 3 * columnSpacing, startY, "EMAIL");
-    painter.drawText(marginLeft + 5 * columnSpacing, startY, "RÔLE");
-    painter.drawText(marginLeft + 6 * columnSpacing, startY, "SALAIRE");
-
-
-    startY += 30;
-
-    // Data font
-    QFont dataFont("Courier New", 11);
-    painter.setFont(dataFont);
-
-    // Get data from QTableView
+    // Récupération des données depuis le QTableView
     QAbstractItemModel *model = ui->Em_TableView->model();
-    for (int row = 0; row < model->rowCount(); row++) {
-        painter.drawText(marginLeft, startY, model->index(row, 0).data().toString());
-        painter.drawText(marginLeft + 0.5 * columnSpacing, startY, model->index(row, 1).data().toString());
-        painter.drawText(marginLeft + 1.5 * columnSpacing, startY, model->index(row, 2).data().toString());
-        painter.drawText(marginLeft + 3 * columnSpacing, startY, model->index(row, 3).data().toString());
-        painter.drawText(marginLeft + 5 * columnSpacing, startY, model->index(row, 4).data().toString());
-        painter.drawText(marginLeft + 6 * columnSpacing, startY, model->index(row, 5).data().toString());
-
-
-        startY += rowHeight;
+    for (int row = 0; row < model->rowCount(); ++row) {
+        html += "<tr>";
+        for (int col = 0; col < 6; ++col) {  // 6 colonnes : ID, NOM, POSTE, EMAIL, ROLE, SALAIRE
+            QString data = model->index(row, col).data().toString();
+            html += "<td>" + data + "</td>";
+        }
+        html += "</tr>";
     }
 
-    painter.end();
-    QMessageBox::information(this, "Succès", "PDF généré avec succès !");
+    html += "</table>";
+
+    // Création du document PDF
+    QTextDocument doc;
+    doc.setHtml(html);
+    doc.setPageSize(printer.pageRect(QPrinter::Point).size());
+    doc.print(&printer);
+
+    QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
 }
+
+
 
 
 void MainWindow::sortBySalaryAscending()

@@ -35,7 +35,7 @@ private slots:
 
 
 public slots:
-    void exportToPDF();
+    void exportToPDF(const QString &fileName);
     void showSalaryPieChart();
 
 private:

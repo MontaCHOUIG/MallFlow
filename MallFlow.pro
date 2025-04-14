@@ -20,7 +20,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 QT += sql
 QT += charts
 QT += network
-
+QT += printsupport
 
 SOURCES += \
     connection.cpp \
