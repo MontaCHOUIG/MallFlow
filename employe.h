@@ -16,12 +16,13 @@ private:
     QString role;
     double salaire;
     QString mdp;
+    int secure_auth;
 
 public:
     // Constructors
     Employe();
     Employe(int id, const QString& nom, const QString& poste, const QString& email,
-            const QString& role, double salaire, const QString& mdp);
+            const QString& role, double salaire, const QString& mdp, int secure_auth);
 
     // Getters & Setters
     int getIdEmploye() const;
@@ -38,6 +39,10 @@ public:
     void setSalaire(double salaire);
     QString getMdp() const;
     void setMdp(const QString& mdp);
+    int getSecureAuth() const;
+    void setSecureAuth(int secure_auth);
+    void setSecurityQuestions(const QString &q1, const QString &a1,
+                              const QString &q2, const QString &a2);
 
     // CRUD Operations
     bool ajouter();

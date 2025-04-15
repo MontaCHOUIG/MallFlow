@@ -16,7 +16,7 @@ void EmailSender::sendPasswordResetEmail(const QString &toEmail, const QString &
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    // Replace with your real Mailjet keys
+
     QString apiKey = "9177b7342a61ced3d8e699b254e5a0a9";
     QString secretKey = "75e6e6b596faef3958f009ef730f1954";
 

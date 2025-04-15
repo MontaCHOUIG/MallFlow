@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "modifieremploye.h"
-
+#include "securityquestion.h"
 #include <QMessageBox>
 #include <QDebug>
 #include <QSqlRecord>
@@ -78,7 +78,6 @@ MainWindow::~MainWindow()
 
 
 
-//  Add Employee
 void MainWindow::on_Em_Button_Ajouter_clicked()
 {
     bool ok;
@@ -90,62 +89,81 @@ void MainWindow::on_Em_Button_Ajouter_clicked()
         return;
     }
 
-    // Vérification que le nom n'est pas vide
-    QString nom = ui->Em_Line_Nom->text();
-    if (nom.trimmed().isEmpty()) {
+    QString nom = ui->Em_Line_Nom->text().trimmed();
+    if (nom.isEmpty()) {
         QMessageBox::warning(this, "Erreur", "Le nom ne peut pas être vide !");
         return;
     }
 
-    // Vérification que le rôle n'est pas vide
-    QString role = ui->Em_Line_role->text();
-    if (role.trimmed().isEmpty()) {
+    QString role = ui->Em_Line_role->text().trimmed();
+    if (role.isEmpty()) {
         QMessageBox::warning(this, "Erreur", "Le rôle ne peut pas être vide !");
         return;
     }
 
-
     QString email = ui->Em_Line_email->text().trimmed();
-
-    // Une regex pour l'email
     QRegularExpression emailRegex("^[\\w\\.\\-]+@[\\w\\-]+(\\.[\\w\\-]{2,})+$");
     QRegularExpressionMatch match = emailRegex.match(email);
-
     if (!match.hasMatch()) {
         QMessageBox::warning(this, "Erreur", "Format de l'email invalide !");
         return;
     }
 
-
-    // Validation du salaire
     double salaire = ui->Em_Line_salaire->text().toDouble(&ok);
     if (!ok || salaire < 0) {
         QMessageBox::warning(this, "Erreur", "Salaire invalide !");
         return;
     }
 
-    // Vérification que le poste n'est pas vide
-    QString poste = ui->Em_Line_poste->text();
-    if (poste.trimmed().isEmpty()) {
+    QString poste = ui->Em_Line_poste->text().trimmed();
+    if (poste.isEmpty()) {
         QMessageBox::warning(this, "Erreur", "Le poste ne peut pas être vide !");
         return;
     }
 
-    // Vérification que le mot de passe n'est pas vide
-    QString mdp = ui->Em_Line_mdp->text();
-    if (mdp.trimmed().isEmpty()) {
+    QString mdp = ui->Em_Line_mdp->text().trimmed();
+    if (mdp.isEmpty()) {
         QMessageBox::warning(this, "Erreur", "Le mot de passe ne peut pas être vide !");
         return;
     }
 
-    // Création de l'objet Employe
-    Employe e(id, nom, role, email, poste, salaire, mdp);
+    // Ask if they want to enable security questions
+    int choice = QMessageBox::question(
+        this,
+        "Sécurité supplémentaire",
+        "Souhaitez-vous activer l'authentification par questions de sécurité ?",
+        QMessageBox::Yes | QMessageBox::No
+        );
 
-    // Tentative d'ajout de l'employé et affichage du résultat
+    int secureAuth = 0;
+    QString question1, answer1, question2, answer2;
+
+    if (choice == QMessageBox::Yes) {
+        SecurityQuestion dialog(this);
+        if (dialog.exec() == QDialog::Accepted) {
+            secureAuth = 1;
+            question1 = dialog.getQuestion1();
+            answer1 = dialog.getAnswer1();
+            question2 = dialog.getQuestion2();
+            answer2 = dialog.getAnswer2();
+        } else {
+            QMessageBox::information(this, "Annulé", "Ajout annulé car les questions n'ont pas été complétées.");
+            return;
+        }
+    }
+
+    // Create the employee (assuming Employe takes secureAuth)
+    Employe e(id, nom, role, email, poste, salaire, mdp, secureAuth);
+
     if (e.ajouter()) {
+        // Save security questions only if used
+        if (secureAuth == 1) {
+            e.setSecurityQuestions(question1, answer1, question2, answer2); // Make sure this method exists
+        }
+
         QMessageBox::information(this, "Succès", "Employé ajouté avec succès !");
-         proxyModel->setSourceModel(emp.afficher()); // Rafraîchissement du tableau
-        showSalaryPieChart();  // Update pie chart
+        proxyModel->setSourceModel(emp.afficher());
+        showSalaryPieChart();
         clearEmployeeForm();
     } else {
         QMessageBox::warning(this, "Erreur", "L'ajout de l'employé a échoué !");
@@ -288,12 +306,12 @@ void MainWindow::exportToPDF(const QString &fileName) {
 
 void MainWindow::sortBySalaryAscending()
 {
-    proxyModel->sort(5, Qt::AscendingOrder); // Column index 4 is for salary
+    proxyModel->sort(5, Qt::AscendingOrder);
 }
 
 void MainWindow::sortBySalaryDescending()
 {
-    proxyModel->sort(5, Qt::DescendingOrder); // Column index 4 is for salary
+    proxyModel->sort(5, Qt::DescendingOrder);
 }
 
 void MainWindow::on_Em_Line_Search_textChanged(const QString &text)

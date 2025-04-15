@@ -20,6 +20,7 @@ private slots:
     void onLoginButtonClicked();
     void onCancelButtonClicked();
     void onForgotPasswordClicked();
+    void verifySecurityQuestions();
 
 
 private:
@@ -28,6 +29,8 @@ private:
     QPushButton *loginButton;
     QPushButton *cancelButton;
     QLabel *forgotPasswordLabel;
+    QLabel *secureQuestionsLabel;
+
 };
 
 #endif // LOGIN_H

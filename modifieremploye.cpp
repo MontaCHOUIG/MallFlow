@@ -109,7 +109,7 @@ void ModifierEmploye::on_saveButton_clicked()
     }
 
     // Création de l'objet Employe avec les données validées
-    Employe e(empId, nom, role, email, poste, salaire, mdp);
+    Employe e(empId, nom, role, email, poste, salaire, mdp, 1);
 
     // Tentative de modification de l'employé dans la base
     if (e.modifier()) {

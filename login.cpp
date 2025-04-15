@@ -1,7 +1,12 @@
 #include "login.h"
 #include "employe.h"
+#include "securityquestion.h"
 #include <QMessageBox>
 #include <QLabel>
+#include <QInputDialog>
+#include <QDialog>
+#include <QSqlQuery>
+#include <QSqlError>
 
 Login::Login(QWidget *parent) : QDialog(parent) {
     setWindowTitle("Login");
@@ -32,7 +37,17 @@ Login::Login(QWidget *parent) : QDialog(parent) {
     forgotPasswordLabel->setAlignment(Qt::AlignCenter);
     forgotPasswordLabel->setVisible(false);
 
-    // Apply updated styles
+    secureQuestionsLabel = new QLabel("<a href='#'>Use security questions</a>");
+    secureQuestionsLabel->setTextFormat(Qt::RichText);
+    secureQuestionsLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    secureQuestionsLabel->setOpenExternalLinks(false);
+    secureQuestionsLabel->setAlignment(Qt::AlignCenter);
+    secureQuestionsLabel->setVisible(false);
+
+
+
+
+
     QString widgetStyle = R"(
         QLabel {
             font-size: 14px;
@@ -79,13 +94,14 @@ Login::Login(QWidget *parent) : QDialog(parent) {
 
     layout->addSpacing(15);
     layout->addLayout(buttonLayout);
-
+    layout->addWidget(secureQuestionsLabel);
     setLayout(layout);
 
     // Connect signals
     connect(loginButton, &QPushButton::clicked, this, &Login::onLoginButtonClicked);
     connect(cancelButton, &QPushButton::clicked, this, &Login::onCancelButtonClicked);
     connect(forgotPasswordLabel, &QLabel::linkActivated, this, &Login::onForgotPasswordClicked);
+    connect(secureQuestionsLabel, &QLabel::linkActivated,this, &Login::verifySecurityQuestions);
 }
 
 
@@ -106,13 +122,18 @@ void Login::onLoginButtonClicked() {
         QSqlQuery query;
         query.prepare("SELECT COUNT(*) FROM Employes WHERE email = :email");
         query.bindValue(":email", email);
-        if (query.exec() && query.next() && query.value(0).toInt() > 0) {
-            forgotPasswordLabel->setVisible(true); // Show "forgot password"
+        if (query.exec() && query.next()) {
+            int secureAuth = query.value(0).toInt();
+            if (secureAuth == 1) {
+                secureQuestionsLabel->setVisible(true); // show link for security questions
+            }
+            forgotPasswordLabel->setVisible(true); // show forgot password anyway
         } else {
+            secureQuestionsLabel->setVisible(false);
             forgotPasswordLabel->setVisible(false);
         }
 
-        QMessageBox::warning(this, "Login Failed", "Invalid email or password.");
+        QMessageBox::warning(this, "Login Failed", "Invalid information.");
     }
 }
 
@@ -130,7 +151,7 @@ void Login::onForgotPasswordClicked() {
     query.bindValue(":email", email);
 
     if (query.exec() && query.next()) {
-        QString tempPassword = "azerty"; // You can generate a random password here
+        QString tempPassword = "azerty"; // temporary password
         QString hashedPassword = e.hashPassword(tempPassword);
 
         // Update the password in the database
@@ -149,6 +170,46 @@ void Login::onForgotPasswordClicked() {
     } else {
         QMessageBox::warning(this, "Email Not Found",
                              "This email does not exist in our records.");
+    }
+}
+
+void Login::verifySecurityQuestions() {
+    QString email = emailLineEdit->text();
+    QSqlQuery query;
+    query.prepare("SELECT sq.QUESTION_1, sq.ANSWER_1, sq.QUESTION_2, sq.ANSWER_2 FROM SECURITY_QUESTIONS sq JOIN Employes e ON sq.EMPLOYEE_ID = e.ID_EMPLOYE WHERE e.EMAIL = :email");
+    query.bindValue(":email", email);
+    if (query.exec() && query.next()) {
+        QString q1 = query.value(0).toString();
+        QString a1 = query.value(1).toString();
+        QString q2 = query.value(2).toString();
+        QString a2 = query.value(3).toString();
+        if (!query.exec()) {
+            QMessageBox::warning(this, "Database Error",
+                                 "Query failed: " + query.lastError().text());
+            return;
+        }
+
+        bool ok;
+        QString answer1 = QInputDialog::getText(this, "Security Question 1", q1,
+                                                QLineEdit::Normal, "", &ok);
+        if (!ok || answer1.trimmed().isEmpty()) return;
+
+        QString answer2 = QInputDialog::getText(this, "Security Question 2", q2,
+                                                QLineEdit::Normal, "", &ok);
+        if (!ok || answer2.trimmed().isEmpty()) return;
+
+        if (answer1.trimmed().toLower() == a1.trimmed().toLower() &&
+            answer2.trimmed().toLower() == a2.trimmed().toLower()) {
+            QMessageBox::information(this, "Login Successful", "Welcome!");
+            Employe e ;
+            e.saveAuthenticatedUser(email);
+            accept();
+        } else {
+            QMessageBox::warning(this, "Incorrect Answers", "Your answers do not match.");
+        }
+
+    } else {
+        QMessageBox::warning(this, "Error", "Security questions not found.");
     }
 }
 

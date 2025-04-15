@@ -6,8 +6,8 @@
 Employe::Employe() {}
 
 Employe::Employe(int id, const QString& nom, const QString& poste, const QString& email,
-                 const QString& role, double salaire, const QString& mdp)
-    : id_employe(id), nom(nom), poste(poste), email(email), role(role), salaire(salaire), mdp(mdp) {}
+                 const QString& role, double salaire, const QString& mdp, int secure_auth)
+    : id_employe(id), nom(nom), poste(poste), email(email), role(role), salaire(salaire), mdp(mdp),secure_auth(secure_auth) {}
 
 // Getters
 int Employe::getIdEmploye() const { return id_employe; }
@@ -17,6 +17,7 @@ QString Employe::getEmail() const { return email; }
 QString Employe::getRole() const { return role; }
 double Employe::getSalaire() const { return salaire; }
 QString Employe::getMdp() const { return mdp; }
+int Employe::getSecureAuth() const {return secure_auth;}
 
 // Setters
 void Employe::setIdEmploye(int id) { id_employe = id; }
@@ -26,6 +27,7 @@ void Employe::setEmail(const QString& email) { this->email = email; }
 void Employe::setRole(const QString& role) { this->role = role; }
 void Employe::setSalaire(double salaire) { this->salaire = salaire; }
 void Employe::setMdp(const QString& mdp) { this->mdp = mdp; }
+void Employe::setSecureAuth(int secure_auth){this->secure_auth = secure_auth; }
 
 QString Employe::hashPassword(const QString &password) {
     QByteArray hash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256);
@@ -60,15 +62,16 @@ bool Employe::authenticateUser(const QString &email, const QString &password) {
 // ADD Employe
 bool Employe::ajouter() {
     QSqlQuery query;
-    query.prepare("INSERT INTO EMPLOYES (ID_EMPLOYE, NOM, POSTE, EMAIL, ROLE, SALAIRE, MOT_DE_PASSE) "
-                  "VALUES (:id, :nom, :poste, :email, :role, :salaire, :mdp)");
+    query.prepare("INSERT INTO EMPLOYES (ID_EMPLOYE, NOM, POSTE, EMAIL, ROLE, SALAIRE, MOT_DE_PASSE, SECURE_AUTH) "
+                  "VALUES (:id, :nom, :poste, :email, :role, :salaire, :mdp, :secure_auth)");
     query.bindValue(":id", id_employe);
     query.bindValue(":nom", nom);
     query.bindValue(":poste", poste);
     query.bindValue(":email", email);
     query.bindValue(":role", role);
     query.bindValue(":salaire", salaire);
-    query.bindValue(":mdp", hashPassword(mdp));  // Changed "mdp" to match the correct column "MOT_DE_PASSE"
+    query.bindValue(":mdp", hashPassword(mdp));
+    query.bindValue(":secure_auth" , secure_auth);
 
     if (!query.exec()) {
         //qDebug() << "Failed to add employee:" << query.lastError().text();
@@ -125,6 +128,18 @@ bool Employe::modifier() {
     return true;
 }
 
+void Employe::setSecurityQuestions(const QString &q1, const QString &a1,
+                                   const QString &q2, const QString &a2) {
+    QSqlQuery query;
+    query.prepare("INSERT INTO SECURITY_QUESTIONS (EMPLOYEE_ID, QUESTION_1, ANSWER_1, QUESTION_2, ANSWER_2) "
+                  "VALUES (:id, :q1, :a1, :q2, :a2)");
+    query.bindValue(":id", this->id_employe);  // Make sure you have the employee's ID set
+    query.bindValue(":q1", q1);
+    query.bindValue(":a1", a1);
+    query.bindValue(":q2", q2);
+    query.bindValue(":a2", a2);
+    query.exec();  // You can check for success with `if (!query.exec())` if needed
+}
 
 void Employe::saveAuthenticatedUser(const QString &email) {
     QSettings settings("MallFlow", "Auth");

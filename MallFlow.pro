@@ -29,7 +29,8 @@ SOURCES += \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
-    modifieremploye.cpp
+    modifieremploye.cpp \
+    securityquestion.cpp
 
 HEADERS += \
     connection.h \
@@ -37,7 +38,8 @@ HEADERS += \
     employe.h \
     login.h \
     mainwindow.h \
-    modifieremploye.h
+    modifieremploye.h \
+    securityquestion.h
 
 FORMS += \
     mainwindow.ui
