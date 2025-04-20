@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>MainApplication</class>
+ <widget class="QMainWindow" name="MainApplication">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -391,7 +391,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-image: url(:/imgs/backgroundservice.png);</string>
+       <string notr="true">background-image: url(:/imgs/background.png);</string>
       </property>
       <property name="text">
        <string/>
@@ -1227,7 +1227,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1376</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

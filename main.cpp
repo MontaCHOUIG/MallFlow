@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "main_application.h"
 #include <QApplication>
 #include <QMessageBox>
 #include "connection.h"
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         return -1; // Quitter l'application si la connexion échoue
     }
 
-    MainWindow w;
+    MainApplication w;
     w.show();
     return a.exec();
 }
