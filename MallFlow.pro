@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
-TARGET = EmployeeSponsorApp
+TARGET = MallFlow
 TEMPLATE = app
 
 # Emit warnings for deprecated Qt features
@@ -14,6 +14,7 @@ QT += sql
 QT += charts
 QT += network
 QT += printsupport
+QT += multimedia widgets
 
 SOURCES += \
     connection.cpp \
@@ -26,6 +27,9 @@ SOURCES += \
     src/employees/login.cpp \
     src/sponsors/sponsors_mainwindow.cpp \
     src/sponsors/sponsor.cpp \
+    src/services/service_mainwindow.cpp \
+    src/services/services.cpp \
+    src/services/urgence.cpp \
     main.cpp
 
 HEADERS += \
@@ -38,11 +42,16 @@ HEADERS += \
     src/employees/emailsender.h \
     src/employees/login.h \
     src/sponsors/sponsors_mainwindow.h \
-    src/sponsors/sponsor.h
+    src/sponsors/sponsor.h \
+    src/services/service_mainwindow.h \
+    src/services/services.h \
+    src/services/urgence.h \
+
 
 FORMS += \
     src/employees/employees.ui \
     src/sponsors/sponsors.ui \
+    src/services/services.ui \
     main_application.ui
 
 RESOURCES += \

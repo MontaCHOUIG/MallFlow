@@ -6,6 +6,7 @@
 
 class EmployeesMainWindow;
 class SponsorsMainWindow;
+class ServiceMainWindow;
 
 class MainApplication : public QMainWindow {
     Q_OBJECT
@@ -16,6 +17,7 @@ private:
     QTabWidget *tabWidget;
     EmployeesMainWindow *employeesMainWindow;
     SponsorsMainWindow *sponsorsMainWindow;
+    ServiceMainWindow *servicesMainWindow;
     void setupTabs();
     void loadStylesheet();
 };
