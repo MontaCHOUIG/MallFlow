@@ -21,8 +21,10 @@ QT += sql
 QT += charts
 QT += network
 QT += printsupport
+QT += serialport
 
 SOURCES += \
+    arduino.cpp \
     connection.cpp \
     emailsender.cpp \
     employe.cpp \
@@ -33,6 +35,7 @@ SOURCES += \
     securityquestion.cpp
 
 HEADERS += \
+    arduino.h \
     connection.h \
     emailsender.h \
     employe.h \

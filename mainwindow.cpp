@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "modifieremploye.h"
 #include "securityquestion.h"
+#include <QSerialPortInfo>
+
 #include <QMessageBox>
 #include <QDebug>
 #include <QSqlRecord>
@@ -10,6 +12,7 @@
 #include <QFileDialog>
 
 #include <QPrinter>
+#include "arduino.h"
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
@@ -26,6 +29,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    arduino = new Arduino(this);
+
+    if (!arduino) {
+        qDebug() << "Failed to create Arduino object";
+        return;
+    }
 
     // Initialize proxy model for filtering and sorting
     proxyModel = new QSortFilterProxyModel(this);
@@ -61,9 +70,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->Em_Button_DESC, &QPushButton::clicked, this, &MainWindow::sortBySalaryDescending);
 
     // Connect search bar
-    connect(ui->Em_Line_Recherche, &QLineEdit::textChanged, this, &MainWindow::on_Em_Line_Search_textChanged);
+   // connect(ui->Em_Line_Recherche, &QLineEdit::textChanged, this, &MainWindow::on_Em_Line_Search_textChanged);
 
     showSalaryPieChart();
+
+     connect(arduino, &Arduino::idReceived, this, &MainWindow::handleArduinoId);
+
+
 
 }
 
@@ -72,6 +85,23 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::handleArduinoId(const QString &id) {
+    QSqlQuery query;
+    qDebug() << "this is the id " << id;
+    query.prepare("SELECT NOM FROM employes WHERE ID_EMPLOYE = :id");
+    query.bindValue(":id", id);
+
+    if (query.exec() && query.next()) {
+        QString name = query.value(0).toString();
+        arduino->sendOpenCommand();
+
+        QMessageBox::information(this, "Parking Access", name + " has entered the parking lot.");
+    } else {
+        QMessageBox::warning(this, "Access Denied", "Unrecognized employee ID: " + id);
+    }
 }
 
 
@@ -314,11 +344,6 @@ void MainWindow::sortBySalaryDescending()
     proxyModel->sort(5, Qt::DescendingOrder);
 }
 
-void MainWindow::on_Em_Line_Search_textChanged(const QString &text)
-{
-    proxyModel->setFilterKeyColumn(1);
-    proxyModel->setFilterFixedString(text);
-}
 
 
 void MainWindow::showSalaryPieChart()
