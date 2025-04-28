@@ -1,4 +1,4 @@
-QT       += core gui sql widgets charts printsupport network
+QT       += core gui sql widgets charts printsupport network quick quickwidgets location positioning multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,6 +30,12 @@ SOURCES += \
     src/services/service_mainwindow.cpp \
     src/services/services.cpp \
     src/services/urgence.cpp \
+    src/evenements/evenement.cpp \
+    src/evenements/evenement_mainwindow.cpp \
+    src/fournisseurs/fournisseur.cpp \
+    src/magasins/magasin.cpp \
+    src/magasins/magasin_mainwindow.cpp \
+    src/fournisseurs/fournisseur_mainwindow.cpp \
     main.cpp
 
 HEADERS += \
@@ -46,16 +52,26 @@ HEADERS += \
     src/services/service_mainwindow.h \
     src/services/services.h \
     src/services/urgence.h \
+    src/evenements/evenement.h \
+    src/fournisseurs/fournisseur.h \
+    src/fournisseurs/fournisseur_mainwindow.h \
+    src/magasins/magasin.h \
+    src/magasins/magasin_mainwindow.h \
+    src/evenements/evenement_mainwindow.h
 
 
 FORMS += \
     src/employees/employees.ui \
     src/sponsors/sponsors.ui \
     src/services/services.ui \
+    src/evenements/evenement_mainwindow.ui \
+    src/fournisseurs/fournisseur_mainwindow.ui \
+    src/magasins/magasin_mainwindow.ui \
     main_application.ui
 
 RESOURCES += \
-    resources/resources.qrc
+    resources/resources.qrc \
+    src/evenements/resources.qrc
 
 # Default rules for deployment
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,7 +1,4 @@
 #include "main_application.h"
-#include "src/employees/employees_mainwindow.h"
-#include "src/sponsors/sponsors_mainwindow.h"
-#include "src/services/service_mainwindow.h"
 #include <QFile>
 #include <QDebug>
 
@@ -9,8 +6,8 @@ MainApplication::MainApplication(QWidget *parent) : QMainWindow(parent) {
     // Set up tab widget
     tabWidget = new QTabWidget(this);
     setCentralWidget(tabWidget);
-    setWindowTitle("Employee, Sponsor & Service Management");
-    resize(1400, 800); // Match employees.ui dimensions
+    setWindowTitle("MallFlow Management");
+    resize(1400, 800);
 
     setupTabs();
     loadStylesheet();
@@ -28,6 +25,18 @@ void MainApplication::setupTabs() {
     // Embed ServicesMainWindow
     servicesMainWindow = new ServiceMainWindow(this);
     tabWidget->addTab(servicesMainWindow, "Services");
+
+    // Embed EvenementMainWindow
+    evenementMainWindow = new EvenementMainWindow(this);
+    tabWidget->addTab(evenementMainWindow, "Events");
+
+    // Embed FournisseurMainWindow
+    fournisseurMainWindow = new FournisseurMainWindow(this);
+    tabWidget->addTab(fournisseurMainWindow, "Suppliers");
+
+    // Embed MagasinMainWindow
+    magasinMainWindow = new MagasinMainWindow(this);
+    tabWidget->addTab(magasinMainWindow, "Stores");
 }
 
 void MainApplication::loadStylesheet() {
@@ -45,4 +54,7 @@ MainApplication::~MainApplication() {
     delete employeesMainWindow;
     delete sponsorsMainWindow;
     delete servicesMainWindow;
+    delete evenementMainWindow;
+    delete fournisseurMainWindow;
+    delete magasinMainWindow;
 }
