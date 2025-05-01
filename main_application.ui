@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainApplication</class>
+ <widget class="QMainWindow" name="MainApplication">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1400</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MallFlow Management</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background-color: #F5F5F5;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QFrame" name="navFrame">
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame {
+    background-color: #230A50;
+    border-radius: 0px;
+}
+</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="logoLabel">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>resources/imgs/logo.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="employeesButton">
+         <property name="text">
+          <string>Employees</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+QPushButton:hover {
+    background-color: #5A1E8B;
+}
+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="sponsorsButton">
+         <property name="text">
+          <string>Sponsors</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+QPushButton:hover {
+    background-color: #5A1E8B;
+}
+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="servicesButton">
+         <property name="text">
+          <string>Services</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+QPushButton:hover {
+    background-color: #5A1E8B;
+}
+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="eventsButton">
+         <property name="text">
+          <string>Events</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+QPushButton:hover {
+    background-color: #5A1E8B;
+}
+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="suppliersButton">
+         <property name="text">
+          <string>Suppliers</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+QPushButton:hover {
+    background-color: #5A1E8B;
+}
+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="storesButton">
+         <property name="text">
+          <string>Stores</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+QPushButton:hover {
+    background-color: #5A1E8B;
+}
+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="contentStack">
+      <property name="styleSheet">
+       <string notr="true">QStackedWidget {
+    background-color: white;
+    border-radius: 8px;
+    margin: 10px;
+}
+</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
