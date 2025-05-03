@@ -19,6 +19,7 @@ public:
 
 private slots:
     void navigateTo(int index);
+    void handleLogout(); // Slot to handle logout
 
 private:
     QStackedWidget *stackedWidget;

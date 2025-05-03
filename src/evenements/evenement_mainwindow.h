@@ -6,6 +6,7 @@
 #include <QChartView>
 #include <QNetworkAccessManager>
 #include "evenement.h"
+#include "src/employees/employe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class EvenementMainWindow; }
@@ -19,6 +20,7 @@ public:
 
 signals:
     void navigateTo(int index);
+    void logoutRequested(); // Signal to request logout
 
 private slots:
     void on_Sp_Button_Ajouter_clicked();
@@ -37,6 +39,9 @@ private slots:
     void on_btnServices_clicked();
     void on_btnSuppliers_clicked();
     void on_btnStores_clicked();
+    void on_button_logout_clicked();
+    void updateAuthUserLabel();
+
 
 private:
     Ui::EvenementMainWindow *ui;

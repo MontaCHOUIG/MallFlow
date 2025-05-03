@@ -1,6 +1,7 @@
 #include "main_application.h"
 #include <QFile>
 #include <QDebug>
+#include "src/employees/login.h"
 
 MainApplication::MainApplication(QWidget *parent) : QMainWindow(parent) {
     // Set up stacked widget
@@ -19,6 +20,15 @@ MainApplication::MainApplication(QWidget *parent) : QMainWindow(parent) {
     connect(evenementMainWindow, &EvenementMainWindow::navigateTo, this, &MainApplication::navigateTo);
     connect(fournisseurMainWindow, &FournisseurMainWindow::navigateTo, this, &MainApplication::navigateTo);
     connect(magasinMainWindow, &MagasinMainWindow::navigateTo, this, &MainApplication::navigateTo);
+
+    // connect logout signals
+    //connect(employeesMainWindow, &EmployeesMainWindow::logoutRequested, this, &MainApplication::handleLogout);
+    connect(evenementMainWindow, &EvenementMainWindow::logoutRequested, this, &MainApplication::handleLogout);
+    connect(fournisseurMainWindow, &FournisseurMainWindow::logoutRequested, this, &MainApplication::handleLogout);
+    connect(magasinMainWindow, &MagasinMainWindow::logoutRequested, this, &MainApplication::handleLogout);
+    connect(servicesMainWindow, &ServiceMainWindow::logoutRequested, this, &MainApplication::handleLogout);
+    connect(sponsorsMainWindow, &SponsorsMainWindow::logoutRequested, this, &MainApplication::handleLogout);
+
 }
 
 void MainApplication::setupWindows() {
@@ -80,6 +90,22 @@ void MainApplication::loadStylesheet() {
         styleFile.close();
     } else {
         qDebug() << "Failed to load stylesheet";
+    }
+}
+
+void MainApplication::handleLogout() {
+    Employe emp;
+    emp.logoutUser(); // Logout the user
+
+    // Close the MainApplication (and all child windows)
+    close();
+
+    // Show the login screen
+    Login login;
+    if (login.exec() == QDialog::Accepted) {
+        // Recreate and show a new MainApplication instance
+        MainApplication* newMainApp = new MainApplication();
+        newMainApp->show();
     }
 }
 

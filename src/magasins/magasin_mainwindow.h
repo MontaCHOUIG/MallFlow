@@ -6,6 +6,8 @@
 #include <QSqlDatabase>
 #include <QNetworkAccessManager>
 #include "magasin.h"
+#include "src/employees/employe.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MagasinMainWindow; }
@@ -20,6 +22,7 @@ public:
 
 signals:
     void navigateTo(int index);
+    void logoutRequested(); // Signal to request logout
 
 private slots:
     void on_ajouterMagasin_clicked();
@@ -40,6 +43,9 @@ private slots:
     void on_btnServices_clicked();
     void on_btnEvents_clicked();
     void on_btnSuppliers_clicked();
+    void on_button_logout_clicked();
+    void updateAuthUserLabel();
+
 
 private:
     Ui::MagasinMainWindow *ui;

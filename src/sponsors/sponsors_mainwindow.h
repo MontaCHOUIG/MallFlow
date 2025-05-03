@@ -16,6 +16,8 @@
 #include <QtCharts/QCategoryAxis>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
+#include "src/employees/employe.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SponsorsMainWindow; }
@@ -31,6 +33,7 @@ public:
 
 signals:
     void navigateTo(int index);
+    void logoutRequested(); // Signal to request logout
 
 private slots:
     void on_Sp_Button_Ajouter_clicked();
@@ -52,6 +55,9 @@ private slots:
     void on_btnEvents_clicked();
     void on_btnSuppliers_clicked();
     void on_btnStores_clicked();
+    void on_button_logout_clicked();
+    void updateAuthUserLabel();
+
 
 private:
     Ui::SponsorsMainWindow *ui;

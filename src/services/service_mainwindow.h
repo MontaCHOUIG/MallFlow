@@ -6,6 +6,7 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
 #include <QTableView> // Added for styleTableView
+#include "src/employees/employe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ServiceMainWindow; }
@@ -19,6 +20,7 @@ public:
 
 signals:
     void navigateTo(int index);
+    void logoutRequested(); // Signal to request logout
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -44,6 +46,9 @@ private slots:
     void on_btnEvents_clicked();
     void on_btnSuppliers_clicked();
     void on_btnStores_clicked();
+    void on_button_logout_clicked();
+    void updateAuthUserLabel();
+
 
 private:
     Ui::ServiceMainWindow *ui;

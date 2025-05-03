@@ -62,6 +62,10 @@ MagasinMainWindow::MagasinMainWindow(QWidget *parent)
     connect(ui->services, &QPushButton::clicked, this, &MagasinMainWindow::on_btnServices_clicked);
     connect(ui->evenement, &QPushButton::clicked, this, &MagasinMainWindow::on_btnEvents_clicked);
     connect(ui->fournisseurs, &QPushButton::clicked, this, &MagasinMainWindow::on_btnSuppliers_clicked);
+    // connect logout signal
+    connect(ui->button_logout, &QPushButton::clicked, this, &MagasinMainWindow::on_button_logout_clicked);
+    updateAuthUserLabel();
+
 
     // Load magasins from database
     QSqlQuery query(QSqlDatabase::database());
@@ -86,6 +90,15 @@ MagasinMainWindow::~MagasinMainWindow() {
     delete timer;
 }
 
+
+void MagasinMainWindow::updateAuthUserLabel() {
+    Employe emp;
+    ui->label_authUser->setText("Logged in as: " + emp.getAuthenticatedUser());
+}
+
+void MagasinMainWindow::on_button_logout_clicked() {
+    emit logoutRequested();
+}
 void MagasinMainWindow::on_ajouterMagasin_clicked() {
     QString idText = ui->ID_MAGASIN->text().trimmed();
     QString nom = ui->NOM_MAGASIN->text().trimmed();

@@ -1070,31 +1070,6 @@ border-radius: 20px;</string>
     <property name="frameShadow">
      <enum>QFrame::Shadow::Raised</enum>
     </property>
-    <widget class="QLabel" name="label_6">
-     <property name="geometry">
-      <rect>
-       <x>780</x>
-       <y>10</y>
-       <width>261</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
-    color: white; /* Text color */
-    background-color: rgb(211, 205, 255); /* Blue background */
-    font-size: 20px; /* Text size */
-    font-weight: bold; /* Bold text */
-    padding: 10px; /* Space inside the label */
-    border-radius: 8px; /* Rounded corners */
-    text-align: center; /* Centers text */
-}
-</string>
-     </property>
-     <property name="text">
-      <string>User@shopDevs.com</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="Sp_Label_Titre">
      <property name="geometry">
       <rect>
@@ -1138,7 +1113,7 @@ border-bottom-right-radius: 10px;</string>
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="button_logout">
      <property name="geometry">
       <rect>
        <x>1030</x>
@@ -1232,6 +1207,31 @@ QPushButton:pressed {
       <string>SOS</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_authUser">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>10</y>
+       <width>421</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    color: white; /* Text color */
+    background-color: rgb(211, 205, 255); /* Blue background */
+    font-size: 20px; /* Text size */
+    font-weight: bold; /* Bold text */
+    padding: 10px; /* Space inside the label */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Centers text */
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <zorder>Bg_imzge</zorder>
    <zorder>tabWidget</zorder>
@@ -1244,7 +1244,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1376</width>
-     <height>30</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

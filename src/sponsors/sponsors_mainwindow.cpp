@@ -44,6 +44,11 @@ SponsorsMainWindow::SponsorsMainWindow(QWidget *parent)
     connect(ui->evenement, &QPushButton::clicked, this, &SponsorsMainWindow::on_btnEvents_clicked);
     connect(ui->fournisseurs, &QPushButton::clicked, this, &SponsorsMainWindow::on_btnSuppliers_clicked);
     connect(ui->magasins, &QPushButton::clicked, this, &SponsorsMainWindow::on_btnStores_clicked);
+
+    // connect logout signal
+    connect(ui->button_logout, &QPushButton::clicked, this, &SponsorsMainWindow::on_button_logout_clicked);
+    updateAuthUserLabel();
+
 }
 
 SponsorsMainWindow::~SponsorsMainWindow()
@@ -51,6 +56,15 @@ SponsorsMainWindow::~SponsorsMainWindow()
     delete ui;
 }
 
+
+void SponsorsMainWindow::updateAuthUserLabel() {
+    Employe emp;
+    ui->label_authUser->setText("Logged in as: " + emp.getAuthenticatedUser());
+}
+
+void SponsorsMainWindow::on_button_logout_clicked() {
+    emit logoutRequested();
+}
 void SponsorsMainWindow::on_Sp_Button_Ajouter_clicked()
 {
     QString idSponsorString = ui->Sp_Line_ID->text().trimmed();

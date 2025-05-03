@@ -34,6 +34,12 @@ EvenementMainWindow::EvenementMainWindow(QWidget *parent)
     connect(ui->fournisseurs, &QPushButton::clicked, this, &EvenementMainWindow::on_btnSuppliers_clicked);
     connect(ui->magasins, &QPushButton::clicked, this, &EvenementMainWindow::on_btnStores_clicked);
 
+
+    // connect logout signal
+    connect(ui->button_logout, &QPushButton::clicked, this, &EvenementMainWindow::on_button_logout_clicked);
+
+    updateAuthUserLabel();
+
     // Initialisation de la carte
     mapWidget = new QQuickWidget(ui->tab_5);
     mapWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -66,6 +72,10 @@ EvenementMainWindow::~EvenementMainWindow() {
     delete ui;
 }
 
+void EvenementMainWindow::on_button_logout_clicked() {
+    emit logoutRequested();
+}
+
 bool EvenementMainWindow::recordExists(const QString &table, const QString &col, int id) {
     QSqlQuery q;
     q.prepare(QString("SELECT 1 FROM %1 WHERE %2 = :id").arg(table, col));
@@ -74,6 +84,11 @@ bool EvenementMainWindow::recordExists(const QString &table, const QString &col,
     return q.next();
 }
 
+
+void EvenementMainWindow::updateAuthUserLabel() {
+    Employe emp;
+    ui->label_authUser->setText("Logged in as: " + emp.getAuthenticatedUser());
+}
 void EvenementMainWindow::on_Sp_Button_Ajouter_clicked() {
     int id = ui->ID_EVENEMENT->text().toInt();
     QString titre = ui->TITRE->text().trimmed();

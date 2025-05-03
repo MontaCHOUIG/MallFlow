@@ -59,6 +59,11 @@ ServiceMainWindow::ServiceMainWindow(QWidget *parent)
     connect(ui->fournisseurs, &QPushButton::clicked, this, &ServiceMainWindow::on_btnSuppliers_clicked);
     connect(ui->magasins, &QPushButton::clicked, this, &ServiceMainWindow::on_btnStores_clicked);
 
+    // connect logout signal
+    connect(ui->button_logout, &QPushButton::clicked, this, &ServiceMainWindow::on_button_logout_clicked);
+    updateAuthUserLabel();
+
+
     // Vérification des services avec la date d'aujourd'hui
     QSqlQuery query;
     query.prepare("SELECT COUNT(*) FROM Services WHERE Date_Service = :today");
@@ -91,6 +96,15 @@ ServiceMainWindow::ServiceMainWindow(QWidget *parent)
     });
 }
 
+
+void ServiceMainWindow::updateAuthUserLabel() {
+    Employe emp;
+    ui->label_authUser->setText("Logged in as: " + emp.getAuthenticatedUser());
+}
+
+void ServiceMainWindow::on_button_logout_clicked() {
+    emit logoutRequested();
+}
 void ServiceMainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);

@@ -21,15 +21,31 @@ FournisseurMainWindow::FournisseurMainWindow(QWidget *parent)
     connect(ui->evenement, &QPushButton::clicked, this, &FournisseurMainWindow::on_btnEvents_clicked);
     connect(ui->magasins, &QPushButton::clicked, this, &FournisseurMainWindow::on_btnStores_clicked);
 
+    // connect logout signal
+    connect(ui->button_logout, &QPushButton::clicked, this, &FournisseurMainWindow::on_button_logout_clicked);
+
+    updateAuthUserLabel();
+
     connect(ui->pb_id, &QPushButton::clicked, this, &FournisseurMainWindow::on_pb_id_clicked);
     ui->le_id->setValidator(new QIntValidator(0, 999999, this));
     ui->tab_fournisseur->setModel(f.afficher());
     updateStatsChart();
 }
 
+
+
 FournisseurMainWindow::~FournisseurMainWindow()
 {
     delete ui;
+}
+
+void FournisseurMainWindow::on_button_logout_clicked() {
+    emit logoutRequested();
+}
+
+void FournisseurMainWindow::updateAuthUserLabel() {
+    Employe emp;
+    ui->label_authUser->setText("Logged in as: " + emp.getAuthenticatedUser());
 }
 
 QString FournisseurMainWindow::generateCaptchaText(int length)
