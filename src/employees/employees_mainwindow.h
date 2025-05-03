@@ -22,6 +22,8 @@ public:
 
 signals:
     void navigateTo(int index);
+    void logoutRequested(); // Signal to request logout
+
 
 private slots:
     void on_Em_Button_Ajouter_clicked();
@@ -40,6 +42,7 @@ private slots:
     void on_btnEvents_clicked();
     void on_btnSuppliers_clicked();
     void on_btnStores_clicked();
+
 
 private:
     Ui::EmployeesMainWindow *ui;

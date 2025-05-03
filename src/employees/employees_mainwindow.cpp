@@ -38,6 +38,7 @@ EmployeesMainWindow::EmployeesMainWindow(QWidget *parent)
     proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     proxyModel->setDynamicSortFilter(true);
+
     updateAuthUserLabel();
 
     // Set filtered model to TableView
@@ -365,15 +366,8 @@ void EmployeesMainWindow::updateAuthUserLabel()
 
 void EmployeesMainWindow::on_button_logout_clicked()
 {
-    emp.logoutUser();
-    close();
+    emit logoutRequested();
 
-    // Show login screen again
-    Login login;
-    if (login.exec() == QDialog::Accepted) {
-        updateAuthUserLabel();
-        show();
-    }
 }
 
 void EmployeesMainWindow::on_btnSponsors_clicked() {

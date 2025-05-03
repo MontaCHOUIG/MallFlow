@@ -22,7 +22,7 @@ MainApplication::MainApplication(QWidget *parent) : QMainWindow(parent) {
     connect(magasinMainWindow, &MagasinMainWindow::navigateTo, this, &MainApplication::navigateTo);
 
     // connect logout signals
-    //connect(employeesMainWindow, &EmployeesMainWindow::logoutRequested, this, &MainApplication::handleLogout);
+    connect(employeesMainWindow, &EmployeesMainWindow::logoutRequested, this, &MainApplication::handleLogout);
     connect(evenementMainWindow, &EvenementMainWindow::logoutRequested, this, &MainApplication::handleLogout);
     connect(fournisseurMainWindow, &FournisseurMainWindow::logoutRequested, this, &MainApplication::handleLogout);
     connect(magasinMainWindow, &MagasinMainWindow::logoutRequested, this, &MainApplication::handleLogout);
@@ -73,10 +73,10 @@ void MainApplication::navigateTo(int index) {
                 setWindowTitle("MallFlow Management - Events");
                 break;
             case 4:
-                setWindowTitle("MallFlow Management - Suppliers");
+                setWindowTitle("MallFlow Management - Fournisseurs");
                 break;
             case 5:
-                setWindowTitle("MallFlow Management - Stores");
+                setWindowTitle("MallFlow Management - Magasins");
                 break;
         }
     }
