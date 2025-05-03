@@ -54,6 +54,10 @@ public:
     bool authenticateUser(const QString &email, const QString &password);
     void saveAuthenticatedUser(const QString &email);
     QString getAuthenticatedUser();
+    QString getAuthenticatedUserRole();
+    QString getAuthenticatedUserPoste();
+
+
     void logoutUser();
 
 

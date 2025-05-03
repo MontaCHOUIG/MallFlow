@@ -142,8 +142,23 @@ void Employe::setSecurityQuestions(const QString &q1, const QString &a1,
 }
 
 void Employe::saveAuthenticatedUser(const QString &email) {
+    QSqlQuery query;
+    query.prepare("SELECT ROLE, POSTE FROM EMPLOYES WHERE EMAIL = :email");
+    query.bindValue(":email", email);
+
+    QString role, poste;
+    if (query.exec() && query.next()) {
+        role = query.value("ROLE").toString();
+        poste = query.value("POSTE").toString();
+    } else {
+        qDebug() << "Failed to fetch role and poste:" << query.lastError().text();
+        return;
+    }
+
     QSettings settings("MallFlow", "Auth");
     settings.setValue("authenticatedUser", email);
+    settings.setValue("userRole", role);
+    settings.setValue("userPoste", poste);
 }
 
 QString Employe::getAuthenticatedUser() {
@@ -151,8 +166,19 @@ QString Employe::getAuthenticatedUser() {
     return settings.value("authenticatedUser", "").toString();
 }
 
+QString Employe::getAuthenticatedUserRole() {
+    QSettings settings("MallFlow", "Auth");
+    return settings.value("userRole", "").toString();
+}
+
+QString Employe::getAuthenticatedUserPoste() {
+    QSettings settings("MallFlow", "Auth");
+    return settings.value("userPoste", "").toString();
+}
 
 void Employe::logoutUser() {
     QSettings settings("MallFlow", "Auth");
     settings.remove("authenticatedUser");
+    settings.remove("userRole");
+    settings.remove("userPoste");
 }
