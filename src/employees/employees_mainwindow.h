@@ -33,6 +33,7 @@ private slots:
     void updateAuthUserLabel();
     void on_button_logout_clicked();
 
+
     // Navigation slots
     void on_btnSponsors_clicked();
     void on_btnServices_clicked();

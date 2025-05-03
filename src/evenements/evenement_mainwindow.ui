@@ -86,7 +86,7 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <property name="styleSheet">
@@ -98,7 +98,7 @@ QTabBar::close-button:hover {
      <widget class="QGroupBox" name="Sp_GroupBox_2">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>30</x>
         <y>20</y>
         <width>441</width>
         <height>501</height>
@@ -107,7 +107,7 @@ QTabBar::close-button:hover {
       <property name="styleSheet">
        <string notr="true">QGroupBox {
     background-color: rgb(171, 186, 255);
-    border: 2px solid red; /* Red border */
+    border: 2px solid ; /* Red border */
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
@@ -120,7 +120,7 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top left;
     padding: 5px 15px;
-    background-color: red; /* Red title background */
+    background-color: rgb(229, 28, 255); /* Red title background */
     color: white;
     border-radius: 5px;
 }
@@ -140,9 +140,18 @@ QGroupBox::title {
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>Titre</string>
@@ -159,9 +168,18 @@ QGroupBox::title {
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>Date Fin</string>
@@ -219,9 +237,18 @@ QLineEdit:hover {
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>ID Evènement</string>
@@ -257,9 +284,18 @@ QLineEdit:hover {
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>Lieu</string>
@@ -276,9 +312,18 @@ QLineEdit:hover {
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>Date Début</string>
@@ -308,24 +353,27 @@ QLineEdit:hover {
         <rect>
          <x>120</x>
          <y>450</y>
-         <width>151</width>
-         <height>31</height>
+         <width>200</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
         <font>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton {
-background-color: rgba(35,10,152, 200);
-border-radius: 8px;
-color: white;
-}
-QPushButton:hover {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
-}</string>
+        <string notr="true"> background-color: #4CAF50; /* Fond vert */
+    color: white;
+    border: none;
+    border-radius: 8px;  /* Coins arrondis */
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    min-width: 160px; /* Largeur minimale pour le bouton */
+    cursor: pointer;  /* L</string>
        </property>
        <property name="text">
         <string>Ajouter</string>
@@ -362,9 +410,18 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Type de &lt;br/&gt;participants&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -419,9 +476,18 @@ QLineEdit:hover {
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>ID Employe</string>
@@ -438,9 +504,18 @@ QLineEdit:hover {
        </property>
        <property name="font">
         <font>
-         <pointsize>9</pointsize>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    color: black; /* Couleur du texte */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+</string>
        </property>
        <property name="text">
         <string>ID Sponsor</string>
@@ -452,24 +527,38 @@ QLineEdit:hover {
        <rect>
         <x>710</x>
         <y>160</y>
-        <width>151</width>
+        <width>160</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton {
-background-color: rgba(35,10,152, 200);
-border-radius: 8px;
-color: white;
+    background-color: #FF9800;  /* Fond orange */
+    color: white;
+    border: none;
+    border-radius: 8px;  /* Coins arrondis */
+  
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    min-width: 160px;  /* Largeur minimale pour le bouton */
+    cursor: pointer;
 }
+
 QPushButton:hover {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
-}</string>
+    background-color: #FB8C00;  /* Orange plus foncé au survol */
+}
+
+QPushButton:pressed {
+    background-color: #EF6C00;  /* Orange encore plus foncé quand cliqué */
+}
+</string>
       </property>
       <property name="text">
        <string>Modifier</string>
@@ -480,24 +569,26 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        <rect>
         <x>710</x>
         <y>200</y>
-        <width>151</width>
-        <height>31</height>
+        <width>160</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">QPushButton {
-background-color: rgba(35,10,152, 200);
-border-radius: 8px;
-color: white;
-}
-QPushButton:hover {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(117, 201, 187, 200), stop:1 rgba(35,10,152, 200));
-}</string>
+       <string notr="true">background-color: #f44336;  /* Couleur de fond rouge */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    min-width: 120px;</string>
       </property>
       <property name="text">
        <string>Supprimer</string>
@@ -565,7 +656,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-image: url(:/imgs/backgroundEmployes.png)</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string/>
@@ -638,7 +729,38 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color:rgba(35,10,152, 50);</string>
+       <string notr="true">QTableView {
+    background-color: #4A2B7F; /* Lighter dark purple background */
+    color: white; /* White text */
+    gridline-color: #6B3F98; /* Lighter purple gridlines */
+}
+
+QTableView::item {
+    padding: 5px;
+    background-color: #5A3F99; /* Lighter purple for rows */
+    border: 1px solid #6B3F98; /* Border around each cell */
+}
+
+QTableView::item:selected {
+    background-color: #7A4DA9; /* Lighter purple when selected */
+    color: white;
+}
+
+QTableView::horizontalHeader, QTableView::verticalHeader {
+    background-color: #5A3F99; /* Lighter purple header */
+    color: white; /* White text in header */
+    border: none;
+}
+
+QTableView::horizontalHeader::section, QTableView::verticalHeader::section {
+    padding: 10px;
+    border: 1px solid #6B3F98; /* Header section borders */
+}
+
+QTableView::horizontalHeader::section:active, QTableView::verticalHeader::section:active {
+    background-color: #7A4DA9; /* Highlight active header section */
+}
+</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="Sp_Line_Recherche">
@@ -790,7 +912,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-image: url(:/imgs/backgroundEmployes.png)</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string/>
@@ -845,7 +967,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-image: url(:/imgs/backgroundEmployes.png)</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string/>
@@ -1000,7 +1122,7 @@ border-radius : 20px</string>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>20</x>
        <y>30</y>
        <width>141</width>
        <height>141</height>
@@ -1014,8 +1136,6 @@ QLabel {
     border-radius: 10px; /* Rounds the corners */
     padding: 2px; /* Adds space inside the label */image : url(:/imgs/logo.png)
 }
-
-
 </string>
      </property>
      <property name="text">
@@ -1025,7 +1145,7 @@ QLabel {
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>20</x>
        <y>200</y>
        <width>111</width>
        <height>41</height>
@@ -1042,7 +1162,6 @@ QLabel {
     text-align: center;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Adds a shadow effect */
 }
-
 </string>
      </property>
      <property name="text">
@@ -1248,12 +1367,37 @@ border-radius: 20px;</string>
     <property name="frameShadow">
      <enum>QFrame::Shadow::Raised</enum>
     </property>
+    <widget class="QLabel" name="label_authUser">
+     <property name="geometry">
+      <rect>
+       <x>560</x>
+       <y>50</y>
+       <width>421</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    color: white; /* Text color */
+    background-color: rgb(211, 205, 255); /* Blue background */
+    font-size: 20px; /* Text size */
+    font-weight: bold; /* Bold text */
+    padding: 10px; /* Space inside the label */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Centers text */
+}
+</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
     <widget class="QLabel" name="Sp_Label_Titre">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>60</y>
-       <width>451</width>
+       <x>70</x>
+       <y>50</y>
+       <width>391</width>
        <height>51</height>
       </rect>
      </property>
@@ -1278,7 +1422,7 @@ border-bottom-right-radius: 10px;</string>
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>960</x>
+       <x>510</x>
        <y>50</y>
        <width>41</width>
        <height>41</height>
@@ -1294,7 +1438,7 @@ border-bottom-right-radius: 10px;</string>
     <widget class="QPushButton" name="button_logout">
      <property name="geometry">
       <rect>
-       <x>1020</x>
+       <x>1010</x>
        <y>50</y>
        <width>111</width>
        <height>41</height>
@@ -1322,31 +1466,6 @@ QPushButton:pressed {
      </property>
      <property name="text">
       <string>logout</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_authUser">
-     <property name="geometry">
-      <rect>
-       <x>540</x>
-       <y>40</y>
-       <width>421</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
-    color: white; /* Text color */
-    background-color: rgb(211, 205, 255); /* Blue background */
-    font-size: 20px; /* Text size */
-    font-weight: bold; /* Bold text */
-    padding: 10px; /* Space inside the label */
-    border-radius: 8px; /* Rounded corners */
-    text-align: center; /* Centers text */
-}
-</string>
-     </property>
-     <property name="text">
-      <string/>
      </property>
     </widget>
    </widget>
