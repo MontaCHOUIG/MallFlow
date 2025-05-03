@@ -31,6 +31,7 @@ private slots:
     void clearEmployeeForm();
     void on_button_logout_clicked();
     void handleArduinoId(const QString &id) ;
+    void openGate();
 
 
 public slots:

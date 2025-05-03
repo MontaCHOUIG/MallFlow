@@ -86,7 +86,7 @@ QTabBar::close-button:hover {
 </string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab1">
      <property name="styleSheet">
@@ -1165,8 +1165,8 @@ border-radius: 20px;</string>
     <widget class="QLabel" name="label_authUser">
      <property name="geometry">
       <rect>
-       <x>530</x>
-       <y>50</y>
+       <x>430</x>
+       <y>40</y>
        <width>421</width>
        <height>51</height>
       </rect>
@@ -1190,8 +1190,8 @@ border-radius: 20px;</string>
     <widget class="QLabel" name="Sp_Label_Titre">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>60</y>
+       <x>20</x>
+       <y>40</y>
        <width>391</width>
        <height>51</height>
       </rect>
@@ -1217,8 +1217,8 @@ border-bottom-right-radius: 10px;</string>
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>960</x>
-       <y>50</y>
+       <x>860</x>
+       <y>40</y>
        <width>41</width>
        <height>41</height>
       </rect>
@@ -1230,13 +1230,13 @@ border-bottom-right-radius: 10px;</string>
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="button_logout">
+    <widget class="QPushButton" name="gate">
      <property name="geometry">
       <rect>
-       <x>1020</x>
-       <y>50</y>
-       <width>111</width>
-       <height>41</height>
+       <x>950</x>
+       <y>40</y>
+       <width>161</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -1260,7 +1260,7 @@ QPushButton:pressed {
 </string>
      </property>
      <property name="text">
-      <string>logout</string>
+      <string>OPEN GATE</string>
      </property>
     </widget>
    </widget>

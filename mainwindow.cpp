@@ -72,6 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect search bar
    // connect(ui->Em_Line_Recherche, &QLineEdit::textChanged, this, &MainWindow::on_Em_Line_Search_textChanged);
 
+    connect(ui->gate,&QPushButton::clicked ,this,&MainWindow::openGate);
     showSalaryPieChart();
 
      connect(arduino, &Arduino::idReceived, this, &MainWindow::handleArduinoId);
@@ -104,7 +105,13 @@ void MainWindow::handleArduinoId(const QString &id) {
     }
 }
 
+void MainWindow::openGate() {
+    arduino->sendOpenCommand();
 
+    QMessageBox::information(this, "Parking Access", " gate oppened successfully");
+
+
+}
 
 
 
