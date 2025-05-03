@@ -116,6 +116,9 @@ void Login::onLoginButtonClicked() {
     if (e.authenticateUser(email, password)) {
         e.saveAuthenticatedUser(email);
         QMessageBox::information(this, "Login Successful", "Welcome!");
+        QString role = e.getAuthenticatedUserRole();
+        QString poste = e.getAuthenticatedUserPoste();
+        qDebug() << "Authenticated User:" << email << role << poste;
         accept();
     } else {
         // Check if the email exists

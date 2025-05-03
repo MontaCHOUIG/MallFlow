@@ -21,6 +21,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QPushButton>
+#include <QMessageBox>
 
 SponsorsMainWindow::SponsorsMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -516,21 +517,46 @@ void SponsorsMainWindow::checkDateFinAndSendMessage()
 }
 
 void SponsorsMainWindow::on_btnEmployees_clicked() {
-    emit navigateTo(0); // Navigate to Employees
+    Employe emp;
+    if (emp.hasWindowAccess("employees")) {
+        emit navigateTo(0); // Navigate to employees window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void SponsorsMainWindow::on_btnServices_clicked() {
-    emit navigateTo(2); // Navigate to Services
+    Employe emp;
+    if (emp.hasWindowAccess("services")) {
+        emit navigateTo(2); // Navigate to services window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void SponsorsMainWindow::on_btnEvents_clicked() {
-    emit navigateTo(3); // Navigate to Events
+    Employe emp;
+    if (emp.hasWindowAccess("evenements")) {
+        emit navigateTo(3); // Navigate to events window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void SponsorsMainWindow::on_btnSuppliers_clicked() {
-    emit navigateTo(4); // Navigate to Suppliers
+    Employe emp;
+    if (emp.hasWindowAccess("fournisseurs")) {
+        emit navigateTo(4); // Navigate to suppliers window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void SponsorsMainWindow::on_btnStores_clicked() {
-    emit navigateTo(5); // Navigate to Stores
+    Employe emp;
+    if (emp.hasWindowAccess("magasins")) {
+        emit navigateTo(5); // Navigate to stores window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }

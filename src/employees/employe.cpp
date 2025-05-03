@@ -182,3 +182,35 @@ void Employe::logoutUser() {
     settings.remove("userRole");
     settings.remove("userPoste");
 }
+
+bool Employe::hasWindowAccess(const QString& windowName) {
+    QString role = getAuthenticatedUserRole();
+    QString poste = getAuthenticatedUserPoste();
+
+    // Admin has access to all windows
+    if (role == "admin") {
+        return true;
+    }
+
+    // Define access rules based on role and poste
+    if (windowName == "employees") {
+        return role == "admin" || poste == "RH";
+    }
+    else if (windowName == "sponsors") {
+        return role == "admin" || poste == "Sponsoring";
+    }
+    else if (windowName == "services") {
+        return role == "admin" || poste == "Service";
+    }
+    else if (windowName == "evenements") {
+        return role == "admin" || poste == "Evenement";
+    }
+    else if (windowName == "fournisseurs") {
+        return role == "admin" || poste == "Achat";
+    }
+    else if (windowName == "magasins") {
+        return role == "admin" || poste == "Commercial";
+    }
+
+    return false;
+}

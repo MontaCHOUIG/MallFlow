@@ -507,23 +507,48 @@ void ServiceMainWindow::on_Sp_Button_Fermer_4_clicked()
 }
 
 void ServiceMainWindow::on_btnEmployees_clicked() {
-    emit navigateTo(0); // Navigate to Employees
+    Employe emp;
+    if (emp.hasWindowAccess("employees")) {
+        emit navigateTo(0); // Navigate to employees window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void ServiceMainWindow::on_btnSponsors_clicked() {
-    emit navigateTo(1); // Navigate to Sponsors
+    Employe emp;
+    if (emp.hasWindowAccess("sponsors")) {
+        emit navigateTo(1); // Navigate to sponsors window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void ServiceMainWindow::on_btnEvents_clicked() {
-    emit navigateTo(3); // Navigate to Events
+    Employe emp;
+    if (emp.hasWindowAccess("evenements")) {
+        emit navigateTo(3); // Navigate to events window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void ServiceMainWindow::on_btnSuppliers_clicked() {
-    emit navigateTo(4); // Navigate to Suppliers
+    Employe emp;
+    if (emp.hasWindowAccess("fournisseurs")) {
+        emit navigateTo(4); // Navigate to suppliers window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void ServiceMainWindow::on_btnStores_clicked() {
-    emit navigateTo(5); // Navigate to Stores
+    Employe emp;
+    if (emp.hasWindowAccess("magasins")) {
+        emit navigateTo(5); // Navigate to stores window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 ServiceMainWindow::~ServiceMainWindow()

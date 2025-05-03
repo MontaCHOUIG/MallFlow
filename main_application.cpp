@@ -51,8 +51,27 @@ void MainApplication::setupWindows() {
     magasinMainWindow = new MagasinMainWindow(this);
     stackedWidget->addWidget(magasinMainWindow);
 
+    // Determine initial window based on user permissions
+    Employe emp;
+    int initialWindowIndex = 0; // Default to employees window
+
+    // Check each window's access in order of priority
+    if (emp.hasWindowAccess("employees")) {
+        initialWindowIndex = 0;
+    } else if (emp.hasWindowAccess("sponsors")) {
+        initialWindowIndex = 1;
+    } else if (emp.hasWindowAccess("services")) {
+        initialWindowIndex = 2;
+    } else if (emp.hasWindowAccess("evenements")) {
+        initialWindowIndex = 3;
+    } else if (emp.hasWindowAccess("fournisseurs")) {
+        initialWindowIndex = 4;
+    } else if (emp.hasWindowAccess("magasins")) {
+        initialWindowIndex = 5;
+    }
+
     // Set initial window
-    stackedWidget->setCurrentWidget(employeesMainWindow);
+    stackedWidget->setCurrentIndex(initialWindowIndex);
 }
 
 void MainApplication::navigateTo(int index) {

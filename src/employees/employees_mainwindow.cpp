@@ -148,7 +148,7 @@ void EmployeesMainWindow::on_Em_Button_Ajouter_clicked()
     }
 
     // Create the employee
-    Employe e(id, nom, role, email, poste, salaire, mdp, secureAuth);
+    Employe e(id, nom, poste, email, role, salaire, mdp, secureAuth);
 
     if (e.ajouter()) {
         // Save security questions only if used
@@ -371,21 +371,41 @@ void EmployeesMainWindow::on_button_logout_clicked()
 }
 
 void EmployeesMainWindow::on_btnSponsors_clicked() {
-    emit navigateTo(1); // Navigate to Sponsors
+    if (emp.hasWindowAccess("sponsors")) {
+        emit navigateTo(1); // Navigate to sponsors window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void EmployeesMainWindow::on_btnServices_clicked() {
-    emit navigateTo(2); // Navigate to Services
+    if (emp.hasWindowAccess("services")) {
+        emit navigateTo(2); // Navigate to services window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void EmployeesMainWindow::on_btnEvents_clicked() {
-    emit navigateTo(3); // Navigate to Events
+    if (emp.hasWindowAccess("evenements")) {
+        emit navigateTo(3); // Navigate to events window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void EmployeesMainWindow::on_btnSuppliers_clicked() {
-    emit navigateTo(4); // Navigate to Suppliers
+    if (emp.hasWindowAccess("fournisseurs")) {
+        emit navigateTo(4); // Navigate to suppliers window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }
 
 void EmployeesMainWindow::on_btnStores_clicked() {
-    emit navigateTo(5); // Navigate to Stores
+    if (emp.hasWindowAccess("magasins")) {
+        emit navigateTo(5); // Navigate to stores window
+    } else {
+        QMessageBox::warning(this, "Accès refusé", "Vous n'avez pas les permissions nécessaires pour accéder à cette fenêtre.");
+    }
 }

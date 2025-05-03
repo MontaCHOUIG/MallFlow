@@ -57,9 +57,8 @@ public:
     QString getAuthenticatedUserRole();
     QString getAuthenticatedUserPoste();
 
-
     void logoutUser();
-
+    bool hasWindowAccess(const QString& windowName);
 
 };
 
