@@ -6,5 +6,8 @@
         <file>imgs/output-onlinepngtools (3).png</file>
         <file>imgs/logo.png</file>
         <file>imgs/userr.jpg</file>
+        <file>imgs/backgroundEmployes.png</file>
+        <file>map.qml</file>
+        <file>imgs/pin.png</file>
     </qresource>
 </RCC>

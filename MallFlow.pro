@@ -1,53 +1,86 @@
-QT       += core gui
-TARGET = MallFlow 
-
+QT       += core gui sql widgets charts printsupport network quick quickwidgets location positioning multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
-# The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
+TARGET = MallFlow
+TEMPLATE = app
+
+# Emit warnings for deprecated Qt features
 DEFINES += QT_DEPRECATED_WARNINGS
 
-# You can also make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
 QT += sql
+QT += charts
+QT += network
+QT += printsupport
+QT += multimedia widgets
 
 SOURCES += \
     connection.cpp \
-    dialog.cpp \
-    form.cpp \
-    main.cpp \
-    mainwindow.cpp
+    main_application.cpp \
+    src/employees/employees_mainwindow.cpp \
+    src/employees/employe.cpp \
+    src/employees/modifieremploye.cpp \
+    src/employees/securityquestion.cpp \
+    src/employees/emailsender.cpp \
+    src/employees/login.cpp \
+    src/sponsors/sponsors_mainwindow.cpp \
+    src/sponsors/sponsor.cpp \
+    src/services/service_mainwindow.cpp \
+    src/services/services.cpp \
+    src/services/urgence.cpp \
+    src/evenements/evenement.cpp \
+    src/evenements/evenement_mainwindow.cpp \
+    src/fournisseurs/fournisseur.cpp \
+    src/magasins/magasin.cpp \
+    src/magasins/magasin_mainwindow.cpp \
+    src/fournisseurs/fournisseur_mainwindow.cpp \
+    main.cpp
 
 HEADERS += \
     connection.h \
-    dialog.h \
-    form.h \
-    mainwindow.h
+    main_application.h \
+    src/employees/employees_mainwindow.h \
+    src/employees/employe.h \
+    src/employees/modifieremploye.h \
+    src/employees/securityquestion.h \
+    src/employees/emailsender.h \
+    src/employees/login.h \
+    src/sponsors/sponsors_mainwindow.h \
+    src/sponsors/sponsor.h \
+    src/services/service_mainwindow.h \
+    src/services/services.h \
+    src/services/urgence.h \
+    src/evenements/evenement.h \
+    src/fournisseurs/fournisseur.h \
+    src/fournisseurs/fournisseur_mainwindow.h \
+    src/magasins/magasin.h \
+    src/magasins/magasin_mainwindow.h \
+    src/evenements/evenement_mainwindow.h
+
 
 FORMS += \
-    dialog.ui \
-    form.ui \
-    mainwindow.ui
+    src/employees/employees.ui \
+    src/sponsors/sponsors.ui \
+    src/services/services.ui \
+    src/evenements/evenement_mainwindow.ui \
+    src/fournisseurs/fournisseur_mainwindow.ui \
+    src/magasins/magasin_mainwindow.ui \
+    main_application.ui
 
-# Default rules for deployment.
+RESOURCES += \
+    resources/resources.qrc \
+    src/evenements/resources.qrc
+
+# Default rules for deployment
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    imgs/output-onlinepngtools (2).png \
-    imgs/output-onlinepngtools.png \
-    resources/background.jpeg \
-    resources/background.png
-
-RESOURCES += \
-    resources.qrc \
-    resources.qrc
+    resources/imgs/output_onlinepngtools_2.png \
+    resources/imgs/output_onlinepngtools.png \
+    resources/imgs/background.png \
+    resources/imgs/logo.png \
+    resources/styles/style.qss
