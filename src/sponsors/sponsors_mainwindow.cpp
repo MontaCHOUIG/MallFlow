@@ -47,7 +47,7 @@ SponsorsMainWindow::SponsorsMainWindow(QWidget *parent)
     connect(ui->magasins, &QPushButton::clicked, this, &SponsorsMainWindow::on_btnStores_clicked);
 
     // connect logout signal
-    connect(ui->button_logout, &QPushButton::clicked, this, &SponsorsMainWindow::on_button_logout_clicked);
+   // connect(ui->button_logout, &QPushButton::clicked, this, &SponsorsMainWindow::on_button_logout_clicked);
     updateAuthUserLabel();
 
 }

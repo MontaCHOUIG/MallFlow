@@ -60,7 +60,7 @@ ServiceMainWindow::ServiceMainWindow(QWidget *parent)
     connect(ui->magasins, &QPushButton::clicked, this, &ServiceMainWindow::on_btnStores_clicked);
 
     // connect logout signal
-    connect(ui->button_logout, &QPushButton::clicked, this, &ServiceMainWindow::on_button_logout_clicked);
+    //connect(ui->button_logout, &QPushButton::clicked, this, &ServiceMainWindow::on_button_logout_clicked);
     updateAuthUserLabel();
 
 

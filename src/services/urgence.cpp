@@ -11,6 +11,8 @@
 #include <QSqlError>
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
+#include <QSqlDatabase>
+#include <QMessageBox>
 
 Urgence::Urgence(const QString& message, QWidget *parent)
     : QDialog(parent), alarmSound(nullptr)
@@ -134,22 +136,49 @@ void Urgence::showDateAlert(const QString& title, const QString& message, QWidge
 
 void Urgence::checkTodayDuplicates(QWidget *parent, QTableView *tableView, QTabWidget *tabWidget)
 {
+    qDebug() << "Début de checkTodayDuplicates";
+
+    // Vérification de la connexion à la base de données
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen()) {
+        qDebug() << "Erreur: Base de données non connectée";
+        QMessageBox::critical(parent, "Erreur", "Impossible de se connecter à la base de données");
+        return;
+    }
+    qDebug() << "Base de données connectée - Nom:" << db.databaseName()
+             << "Utilisateur:" << db.userName()
+             << "Hôte:" << db.hostName();
+
     QDate today = QDate::currentDate();
+    qDebug() << "Date d'aujourd'hui:" << today.toString("yyyy-MM-dd");
+
+    // Vérification de la structure de la table
+    QSqlQuery checkTable;
+    if (!checkTable.exec("SELECT * FROM SHOPDEVS.SERVICES WHERE ROWNUM = 1")) {
+        qDebug() << "Erreur lors de la vérification de la table:" << checkTable.lastError().text();
+        QMessageBox::critical(parent, "Erreur", "Table SERVICES introuvable ou inaccessible");
+        return;
+    }
+
     QSqlQuery query;
-    query.prepare("SELECT ID_Service, Nom_Service FROM Services WHERE Date_Service = :date");
+    query.prepare("SELECT ID_SERVICE, NOM_SERVICE FROM SHOPDEVS.SERVICES WHERE DATE_SERVICE = TO_DATE(:date, 'YYYY-MM-DD')");
     query.bindValue(":date", today.toString("yyyy-MM-dd"));
 
     if (!query.exec()) {
         qDebug() << "Erreur lors de la vérification des dates:" << query.lastError().text();
+        QMessageBox::critical(parent, "Erreur", "Erreur lors de la requête: " + query.lastError().text());
         return;
     }
+    qDebug() << "Requête exécutée avec succès";
 
     QStringList todayServices;
     while (query.next()) {
         todayServices << QString("ID: %1 - %2").arg(query.value(0).toString()).arg(query.value(1).toString());
+        qDebug() << "Service trouvé:" << todayServices.last();
     }
 
     if (!todayServices.isEmpty()) {
+        qDebug() << "Services trouvés pour aujourd'hui:" << todayServices.count();
         QString message = QString("%1 A faire pour aujourd'hui (%2):\n\n%3")
                               .arg(todayServices.count())
                               .arg(today.toString("dd/MM/yyyy"))
@@ -157,21 +186,34 @@ void Urgence::checkTodayDuplicates(QWidget *parent, QTableView *tableView, QTabW
 
         // Afficher l'alerte
         showDateAlert("Services d'aujourd'hui", message, parent);
+        qDebug() << "Alerte affichée";
 
         // Basculer vers l'onglet "Liste des Services"
-        tabWidget->setCurrentIndex(1);
+        if (tabWidget) {
+            tabWidget->setCurrentIndex(1);
+            qDebug() << "Onglet changé";
+        } else {
+            qDebug() << "Erreur: tabWidget est null";
+        }
 
         // Mettre en surbrillance les services d'aujourd'hui
-        QAbstractItemModel *model = tableView->model();
-        QItemSelectionModel *selectionModel = tableView->selectionModel();
-        selectionModel->clearSelection();
+        if (tableView && tableView->model()) {
+            QAbstractItemModel *model = tableView->model();
+            QItemSelectionModel *selectionModel = tableView->selectionModel();
+            selectionModel->clearSelection();
 
-        for (int row = 0; row < model->rowCount(); ++row) {
-            QModelIndex dateIndex = model->index(row, 3); // Colonne Date
-            if (model->data(dateIndex).toDate() == today) {
-                tableView->selectRow(row);
-                tableView->scrollTo(dateIndex, QAbstractItemView::PositionAtCenter);
+            for (int row = 0; row < model->rowCount(); ++row) {
+                QModelIndex dateIndex = model->index(row, 3); // Colonne Date
+                if (model->data(dateIndex).toDate() == today) {
+                    tableView->selectRow(row);
+                    tableView->scrollTo(dateIndex, QAbstractItemView::PositionAtCenter);
+                    qDebug() << "Service mis en surbrillance à la ligne" << row;
+                }
             }
+        } else {
+            qDebug() << "Erreur: tableView ou son modèle est null";
         }
+    } else {
+        qDebug() << "Aucun service trouvé pour aujourd'hui";
     }
 }

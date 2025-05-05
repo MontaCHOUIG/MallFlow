@@ -63,7 +63,7 @@ MagasinMainWindow::MagasinMainWindow(QWidget *parent)
     connect(ui->evenement, &QPushButton::clicked, this, &MagasinMainWindow::on_btnEvents_clicked);
     connect(ui->fournisseurs, &QPushButton::clicked, this, &MagasinMainWindow::on_btnSuppliers_clicked);
     // connect logout signal
-    connect(ui->button_logout, &QPushButton::clicked, this, &MagasinMainWindow::on_button_logout_clicked);
+   // connect(ui->button_logout, &QPushButton::clicked, this, &MagasinMainWindow::on_button_logout_clicked);
     updateAuthUserLabel();
 
 
@@ -494,6 +494,14 @@ void MagasinMainWindow::envoyerTousLesRappels() {
                              QString("✅ %1 rappels envoyés avec succès.").arg(total));
 }
 
+
+
+
+
+
+
+
+
 void MagasinMainWindow::envoyerEmailRappel(QString email, int id, QString nomMagasin, QString reference, double prix) {
     QNetworkRequest request(QUrl("https://api.sendgrid.com/v3/mail/send"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -570,6 +578,15 @@ void MagasinMainWindow::envoyerEmailRappel(QString email, int id, QString nomMag
         manager->deleteLater();
     });
 }
+
+
+
+
+
+
+
+
+
 
 void MagasinMainWindow::appliquerSolde() {
     int id = ui->ID_MAGASIN->text().toInt();

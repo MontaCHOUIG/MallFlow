@@ -36,7 +36,7 @@ EvenementMainWindow::EvenementMainWindow(QWidget *parent)
 
 
     // connect logout signal
-    connect(ui->button_logout, &QPushButton::clicked, this, &EvenementMainWindow::on_button_logout_clicked);
+   // connect(ui->button_logout, &QPushButton::clicked, this, &EvenementMainWindow::on_button_logout_clicked);
 
     updateAuthUserLabel();
 

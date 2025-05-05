@@ -508,8 +508,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgb
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">
-</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string/>
@@ -1324,7 +1323,7 @@ border-bottom-left-radius: 10px;
 border-bottom-right-radius: 10px;</string>
      </property>
      <property name="text">
-      <string>GESTION DES MAGASINS</string>
+      <string>GESTION DES SPONSORS</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>

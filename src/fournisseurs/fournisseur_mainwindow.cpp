@@ -22,7 +22,7 @@ FournisseurMainWindow::FournisseurMainWindow(QWidget *parent)
     connect(ui->magasins, &QPushButton::clicked, this, &FournisseurMainWindow::on_btnStores_clicked);
 
     // connect logout signal
-    connect(ui->button_logout, &QPushButton::clicked, this, &FournisseurMainWindow::on_button_logout_clicked);
+   // connect(ui->button_logout, &QPushButton::clicked, this, &FournisseurMainWindow::on_button_logout_clicked);
 
     updateAuthUserLabel();
 
